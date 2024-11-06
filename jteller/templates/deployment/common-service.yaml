@@ -1,0 +1,124 @@
+{{- if eq (int .Values.executionMode) 2 }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Release.Name}}-common-service
+  namespace: {{.Values.namespace}}
+spec:
+  {{- if hasKey .Values.services.common "replicas" }}
+  replicas:  {{ .Values.services.common.replicas }}
+  {{- else }}
+  replicas: {{.Values.replicas}}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{.Release.Name}}-common-service
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{.Release.Name}}-common-service
+    spec:
+      containers:
+      - env:
+        - name: JAVA_OPTS
+          value: '-Dspring.profiles.active=docker -Dspring.config.import=optional:configmap:/config/common-keycloak.yml '
+        - name: spring.datasource.url
+          value: {{ quote .Values.environment.database.url }}
+        {{- if eq .Values.environment.database.type "oracle" }}
+        - name: spring.datasource.driver-class-name
+          value: "oracle.jdbc.OracleDriver"
+        - name: spring.jpa.database-platform
+          value: "org.hibernate.dialect.Oracle12cDialect"
+        {{- else if eq .Values.environment.database.type "mysql" }}
+        - name: spring.datasource.driver-class-name
+          value: "com.mysql.cj.jdbc.Driver"
+        - name: spring.jpa.database-platform
+          value: "org.hibernate.dialect.MySQL5InnoDBDialect"
+          {{- end }}
+        - name: db.local.user
+          valueFrom:
+            secretKeyRef:
+              name: general-secret
+              key: commonUsername
+        - name: db.local.password
+          valueFrom:
+            secretKeyRef:
+              name: general-secret
+              key: commonPassword
+        - name: spring.jpa.properties.hibernate.default_schema
+          valueFrom:
+            secretKeyRef:
+              key: commonUsername
+              name: general-secret
+        - name: spring.jpa.properties.org.hibernate.envers.default_schema
+          value: {{.Values.environment.database.audScheme}}
+        - name: server.port
+          value: "{{.Values.services.common.port}}"
+        - name: keycloak.realm
+          value: {{.Values.environment.keycloak.realm}}
+        - name: keycloak.auth-server-url
+          value: {{.Values.environment.keycloak.url}}
+        - name: keycloak.credentials.secret
+          value: {{.Values.environment.keycloak.configuration.secret}}
+        - name: spring.liquibase.enabled
+          value: {{.Values.liquibaseEnable}}
+        - name: spring.liquibase.contexts
+          value: {{.Values.liquibaseContext}}
+        - name: spring.mvc.locale
+          value: {{.Values.environment.backend.locale}}
+        - name: spring.mvc.locale-resolver
+          value: {{.Values.environment.backend.resolver}}
+        image: {{.Values.services.registry}}{{.Values.services.common.image}}:{{.Values.services.common.tag}}
+        imagePullPolicy: IfNotPresent
+        name: {{.Release.Name}}-common-service
+        {{- if hasKey .Values.services.common "actuator" }}
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: {{ join .Values.services.common.actuator.url "/health" }}
+            port: {{ .Values.services.common.port }}
+            scheme: HTTP
+          initialDelaySeconds: 100
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: {{ join .Values.services.common.actuator.url "/health/readiness" }}
+            port: {{ .Values.services.common.port }}
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 3
+          timeoutSeconds: 1
+        {{- end }}
+        ports:
+        - containerPort: {{.Values.services.common.port}}
+          protocol: TCP
+        resources:
+          limits:
+            memory: {{.Values.services.common.memoryLimit | default "512Mi"}}
+          requests:
+            memory: {{.Values.services.common.memoryLimit | default "512Mi"}}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /config
+          name: keycloak-conf
+          readOnly: true
+      dnsPolicy: ClusterFirst
+      {{- if hasKey .Values.services "secretRegistry"}}
+      imagePullSecrets:
+      - name: {{.Values.services.secretRegistry}}
+      {{- end }}
+      volumes:
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: common-keycloak.yml
+            path: application.yml
+          name: common-application
+        name: keycloak-conf
+  {{- end }}

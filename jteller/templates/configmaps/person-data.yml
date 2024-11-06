@@ -1,0 +1,381 @@
+{{- if eq (int .Values.executionMode) 2 }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: person-data-application
+  namespace: {{.Values.namespace}}
+data:
+  person-data-application.yml: |
+    server:
+      port: ${server.port}
+    spring:
+      application:
+        name: person-data-service
+      datasource:
+        database-type: oracle
+        url: ${db.local.host}
+        driverClassName: oracle.jdbc.OracleDriver
+        username: ${db.username}
+        password: ${db.password}
+        minimum-idle: 1
+        maximum-pool-size: 1
+      jpa:
+        show-sql: true
+        properties:
+          org:
+            hibernate:
+              envers:
+                default_schema: logdat
+                do_not_audit_optimistic_locking_field: false
+                store_data_at_delete: true
+      liquibase:
+        change-log: classpath:changelog/db.changelog-master.xml
+        contexts: prod, develop, oracle
+        enabled: true
+    #  profiles:
+    #    include: 'keycloak'
+    hazelcast:
+      network:
+        join:
+          multicast:
+            enabled: true
+    config:
+      emailDirectionTypeCode: 999
+      chmDataService: http://chm-data-service:8080
+      personConfService: http://person-conf-service:8080
+      commonService: http://common-service:8080
+      vistasService: http://vistas-service:8080
+      host: person-conf-service
+      port: 8080
+      customerEnable: ${customer.enable:0}
+    byte:
+      conf:
+        registryTypeId: 21
+        addressId: 100
+        emailId: 999
+        partialAccountCode: 0
+        statusIdActiveAgency: 444
+        statusCodeActiveAgency: A
+        statusCodeClosedAgency: CL
+        entityStatusCode: CR
+        channelId: 1
+      fe:
+        realm: jteller
+        username: agentebancario
+        password: Convenios$21
+        organizationTreeUrl: /api/catalog-service/v1/organizationTree
+      client:
+        feClient: http://172.16.10.120:30000
+    feign:
+      client:
+        config:
+          default:
+            connectTimeout: 5000
+            readTimeout: 5000
+            loggerLevel: full
+    logging.level.com.bytesw.acm.person.web.client.FeClient: DEBUG
+    keycloak:
+      enabled: true
+      realm: jteller
+      resource: configuration-service
+      securityConstraints:
+          - authRoles:
+              {{- range  $index, $role := .Values.environment.keycloak.roles}}
+              - {{$role}}
+              {{- end }}
+            securityCollections:
+              -   name: addresses-service
+                  patterns:
+                    - /service/person-data/address/*
+              -   name: branches-service
+                  patterns:
+                    - /service/person-data/branch/*
+              -   name: branch-schedules-service
+                  patterns:
+                    - /service/person-data/branch_schedule/*
+              -   name: business-service
+                  patterns:
+                    - /service/person-data/business/*
+              -   name: personal-data-service
+                  patterns:
+                    - /service/person-data/personal_data/*
+              -   name: persons-service
+                  patterns:
+                    - /service/person-data/person/*
+              -   name: person-identifications-service
+                  patterns:
+                    - /service/person-data/person_identification/*
+              -   name: person-relations-service
+                  patterns:
+                    - /service/person-data/person_relation/*
+              -   name: person-roles-relations-service
+                  patterns:
+                    - /service/person-data/person_role_relation/*
+              -   name: person-section-catalogues-service
+                  patterns:
+                    - /service/person-data/person_section_catalogue/*
+              -   name: phones-service
+                  patterns:
+                    - /service/person-data/phone/*
+              -   name: registry-data-service
+                  patterns:
+                    - /service/person-data/registry_data/*
+              -   name: person-pep-info-service
+                  patterns:
+                    - /service/person-data/person-pep-info/*
+      ssl-required: external
+      auth-server-url: ${keycloak.auth-server-url}
+      bearer-only: true
+      credentials:
+        secret: ${keycloak.credentials.secret}
+      policy-enforcer-config:
+        paths:
+          -   methods:
+                -   method: GET
+              path: /actuator/*
+              enforcementMode: DISABLED
+          -   methods:
+                -   method: POST
+                    scopes:
+                      - view
+              path: /service/person-data/address/page
+          -   methods:
+                -   method: GET
+                    scopes:
+                      - view
+                -   method: DELETE
+                    scopes:
+                      - delete
+                -   method: POST
+                    scopes:
+                      - create
+                -   method: PUT
+                    scopes:
+                      - update
+              path: /service/person-data/address/*
+          -   methods:
+                -   method: POST
+                    scopes:
+                      - view
+              path: /service/person-data/branch/page
+          -   methods:
+                -   method: GET
+                    scopes:
+                      - view
+                -   method: DELETE
+                    scopes:
+                      - delete
+                -   method: POST
+                    scopes:
+                      - create
+                -   method: PUT
+                    scopes:
+                      - update
+              path: /service/person-data/branch/*
+          -   methods:
+                -   method: POST
+                    scopes:
+                      - view
+              path: /service/person-data/branch_schedule/page
+          -   methods:
+                -   method: GET
+                    scopes:
+                      - view
+                -   method: DELETE
+                    scopes:
+                      - delete
+                -   method: POST
+                    scopes:
+                      - create
+                -   method: PUT
+                    scopes:
+                      - update
+              path: /service/person-data/branch_schedule/*
+          -   methods:
+                -   method: POST
+                    scopes:
+                      - view
+              path: /service/person-data/business/page
+          -   methods:
+                -   method: GET
+                    scopes:
+                      - view
+                -   method: DELETE
+                    scopes:
+                      - delete
+                -   method: POST
+                    scopes:
+                      - create
+                -   method: PUT
+                    scopes:
+                      - update
+              path: /service/person-data/business/*
+          -   methods:
+                -   method: POST
+                    scopes:
+                      - view
+              path: /service/person-data/personal_data/page
+          -   methods:
+                -   method: GET
+                    scopes:
+                      - view
+                -   method: DELETE
+                    scopes:
+                      - delete
+                -   method: POST
+                    scopes:
+                      - create
+                -   method: PUT
+                    scopes:
+                      - update
+              path: /service/person-data/personal_data/*
+          -   methods:
+                -   method: POST
+                    scopes:
+                      - view
+              path: /service/person-data/person/page
+          -   methods:
+                -   method: GET
+                    scopes:
+                      - view
+                -   method: DELETE
+                    scopes:
+                      - delete
+                -   method: POST
+                    scopes:
+                      - create
+                -   method: PUT
+                    scopes:
+                      - update
+              path: /service/person-data/person/*
+          -   methods:
+                -   method: POST
+                    scopes:
+                      - view
+              path: /service/person-data/person_identification/page
+          -   methods:
+                -   method: GET
+                    scopes:
+                      - view
+                -   method: DELETE
+                    scopes:
+                      - delete
+                -   method: POST
+                    scopes:
+                      - create
+                -   method: PUT
+                    scopes:
+                      - update
+              path: /service/person-data/person_identification/*
+          -   methods:
+                -   method: POST
+                    scopes:
+                      - view
+              path: /service/person-data/person_relation/page
+          -   methods:
+                -   method: GET
+                    scopes:
+                      - view
+                -   method: DELETE
+                    scopes:
+                      - delete
+                -   method: POST
+                    scopes:
+                      - create
+                -   method: PUT
+                    scopes:
+                      - update
+              path: /service/person-data/person_relation/*
+          -   methods:
+                -   method: POST
+                    scopes:
+                      - view
+              path: /service/person-data/person_role_relation/page
+          -   methods:
+                -   method: GET
+                    scopes:
+                      - view
+                -   method: DELETE
+                    scopes:
+                      - delete
+                -   method: POST
+                    scopes:
+                      - create
+                -   method: PUT
+                    scopes:
+                      - update
+              path: /service/person-data/person_role_relation/*
+          -   methods:
+                -   method: POST
+                    scopes:
+                      - view
+              path: /service/person-data/person_section_catalogue/page
+          -   methods:
+                -   method: GET
+                    scopes:
+                      - view
+                -   method: DELETE
+                    scopes:
+                      - delete
+                -   method: POST
+                    scopes:
+                      - create
+                -   method: PUT
+                    scopes:
+                      - update
+              path: /service/person-data/person_section_catalogue/*
+          -   methods:
+                -   method: POST
+                    scopes:
+                      - view
+              path: /service/person-data/phone/page
+          -   methods:
+                -   method: GET
+                    scopes:
+                      - view
+                -   method: DELETE
+                    scopes:
+                      - delete
+                -   method: POST
+                    scopes:
+                      - create
+                -   method: PUT
+                    scopes:
+                      - update
+              path: /service/person-data/phone/*
+          -   methods:
+                -   method: POST
+                    scopes:
+                      - view
+              path: /service/person-data/registry_data/page
+          -   methods:
+                -   method: GET
+                    scopes:
+                      - view
+                -   method: DELETE
+                    scopes:
+                      - delete
+                -   method: POST
+                    scopes:
+                      - create
+                -   method: PUT
+                    scopes:
+                      - update
+              path: /service/person-data/registry_data/*
+          -   methods:
+                -   method: GET
+                    scopes:
+                      - view
+                -   method: DELETE
+                    scopes:
+                      - delete
+                -   method: POST
+                    scopes:
+                      - create
+                -   method: PUT
+                    scopes:
+                      - update
+              path: /service/person-data/person-pep-info/*
+
+
+  {{- end }}

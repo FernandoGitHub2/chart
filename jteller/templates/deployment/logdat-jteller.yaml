@@ -1,0 +1,103 @@
+{{- if eq (int .Values.executionMode) 2 }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-logdat-jteller
+  namespace: {{ .Values.namespace }}
+spec:
+  {{- if hasKey .Values.services.minio "replicas" }}
+  replicas:  {{ .Values.services.minio.replicas }}
+  {{- else }}
+  replicas: {{.Values.replicas}}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-logdat-jteller
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-logdat-jteller
+    spec:
+      containers:
+      - env:
+        - name: JAVA_OPTS
+          value: -Dspring.profiles.active=docker
+        - name: server.port
+          value: "8080"
+        - name: spring.datasource.username
+          valueFrom:
+            secretKeyRef:
+              name: general-secret
+              key: logdatUsername
+        - name: spring.datasource.password
+          valueFrom:
+            secretKeyRef:
+              name: general-secret
+              key: logdatPassword
+        - name: spring.liquibase.enable
+          value: {{ .Values.liquibaseEnable }}
+        - name: spring.liquibase.contexts
+          value: "{{ .Values.liquibaseContext }}"
+        - name: spring.datasource.url
+          value: {{ quote .Values.environment.database.url }}
+          {{- if eq .Values.environment.database.type "oracle" }}
+        - name: spring.datasource.driver-class-name
+          value: "oracle.jdbc.OracleDriver"
+        - name: spring.jpa.database-platform
+          value: "org.hibernate.dialect.Oracle12cDialect"
+          {{- else if eq .Values.environment.database.type "mysql" }}
+        - name: spring.datasource.driver-class-name
+          value: "com.mysql.cj.jdbc.Driver"
+        - name: spring.jpa.database-platform
+          value: "org.hibernate.dialect.MySQL5InnoDBDialect"
+          {{- end }}
+        image: {{ .Values.services.registry }}{{.Values.services.logdat.image }}:{{.Values.services.logdat.tag }}
+        imagePullPolicy: IfNotPresent
+        {{- if hasKey .Values.services.logdat "actuator" }}
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: {{join .Values.services.logdat.actuator.url "/health" }}
+            port: {{ .Values.services.logdat.port }}
+            scheme: HTTP
+          initialDelaySeconds: 100
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: {{join .Values.services.logdat.actuator.url "/health/readiness" }}
+            port: {{ .Values.services.logdat.port }}
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 3
+          timeoutSeconds: 1
+        {{- end }}
+        name: {{ .Release.Name }}-logdat-jteller
+        ports:
+        - containerPort: {{ .Values.services.logdat.port }}
+          protocol: TCP
+        resources:
+          limits:
+            {{- if hasKey .Values.services.logdat "memoryLimit" }}
+            memory: {{ .Values.services.logdat.memoryLimit }}
+            {{- else}}
+            memory: 756Mi
+            {{- end }}
+          requests:
+            {{- if hasKey .Values.services.logdat "memoryLimit" }}
+            memory: {{ .Values.services.logdat.memoryLimit }}
+            {{- else}}
+            memory: 756Mi
+            {{- end }}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      {{- if hasKey .Values.services "secretRegistry"}}
+      imagePullSecrets:
+      - name: {{.Values.services.secretRegistry}}
+      {{- end }}
+  {{- end }}

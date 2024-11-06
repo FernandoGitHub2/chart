@@ -1,0 +1,25 @@
+{{- if eq (int .Values.executionMode) 2 }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: admin-view
+  namespace: {{.Values.namespace}}
+spec:
+  ports:
+  - port: {{.Values.services.adminView.port}}
+    {{- if  hasKey .Values.services.adminView "nodePort"}}
+    nodePort: {{.Values.services.adminView.nodePort}}
+    {{- end }}
+    protocol: TCP
+    targetPort: {{.Values.services.adminView.port}}
+  selector:
+    app: {{.Release.Name}}-admin-view
+  sessionAffinity: None
+  {{- if eq (toString (.Values.services.adminView.typeService)) "C"}}
+  type: ClusterIP
+  {{- else if eq (toString (.Values.services.adminView.typeService)) "L"}}
+  type: LoadBalancer
+  {{- else }}
+  type: NodePort
+  {{- end }}
+  {{- end }}

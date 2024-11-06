@@ -1,0 +1,10 @@
+{{- if eq (int .Values.executionMode) 2 }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: transaction-engine-config-map
+  namespace: {{ .Values.namespace }}
+data:
+{{ toYaml .Values.camposTabla | indent 1}}
+
+  {{- end }}

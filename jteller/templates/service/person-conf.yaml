@@ -1,0 +1,25 @@
+{{- if eq (int .Values.executionMode) 2 }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: person-conf-service
+  namespace: {{.Values.namespace}}
+spec:
+  ports:
+  - port: {{.Values.services.personConf.port}}
+    protocol: TCP
+    targetPort: {{.Values.services.personConf.port}}
+    {{- if  hasKey .Values.services.personConf "nodePort"}}
+    nodePort: {{.Values.services.personConf.nodePort}}
+    {{- end }}
+  selector:
+    app: {{.Release.Name}}-person-conf-service
+  sessionAffinity: None
+  {{- if eq (toString (.Values.services.personConf.typeService)) "C"}}
+  type: ClusterIP
+  {{- else if eq (toString (.Values.services.personConf.typeService)) "L"}}
+  type: LoadBalancer
+  {{- else }}
+  type: NodePort
+  {{- end }}
+  {{- end }}

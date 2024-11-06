@@ -1,0 +1,77 @@
+{{- if or (eq (int .Values.executionMode) 0) (eq (int .Values.executionMode) 1) (eq (int .Values.executionMode) 2) }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name}}-keycloak
+  namespace: {{ .Values.namespace }}
+spec:
+  {{- if hasKey .Values.services.keycloak "replicas" }}
+  replicas:  {{ .Values.services.keycloak.replicas }}
+  {{- else }}
+  replicas: {{.Values.replicas}}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name}}-keycloak
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name}}-keycloak
+    spec:
+      containers:
+      - env:
+        - name: KC_DB_URL
+          value: {{.Values.environment.database.url}}{{if eq .Values.environment.database.type "mysql"}}{{.Values.environment.database.mysqlScheme.keycloak}}?useUnicode=true{{end}}
+        - name: TZ
+          value: {{ .Values.environment.backend.timeZone }}
+        - name: KEYCLOAK_FEATURES
+          value: "scripts"
+        - name: KEYCLOAK_IMPORT
+          value: "/opt/keycloak/data/import/realm.json"
+        - name: KC_HOSTNAME_STRICT_HTTPS
+          value: "{{ .Values.services.keycloak.hostname }}"
+        - name: KC_PROXY
+          value: {{.Values.services.keycloak.proxy}}
+        - name: KC_DB
+          value: {{.Values.environment.database.type}}
+        - name: KC_DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: general-secret
+              key: keycloakDBUsername
+        - name: KC_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: general-secret
+              key: keycloakDBPassword
+        - name: KEYCLOAK_ADMIN
+          valueFrom:
+            secretKeyRef:
+              name: general-secret
+              key: keycloakUsername
+        - name: KEYCLOAK_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: general-secret
+              key: keycloakPassword
+        image: {{ .Values.services.keycloak.image }}:{{ .Values.services.keycloak.tag }}
+        imagePullPolicy: Always
+        name: {{ .Release.Name}}-keycloak
+        args:
+        - start-dev
+        - --import-realm
+        - -Dkeycloak.profile.feature.upload_scripts=enabled
+        - --spi-login-protocol-openid-connect-legacy-logout-redirect-uri=true
+        ports:
+        - containerPort: {{ .Values.services.keycloak.port }}
+          name: http
+          protocol: TCP
+      dnsPolicy: ClusterFirst
+      {{- if hasKey .Values.services "secretRegistry"}}
+      imagePullSecrets:
+      - name: {{.Values.services.secretRegistry}}
+      {{- end }}
+      restartPolicy: Always
+  {{- end }}

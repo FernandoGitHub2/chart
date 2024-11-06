@@ -1,0 +1,25 @@
+{{- if eq (int .Values.executionMode) 2 }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: operation-view
+  namespace: {{.Values.namespace}}
+spec:
+  ports:
+  - port: {{.Values.services.operationView.port}}
+    protocol: TCP
+    targetPort: {{.Values.services.operationView.port}}
+    {{- if  hasKey .Values.services.operationView "nodePort"}}
+    nodePort: {{.Values.services.operationView.nodePort}}
+    {{- end }}
+  selector:
+    app: {{.Release.Name}}-operation-view
+  sessionAffinity: None
+  {{- if eq (toString (.Values.services.operationView.typeService)) "C"}}
+  type: ClusterIP
+  {{- else if eq (toString (.Values.services.operationView.typeService)) "L"}}
+  type: LoadBalancer
+  {{- else }}
+  type: NodePort
+  {{- end }}
+  {{- end }}

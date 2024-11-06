@@ -1,0 +1,53 @@
+{{- if eq (int .Values.executionMode) 2 }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Release.Name}}-firmas-front
+  namespace: {{ .Values.namespace }}
+spec:
+  {{- if hasKey .Values.services.firmasView "replicas" }}
+  replicas:  {{ .Values.services.firmasView.replicas }}
+  {{- else }}
+  replicas: {{.Values.replicas}}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{.Release.Name}}-firmas-front
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{.Release.Name}}-firmas-front
+    spec:
+      containers:
+      - image: {{ .Values.services.registry}}{{.Values.services.firmasView.image}}:{{.Values.services.firmasView.tag }}
+        imagePullPolicy: IfNotPresent
+        name: {{.Release.Name}}-firmas-front
+        ports:
+        - containerPort: {{ .Values.services.firmasView.port }}
+          protocol: TCP
+        resources:
+          limits:
+            memory: {{.Values.services.firmasView.port | default "512Mi" }}
+          requests:
+            memory: {{.Values.services.firmasView.port | default "512Mi" }}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /app/assets/config
+          name: keycloak-firmas-front-vol
+      dnsPolicy: ClusterFirst
+      {{- if hasKey .Values.services "secretRegistry"}}
+      imagePullSecrets:
+      - name: {{.Values.services.secretRegistry}}
+      {{- end }}
+      volumes:
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: config.json
+            path: config.json
+          name: firmas-fe-configmap
+        name: keycloak-firmas-front-vol
+  {{- end }}

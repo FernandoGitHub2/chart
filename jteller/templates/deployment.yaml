@@ -1,0 +1,299 @@
+{{/*{{- $name := .Release.Name }}*/}}
+{{/*{{- $values := .Values }}*/}}
+{{/*{{- range .Values.services }}*/}}
+{{/*  {{- $notConditioned := and (ne .name "firmas") (ne .name "firmas-front") (ne .name "provide-signature") (ne .name "distributor") (ne .name "distributor-client") }}*/}}
+{{/*  {{- $isDist := and (or (eq .name "distributor") (eq .name "distributor-client")) (ne $values.distributor 0) }}*/}}
+{{/*  {{- $isSing := and (or (eq .name "firmas") (eq .name "firmas-front") (eq .name "provide-signature")) (ne $values.signature 0) }}*/}}
+{{/*  {{- if or ($notConditioned) (and ($isSing) (ne $values.signature 0)) (and ($isDist) (ne $values.distributor 0)) }}*/}}
+{{/*    {{- if or ($notConditioned) (and (eq .name "provide-signature") (eq $values.signature 2)) }}*/}}
+{{/*      {{- if or ($notConditioned) (and (eq .name "distributor-client") (ne $values.distributor 1)) }}*/}}
+{{/*        {{- $isBe := and (ne .name "operation-view") (ne .name "specs-view") (ne .name "firmas-front") (ne .name "distributor-view") }}*/}}
+{{/*        {{- $isConf := and (eq .name "catalog") (eq .name "transaction-catalog") (eq .name "specs-view") }}*/}}
+{{/*apiVersion: apps/v1*/}}
+{{/*kind: Deployment*/}}
+{{/*metadata:*/}}
+{{/*  name: {{ printf "%s-%s" $name .name }}*/}}
+{{/*  namespace: {{ $values.namespace }}*/}}
+{{/*spec:*/}}
+{{/*  selector:*/}}
+{{/*    matchLabels:*/}}
+{{/*      app: {{ printf "%s-%s" $name .name }}*/}}
+{{/*  replicas: {{ if (hasKey . "replica") }}{{ .replica }}{{ else }}{{ $values.replica }}{{ end }}*/}}
+{{/*  template:*/}}
+{{/*    metadata:*/}}
+{{/*      labels:*/}}
+{{/*        app: {{ printf "%s-%s" $name .name }}*/}}
+{{/*    spec:*/}}
+{{/*      containers:*/}}
+{{/*        - name: {{ printf "%s-%s" $name .name }}*/}}
+{{/*          image: {{ printf "%s:%s" .image .tag }}*/}}
+{{/*          imagePullPolicy: IfNotPresent*/}}
+{{/*          ports:*/}}
+{{/*            - containerPort: {{ .port }}*/}}
+{{/*              protocol: TCP*/}}
+{{/*          resources:*/}}
+{{/*            limits:*/}}
+{{/*              memory: {{ if (hasKey . "memoryLimit") }}{{ .memoryLimit }}{{ else }}512Mi {{ end }}*/}}
+{{/*            requests:*/}}
+{{/*              memory: {{ if (hasKey . "memoryLimit") }}{{ .memoryLimit }}{{ else }}512Mi {{ end }}*/}}
+{{/*          {{- if (hasKey . "actuatorPath") }}*/}}
+{{/*          livenessProbe:*/}}
+{{/*            failureThreshold: 3*/}}
+{{/*            httpGet:*/}}
+{{/*              path: {{ printf "%s%s" .actuatorPath "/health" }}*/}}
+{{/*              port: {{ .port }}*/}}
+{{/*              scheme: HTTP*/}}
+{{/*            initialDelaySeconds: 100*/}}
+{{/*            periodSeconds: 5*/}}
+{{/*            successThreshold: 1*/}}
+{{/*            timeoutSeconds: 1*/}}
+{{/*          readinessProbe:*/}}
+{{/*            failureThreshold: 3*/}}
+{{/*            httpGet:*/}}
+{{/*              path: {{ printf "%s%s" .actuatorPath "/health/readiness" }}*/}}
+{{/*              port: {{ .port }}*/}}
+{{/*              scheme: HTTP*/}}
+{{/*            periodSeconds: 10*/}}
+{{/*            successThreshold: 3*/}}
+{{/*            timeoutSeconds: 1*/}}
+{{/*          {{- end }}*/}}
+{{/*          {{- if $isBe }}*/}}
+{{/*          env:*/}}
+{{/*            - name: server.port*/}}
+{{/*              value: "{{ .port }}"*/}}
+{{/*            - name: spring.datasource.url*/}}
+{{/*              value: {{ quote $values.environment.database.url }}*/}}
+{{/*            {{- if eq $values.environment.database.type "oracle" }}*/}}
+{{/*            - name: spring.datasource.driver-class-name*/}}
+{{/*              value: "oracle.jdbc.OracleDriver"*/}}
+{{/*            - name: spring.jpa.database-platform*/}}
+{{/*              value: "org.hibernate.dialect.Oracle12cDialect"*/}}
+{{/*            {{- else if eq $values.environment.database.type "mysql" }}*/}}
+{{/*            - name: spring.datasource.driver-class-name*/}}
+{{/*              value: "com.mysql.cj.jdbc.Driver"*/}}
+{{/*            - name: spring.jpa.database-platform*/}}
+{{/*              value: "org.hibernate.dialect.MySQL5InnoDBDialect"*/}}
+{{/*            {{- end }}*/}}
+{{/*            {{- if ne .name "hermes" }}*/}}
+{{/*            - name: keycloak.config.number*/}}
+{{/*              value: {{ $values.environment.keycloak.securityOpt }}*/}}
+{{/*            {{- end }}*/}}
+{{/*            - name: keycloak.auth-server-url*/}}
+{{/*              value: {{ $values.environment.keycloak.url }}*/}}
+{{/*            - name: keycloak.realm*/}}
+{{/*              value: {{ $values.environment.keycloak.realm }}*/}}
+{{/*            - name: spring.mvc.locale-resolver*/}}
+{{/*              value: {{ $values.environment.backend.resolver }}*/}}
+{{/*            - name: spring.mvc.locale*/}}
+{{/*              value: {{ $values.environment.backend.locale }}*/}}
+{{/*            - name: config.keycloak.username*/}}
+{{/*              valueFrom:*/}}
+{{/*                secretKeyRef:*/}}
+{{/*                  name: general-secret*/}}
+{{/*                  key: keycloakAdminUsername*/}}
+{{/*            - name: config.keycloak.password*/}}
+{{/*              valueFrom:*/}}
+{{/*                secretKeyRef:*/}}
+{{/*                  name: general-secret*/}}
+{{/*                  key: keycloakAdminPassword*/}}
+{{/*            - name: config.distEnable*/}}
+{{/*              value: {{ $values.environment.backend.enableDist }}*/}}
+{{/*            - name: config.personInterface*/}}
+{{/*              value: {{ $values.environment.backend.personInterface }}*/}}
+{{/*            - name: config.savePersonURL*/}}
+{{/*              value: {{ $values.environment.backend.personUrl }}/service/person-data/person/savePerson*/}}
+{{/*            - name: config.updatePersonURL*/}}
+{{/*              value: {{ $values.environment.backend.personUrl }}/service/person-data/person/updatePerson*/}}
+{{/*            - name: config.getPersonURL*/}}
+{{/*              value: {{ $values.environment.backend.personUrl }}/service/person-data/person/getPerson*/}}
+{{/*            - name: config.mailResetPass*/}}
+{{/*              value: {{ $values.environment.backend.mailResetPass }}*/}}
+{{/*            - name: config.validUserMove*/}}
+{{/*              value: {{ $values.environment.backend.validUserMove }}*/}}
+{{/*            {{- if or (eq .name "distributor") (eq .name "distributor-client") }}*/}}
+{{/*            - name: keycloak.resource*/}}
+{{/*              value: {{ $values.environment.keycloak.distributor.resource }}*/}}
+{{/*            - name: keycloak.credentials.secret*/}}
+{{/*              value: {{ $values.environment.keycloak.distributor.secret }}*/}}
+{{/*              {{- if eq .name "distributor-client" }}*/}}
+{{/*            - name: spring.datasource.username*/}}
+{{/*              valueFrom:*/}}
+{{/*                secretKeyRef:*/}}
+{{/*                  name: general-secret*/}}
+{{/*                  key: clientUsername*/}}
+{{/*            - name: spring.datasource.password*/}}
+{{/*              valueFrom:*/}}
+{{/*                secretKeyRef:*/}}
+{{/*                  name: general-secret*/}}
+{{/*                  key: clientPassword*/}}
+{{/*              {{- else }}*/}}
+{{/*            - name: spring.datasource.username*/}}
+{{/*              valueFrom:*/}}
+{{/*                secretKeyRef:*/}}
+{{/*                  name: general-secret*/}}
+{{/*                  key: distributorUsername*/}}
+{{/*            - name: spring.datasource.password*/}}
+{{/*              valueFrom:*/}}
+{{/*                secretKeyRef:*/}}
+{{/*                  name: general-secret*/}}
+{{/*                  key: distributorPassword*/}}
+{{/*              {{- end }}*/}}
+{{/*            {{- else if eq .name "firmas" }}*/}}
+{{/*            - name: keycloak.resource*/}}
+{{/*              value: {{ $values.environment.keycloak.signature.resource }}*/}}
+{{/*            - name: keycloak.credentials.secret*/}}
+{{/*              value: {{ $values.environment.keycloak.signature.secret }}*/}}
+{{/*            - name: spring.datasource.username*/}}
+{{/*              valueFrom:*/}}
+{{/*                secretKeyRef:*/}}
+{{/*                  name: general-secret*/}}
+{{/*                  key: signatureUsername*/}}
+{{/*            - name: spring.datasource.password*/}}
+{{/*              valueFrom:*/}}
+{{/*                secretKeyRef:*/}}
+{{/*                  name: general-secret*/}}
+{{/*                  key: signaturePassword*/}}
+{{/*            {{- else }}*/}}
+{{/*            - name: spring.datasource.username*/}}
+{{/*              valueFrom:*/}}
+{{/*                secretKeyRef:*/}}
+{{/*                  name: general-secret*/}}
+{{/*                  key: jtellerUsername*/}}
+{{/*            - name: spring.datasource.password*/}}
+{{/*              valueFrom:*/}}
+{{/*                secretKeyRef:*/}}
+{{/*                  name: general-secret*/}}
+{{/*                  key: jtellerPassword*/}}
+{{/*              {{- if $isConf }}*/}}
+{{/*            - name: keycloak.resource*/}}
+{{/*              value: {{ $values.environment.keycloak.jtellerSpec.resource }}*/}}
+{{/*            - name: keycloak.credentials.secret*/}}
+{{/*              value: {{ $values.environment.keycloak.jtellerSpec.secret }}*/}}
+{{/*              {{- else }}*/}}
+{{/*            - name: keycloak.resource*/}}
+{{/*              value: {{ $values.environment.keycloak.jtellerOv.resource }}*/}}
+{{/*            - name: keycloak.credentials.secret*/}}
+{{/*              value: {{ $values.environment.keycloak.jtellerOv.secret }}*/}}
+{{/*              {{- end }}*/}}
+{{/*            {{- end }}*/}}
+{{/*            - name: spring.jpa.properties.org.hibernate.envers.default_schema*/}}
+{{/*              value: {{ $values.environment.database.audScheme }}*/}}
+{{/*            - name: spring.jpa.show-sql*/}}
+{{/*              value: {{ $values.environment.database.showSql }}*/}}
+{{/*            - name: logging.level.org.hibernate.type.descriptor.sql.BasicBinder*/}}
+{{/*              value: {{ $values.environment.database.sqlBasicBinder }}*/}}
+{{/*            - name: spring.jpa.properties.hibernate.format_sql*/}}
+{{/*              value: {{ $values.environment.database.formatSql }}*/}}
+{{/*            - name: spring.jpa.show-sql*/}}
+{{/*              value: {{ $values.environment.database.showSql }}*/}}
+{{/*            - name: config.ambiente*/}}
+{{/*              value: {{ $values.environment.keycloak.realm }}*/}}
+{{/*            - name: mail.host*/}}
+{{/*              value: {{ $values.environment.backend.mail.host }}*/}}
+{{/*            - name: mail.port*/}}
+{{/*              value: {{ $values.environment.backend.mail.port }}*/}}
+{{/*            - name: mail.auth*/}}
+{{/*              value: {{ $values.environment.backend.mail.auth }}*/}}
+{{/*            - name: mail.tls*/}}
+{{/*              value: {{ $values.environment.backend.mail.tls }}*/}}
+{{/*            - name: mail.password*/}}
+{{/*              valueFrom:*/}}
+{{/*                secretKeyRef:*/}}
+{{/*                  name: general-secret*/}}
+{{/*                  key: mailServerPassword*/}}
+{{/*            - name: mail.user*/}}
+{{/*              valueFrom:*/}}
+{{/*                secretKeyRef:*/}}
+{{/*                  name: general-secret*/}}
+{{/*                  key: mailServerUser*/}}
+{{/*            - name: spring.mail.host*/}}
+{{/*              value: {{ $values.environment.backend.mail.host }}*/}}
+{{/*            - name: spring.mail.port*/}}
+{{/*              value: {{ $values.environment.backend.mail.port }}*/}}
+{{/*            - name: spring.mail.properties.mail.smtp.auth*/}}
+{{/*              value: {{ $values.environment.backend.mail.auth }}*/}}
+{{/*            - name: spring.mail.properties.mail.smtp.starttls.enable*/}}
+{{/*              value: {{ $values.environment.backend.mail.tls }}*/}}
+{{/*            - name: spring.mail.properties.mail.smtp.timeout*/}}
+{{/*              value: {{ $values.environment.backend.mail.timeout }}*/}}
+{{/*            - name: spring.mail.properties.mail.smtp.writetimeout*/}}
+{{/*              value: {{ $values.environment.backend.mail.writetimeout }}*/}}
+{{/*            - name: spring.mail.properties.mail.smtp.connectiontimeout*/}}
+{{/*              value: {{ $values.environment.backend.mail.connectiontimeout }}*/}}
+{{/*            - name: spring.mail.password*/}}
+{{/*              valueFrom:*/}}
+{{/*                secretKeyRef:*/}}
+{{/*                  name: general-secret*/}}
+{{/*                  key: mailServerPassword*/}}
+{{/*            - name: spring.mail.username*/}}
+{{/*              valueFrom:*/}}
+{{/*                secretKeyRef:*/}}
+{{/*                  name: general-secret*/}}
+{{/*                  key: mailServerUser*/}}
+{{/*            - name: config.numberFormat.includeThousandsSeparator*/}}
+{{/*              value: {{ $values.environment.backend.numberFormat.includeThousandsSeparator }}*/}}
+{{/*            - name: config.numberFormat.thousandsSeparatorSymbol*/}}
+{{/*              value: {{ $values.environment.backend.numberFormat.thousandsSeparatorSymbol }}*/}}
+{{/*            - name: config.numberFormat.allowDecimal*/}}
+{{/*              value: {{ $values.environment.backend.numberFormat.allowDecimal }}*/}}
+{{/*            - name: config.numberFormat.decimalSymbol*/}}
+{{/*              value: {{ $values.environment.backend.numberFormat.decimalSymbol }}*/}}
+{{/*            - name: config.numberFormat.decimalLimit*/}}
+{{/*              value: {{ $values.environment.backend.numberFormat.decimalLimit }}*/}}
+{{/*            - name: config.numberFormat.decimalLimitOnRate*/}}
+{{/*              value: {{ $values.environment.backend.numberFormat.decimalLimitOnRate }}*/}}
+{{/*            - name: config.whatsapp.token*/}}
+{{/*              value: {{ $values.environment.backend.whatsapp.token }}*/}}
+{{/*            - name: config.whatsapp.id*/}}
+{{/*              value: {{ $values.environment.backend.whatsapp.id }}*/}}
+{{/*            - name: config.whatsapp.version*/}}
+{{/*              value: {{ $values.environment.backend.whatsapp.version }}*/}}
+{{/*            - name: config.whatsapp.templateName*/}}
+{{/*              value: {{ $values.environment.backend.whatsapp.templateName }}*/}}
+{{/*            - name: config.whatsapp.templateLanguage*/}}
+{{/*              value: {{ $values.environment.backend.whatsapp.templateLanguage }}*/}}
+{{/*{{- end }}*/}}
+{{/*          volumeMounts:*/}}
+{{/*            {{- if $isBe }}*/}}
+{{/*            - mountPath: /keycloak/*/}}
+{{/*              name: keycloak-be-vol*/}}
+{{/*            {{- else }}*/}}
+{{/*            - mountPath: /app/assets/config*/}}
+{{/*              name: keycloak-conf-vol*/}}
+{{/*              {{- if eq .name "operation-view" }}*/}}
+{{/*            - mountPath: /opt/bitnami/nginx/conf/nginx.conf*/}}
+{{/*              name: nginx-conf*/}}
+{{/*              subPath: nginx.conf*/}}
+{{/*              {{- end }}*/}}
+{{/*            {{- end }}*/}}
+{{/*      volumes:*/}}
+{{/*        {{- if $isBe }}*/}}
+{{/*        - configMap:*/}}
+{{/*            defaultMode: 420*/}}
+{{/*            items:*/}}
+{{/*              - key: {{ $values.environment.keycloak.realmInHeader }}-keycloak*/}}
+{{/*                path: {{ $values.environment.keycloak.realmInHeader }}-keycloak.json*/}}
+{{/*            name: be-configmap*/}}
+{{/*          name: keycloak-be-vol*/}}
+{{/*        {{- else }}*/}}
+{{/*        - configMap:*/}}
+{{/*            defaultMode: 420*/}}
+{{/*            items:*/}}
+{{/*              - key: config.json*/}}
+{{/*                path: config.json*/}}
+{{/*            name: {{ .name }}-configmap*/}}
+{{/*          name: keycloak-conf-vol*/}}
+{{/*          {{- if eq .name "operation-view" }}*/}}
+{{/*        - configMap:*/}}
+{{/*            defaultMode: 420*/}}
+{{/*            items:*/}}
+{{/*              - key: nginx.conf*/}}
+{{/*                path: nginx.conf*/}}
+{{/*            name: nginx-conf*/}}
+{{/*          name: nginx-conf*/}}
+{{/*          {{- end }}*/}}
+{{/*        {{- end }}*/}}
+{{/*{{- end }}*/}}
+{{/*{{- end }}*/}}
+{{/*{{- end }}*/}}
+{{/*{{- end }}*/}}

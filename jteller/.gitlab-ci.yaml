@@ -1,0 +1,14 @@
+#stages:
+#  - build
+#
+#build_and_push_chart:
+#  image: alpine/helm:3.8.0
+#  stage: build
+#  variables:
+#    HELM_REGISTRY: registry.gitlab.com
+#    HELM_PROJECT: $CI_PROJECT_PATH
+#    HELM_CHART: ./
+#  script:
+#    - helm repo add my-repo $HELM_REGISTRY/$HELM_PROJECT
+#    - helm package $HELM_CHART
+#    - helm push ${HELM_CHART##*/}*.tgz my-repo

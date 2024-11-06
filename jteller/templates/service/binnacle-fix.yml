@@ -1,0 +1,24 @@
+{{- if eq (int .Values.executionMode) 2 }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: binnacle-fix
+  namespace: jteller-7-50
+spec:
+  ports:
+  - port: {{.Values.services.binnacleFix.port}}
+    protocol: TCP
+    {{- if  hasKey .Values.services.binnacleFix "nodePort"}}
+    nodePort: {{.Values.services.binnacleFix.nodePort}}
+    {{- end }}
+    targetPort: {{.Values.services.binnacleFix.port}}
+  selector:
+    app: binnacle-fix
+  {{- if eq (toString (.Values.services.binnacleFix.typeService)) "C"}}
+  type: ClusterIP
+  {{- else if eq (toString (.Values.services.binnacleFix.typeService)) "L"}}
+  type: LoadBalancer
+  {{- else }}
+  type: NodePort
+  {{- end }}
+  {{- end }}

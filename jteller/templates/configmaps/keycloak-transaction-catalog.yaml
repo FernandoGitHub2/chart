@@ -1,0 +1,1052 @@
+{{- if eq (int .Values.executionMode) 2 }}
+apiVersion: v1
+data:
+  application.yml: |
+    server:
+      port: ${port:2102}
+      compression:
+        enabled: true
+        mime-types: text/html, text/xml, text/plain, text/css, application/javascript, application/json
+        min-response-size: 1024
+    eureka:
+      instance:
+        statusPageUrlPath: /info
+        healthCheckUrlPath: /health
+        preferIpAddress: true
+      client:
+        serviceUrl:
+          defaultZone: http://registry:1111/eureka/
+        enabled: ${eureka.discovery.enabled:false}
+    spring:
+      application:
+        name: transaction-catalog-service
+      datasource:
+        url: ${db.local.host:jdbc:oracle:thin:@//172.16.21.10:1521:xe}
+        username: ${db.local.user:jtellerv7}
+        password: ${db.local.password:jtellerv7}
+        driver-class-name: oracle.jdbc.OracleDriver
+        hikari:
+          minimum-idle: ${db.pool.min-idle:1}
+          maximum-pool-size: ${db.pool.max-pool-size:5}
+          idle-timeout: ${db.pool.idle-timeout:600000}
+          connection-timeout: ${db.pool.connection-timeout:30000}
+          maxLifetime: ${db.pool.maxLifetime:1800000}
+      jpa:
+        database-platform: org.hibernate.dialect.Oracle12cDialect
+        show-sql: ${db.jpa.show-sql:true}
+        hibernate:
+          ddl-auto: none
+        properties:
+          hibernate.generate_statistics: ${hibernate.generate-statistics:false}
+          org:
+            hibernate:
+              envers:
+                default_schema: jtellerv7
+                do_not_audit_optimistic_locking_field: false
+                store_data_at_delete: true
+        jackson:
+          serialization:
+            fail-on-empty-beans: ${jackson.serialization.fail-on-empty-beans:false}
+      main:
+        allow-bean-definition-overriding: true
+      mvc:
+        locale: es
+        locale-resolver: fixed
+    app:
+      commons:
+        report:
+          maxNumberItemsReport: 1000
+          imagePathReport: classpath:logoByte.png
+    logging:
+      level:
+        org.hibernate: ${log.level.hibernate:INFO}
+        org.springframework: ${log.level.spring:INFO}
+        com.netflix.discovery.shared.resolver.aws: ${log.level.netflix.eureka.aws:OFF}
+        springfox.documentation.spring.web: ${log.level.springfox:OFF}
+    liquibase:
+      change-log: classpath:dbchangelog.xml
+      contexts: ${migration.context:production}
+      enabled: ${migration.enabled:false}
+    management:
+      health:
+        probes:
+          enabled: true
+      endpoint:
+        health:
+          show-details: always
+    byte:
+      swagger:
+        api:
+          enabled: ${swagger.enabled:true}
+          title: Transaction catalog service
+          description: Documentation of the transaction catalog service API's
+          terms-of-service-url: http://www.bytesw.com
+          license: Byte
+          license-url: http://www.bytesw.com
+          version: 1.0.0
+          paths:
+            - /amountsTakePhotoSpec
+            - /authTrxRemoteByTree
+            - /barcodeCharacteristic
+            - /characteristicSpec
+            - /maxLevelCashierSpec
+            - /maxTypeTreeBranch
+            - /minMaxTypeTreebranch
+            - /processImplementTrx
+            - /productsOfflineMode
+            - /resultCharacteristic
+            - /routineExecuteTrx
+            - /totalByFormula
+            - /totalCashierAffect
+            - /totalsToSquare
+            - /typeCashierExecTransaction
+            - /validationsEndDay
+            - /validationsEndDayDetail
+            - /flowTemplate
+            - /flowTemplateDetail
+            - /transactionFlow
+            - /transactionFlowRoutine
+            - /transactionCharactByStep
+            - /userReceiveTrxAutomatic
+      resource:
+        config:
+          enabled: ${resource.security.enabled:true}
+    keycloak:
+      realm: ${keycloak.realmName:JTeller}
+      resource: ${keycloak.client:specs-configuration}
+      ssl-required: external
+      auth-server-url: ${keycloak.auth:https://keycloak.bytesw.cloud:30000}
+      bearer-only: true
+      credentials:
+        secret: ${keycloak.secret:Py1WDjKToqr0TUtHqTjJsL4En9uDW3V8}
+      config:
+        number: 2 # 1 -> resources/file.json , 2 -> conf in yaml
+      securityConstraints:
+        - authRoles:
+            {{- range  $index, $role := .Values.environment.keycloak.roles}}
+            - {{$role}}
+            {{- end }}
+          securityCollections:
+            - name: example-service
+              patterns:
+                - /api/example/*
+            - name: transaction-spec-service
+              patterns:
+                - /v1/transactionSpec/*
+            - name: action-resource
+              patterns:
+                - /v1/action/*
+            - name: affect-conditioned-totals-resource
+              patterns:
+                - /v1/affectConditionedTotals/*
+            - name: amounts-take-photo-spec-resource
+              patterns:
+                - /v1/amountsTakePhotoSpec/*
+            - name: aplications-submenu-resource
+              patterns:
+                - /v1/applicationsSubmenu/*
+            - name: aplications-user-level-resource
+              patterns:
+                - /v1/applicationsUserLevel/*
+            - name: associate-transaction-detail-resource
+              patterns:
+                - /v1/associateTransactionDetail/*
+            - name: associate-transactions-resource
+              patterns:
+                - /v1/associateTransactions/*
+            - name: auth-condition-transaction-resource
+              patterns:
+                - /v1/authConditionTransactions/*
+            - name: auth-trx-remote-by-tree-resource
+              patterns:
+                - /v1/authTrxRemoteByTree/*
+            - name: automatic_transaction-resource
+              patterns:
+                - /v1/automaticTransaction/*
+            - name: barcode-characteristic-resource
+              patterns:
+                - /v1/barcodeCharacteristic/*
+            - name: cashier-level-auth-trx-resource
+              patterns:
+                - /v1/cashierLevelAuthTrx/*
+            - name: characteristic-spec-resource
+              patterns:
+                - /v1/characteristicSpec/*
+            - name: characteristic_spec_value-resource
+              patterns:
+                - /v1/characteristicSpecValue/*
+            - name: conditioned-actions-resource
+              patterns:
+                - /v1/conditionedActions/*
+            - name: conditioned-formats-resource
+              patterns:
+                - /v1/conditionedFormats/*
+            - name: conditioned-form-resource
+              patterns:
+                - /v1/conditionedForm/*
+            - name: conditioned-message-spec-resource
+              patterns:
+                - /v1/conditionedMessageSpec/*
+            - name: copy-transaction-spec-resource
+              patterns:
+                - /v1/copyTransactionSpec/*
+            - name: flow-template-resource
+              patterns:
+                - /v1/flowTemplate/*
+            - name: flow-template-detail-resource
+              patterns:
+                - /v1/flowTemplateDetail/*
+            - name: formats-print-transaction-resource
+              patterns:
+                - /v1/formatsPrintTransaction/*
+            - name: map-char-transactions-resource
+              patterns:
+                - /v1/mapCharTransactions/*
+            - name: max-level-cashier-spec-resource
+              patterns:
+                - /v1/maxLevelCashierSpec/*
+            - name: max-type-treebranch-resource
+              patterns:
+                - /v1/maxTypeTreebranch/*
+            - name: means-notification-resource
+              patterns:
+                - /v1/meansNotification/*
+            - name: min-max-type-treebranch-resource
+              patterns:
+                - /v1/minMaxTypeTreebranch/*
+            - name: process-implement-trx-resource
+              patterns:
+                - /v1/processImplementTrx/*
+            - name: products-offline-mode-resource
+              patterns:
+                - /v1/productsOfflineMode/*
+            - name: provide-transaction-catalogs-resource
+              patterns:
+                - /v1/provideTransactionCatalogs/*
+            - name: result-characteristic-resource
+              patterns:
+                - /v1/resultCharacteristic/*
+            - name: routine-execute-trx-resource
+              patterns:
+                - /v1/routineExecuteTrx/*
+            - name: rules-detail-resource
+              patterns:
+                - /v1/rulesDetail/*
+            - name: rules-spec-resource
+              patterns:
+                - /v1/rulesSpec/*
+            - name: start-day-transaction-resource
+              patterns:
+                - /v1/startDayTransaction/*
+            - name: sub-characteristic-spec-resource
+              patterns:
+                - /v1/subCharacteristicSpec/*
+            - name: total-by-formula-resource
+              patterns:
+                - /v1/totalByFormula/*
+            - name: total-cashier-affect-resource
+              patterns:
+                - /v1/totalCashierAffect/*
+            - name: total-cashier-resource
+              patterns:
+                - /v1/totalCashier/*
+            - name: totals-to-square-resource
+              patterns:
+                - /v1/totalsToSquare/*
+            - name: transaction-charact-by-step-resource
+              patterns:
+                - /v1/transactionCharactByStep/*
+            - name: transaction-characteristic-relation-resource
+              patterns:
+                - /v1/transactionCharacteristicRelation/*
+            - name: transaction-characteristic-spec-resource
+              patterns:
+                - /v1/transactionCharacteristicSpec/*
+            - name: transaction-flow-resource
+              patterns:
+                - /v1/transactionFlow/*
+            - name: transaction-flow-routine-resource
+              patterns:
+                - /v1/transactionFlowRoutine/*
+            - name: transaction-send-spec-resource
+              patterns:
+                - /v1/transactionSendSpec/*
+            - name: transaction-type-resource
+              patterns:
+                - /v1/transactionType/*
+            - name: type-cashier-exec-transaccion-resource
+              patterns:
+                - /v1/typeCashierExecTransaction/*
+            - name: user-receive-trx-automatic-resource
+              patterns:
+                - /v1/userReceiveTrxAutomatic/*
+            - name: validations-end-day-resource
+              patterns:
+                - /v1/validationsEndDay/*
+            - name: validations_end_day_detail-resource
+              patterns:
+                - /v1/validationsEndDayDetail/*
+      policy-enforcer-config:
+        paths:
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+            path: /api/example/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/transactionSpec/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/action/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/affectConditionedTotals/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/amountsTakePhotoSpec/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/applicationsSubmenu/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/applicationsUserLevel/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/associateTransactionDetail/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/associateTransactions/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/authConditionTransactions/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/authTrxRemoteByTree/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/automaticTransaction/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/barcodeCharacteristic/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/cashierLevelAuthTrx/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/characteristicSpec/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/characteristicSpecValue/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/conditionedActions/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/conditionedFormats/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/conditionedForm/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/conditionedMessageSpec/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/copyTransactionSpec/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/flowTemplate/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/flowTemplateDetail/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/formatsPrintTransaction/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/mapCharTransactions/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/maxLevelCashierSpec/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/maxTypeTreebranch/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/meansNotification/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/minMaxTypeTreebranch/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/processImplementTrx/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/productsOfflineMode/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/provideTransactionCatalogs/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/resultCharacteristic/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/routineExecuteTrx/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/rulesDetail/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/rulesSpec/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/startDayTransaction/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/subCharacteristicSpec/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/totalByFormula/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/totalCashierAffect/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/totalCashier/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/totalsToSquare/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/transactionCharactByStep/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/transactionCharacteristicRelation/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/transactionCharacteristicSpec/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/transactionFlow/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/transactionFlowRoutine/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/transactionSendSpec/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/transactionType/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/typeCashierExecTransaction/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/userReceiveTrxAutomatic/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/validationsEndDay/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/validationsEndDayDetail/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+            path: /actuator/**
+            enforcementMode: DISABLED
+    config:
+      distEnable: 0
+    ---
+
+    spring:
+      profiles: test
+    server:
+      port: 0
+
+    ---
+
+    spring:
+      profiles: docker
+    eureka:
+      instance:
+        hostname: ${byte.net.hostname:transaction-catalog-service}
+        ipAddress: ${byte.net.address}
+kind: ConfigMap
+metadata:
+  name: keycloak-transaction-catalog
+  namespace: {{.Values.namespace}}
+
+  {{- end }}

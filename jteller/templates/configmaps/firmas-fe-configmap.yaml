@@ -1,0 +1,19 @@
+{{- if eq (int .Values.executionMode) 2 }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: firmas-fe-configmap
+  namespace: {{ .Values.namespace }}
+data:
+  config.json: |
+    {
+     "keycloak":{
+            "url":"{{.Values.environment.keycloak.url}}",
+            "realm": "{{.Values.environment.keycloak.realm}}",
+            "clientId": "firmas-fe",
+            "realmInHeader": "{{.Values.environment.keycloak.realmInHeader}}",
+            "idleTime": "15"
+               }
+    }
+
+  {{- end }}

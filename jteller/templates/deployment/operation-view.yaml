@@ -1,0 +1,63 @@
+{{- if eq (int .Values.executionMode) 2 }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Release.Name}}-operation-view
+  namespace: {{ .Values.namespace }}
+spec:
+  {{- if hasKey .Values.services.operationView "replicas" }}
+  replicas:  {{ .Values.services.operationView.replicas }}
+  {{- else }}
+  replicas: {{.Values.replicas}}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{.Release.Name}}-operation-view
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{.Release.Name}}-operation-view
+    spec:
+      containers:
+      - image: {{.Values.services.registry }}{{.Values.services.operationView.image}}:{{.Values.services.operationView.tag }}
+        imagePullPolicy: IfNotPresent
+        name: {{.Release.Name}}-operation-view
+        ports:
+        - containerPort: {{ .Values.services.operationView.port }}
+          protocol: TCP
+        resources:
+          limits:
+            memory: 128Mi
+          requests:
+            memory: 64Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /app/assets/config
+          name: keycloak-operation-view-vol
+        - mountPath: /opt/bitnami/nginx/conf/nginx.conf
+          name: nginx-conf
+          subPath: nginx.conf
+      dnsPolicy: ClusterFirst
+      {{- if hasKey .Values.services "secretRegistry"}}
+      imagePullSecrets:
+      - name: {{.Values.services.secretRegistry}}
+      {{- end }}
+      volumes:
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: config.json
+            path: config.json
+          name: operation-view-configmap
+        name: keycloak-operation-view-vol
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: nginx.conf
+            path: nginx.conf
+          name: nginx-conf
+        name: nginx-conf
+  {{- end }}

@@ -1,0 +1,59 @@
+{{- if or (eq (int .Values.executionMode) 0) (eq (int .Values.executionMode) 1) (eq (int .Values.executionMode) 2) }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Release.Name}}-mongo
+  namespace: {{ .Values.namespace }}
+spec:
+  progressDeadlineSeconds: 600
+  {{- if hasKey .Values.services.mongo "replicas" }}
+  replicas:  {{ .Values.services.mongo.replicas }}
+  {{- else }}
+  replicas: {{.Values.replicas}}
+  {{- end }}
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: {{.Release.Name}}-mongo
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{.Release.Name}}-mongo
+    spec:
+      containers:
+      - env:
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: general-secret
+              key: mongoPassword
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: general-secret
+              key: mongoUser
+        image: {{.Values.services.mongo.image}}:{{.Values.services.mongo.tag }}
+        imagePullPolicy: IfNotPresent
+        name: {{.Release.Name}}-mongo
+        ports:
+        - containerPort: {{ .Values.services.mongo.port }}
+          name: {{.Release.Name}}-mongo
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /data/db
+          name: storage
+      dnsPolicy: ClusterFirst
+      volumes:
+      - name: storage
+        persistentVolumeClaim:
+          claimName: {{ .Values.services.mongo.pvcName }}
+      {{- if hasKey .Values.services "secretRegistry"}}
+      imagePullSecrets:
+      - name: {{.Values.services.secretRegistry}}
+      {{- end }}
+  {{- end }}

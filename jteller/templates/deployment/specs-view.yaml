@@ -1,0 +1,53 @@
+{{- if eq (int .Values.executionMode) 2 }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Release.Name}}-specs-view
+  namespace: {{ .Values.namespace }}
+spec:
+  {{- if hasKey .Values.services.specsView "replicas" }}
+  replicas:  {{ .Values.services.specsView.replicas }}
+  {{- else }}
+  replicas: {{.Values.replicas}}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: specs-view
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{.Release.Name}}-specs-view
+    spec:
+      containers:
+      - image: {{.Values.services.registry}}{{.Values.services.specsView.image}}:{{.Values.services.specsView.tag }}
+        imagePullPolicy: IfNotPresent
+        name: {{.Release.Name}}-specs-view
+        ports:
+        - containerPort: {{ .Values.services.specsView.port }}
+          protocol: TCP
+        resources:
+          limits:
+            memory: 512Mi
+          requests:
+            memory: 512Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /app/assets/config
+          name: keycloak-frontend-vol
+      dnsPolicy: ClusterFirst
+      {{- if hasKey .Values.services "secretRegistry"}}
+      imagePullSecrets:
+      - name: {{.Values.services.secretRegistry}}
+      {{- end }}
+      volumes:
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: keycloak.json
+            path: keycloak.json
+          name: frontend-configmap
+        name: keycloak-frontend-vol
+  {{- end }}

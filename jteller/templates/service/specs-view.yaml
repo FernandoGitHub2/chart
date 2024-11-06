@@ -1,0 +1,25 @@
+{{- if eq (int .Values.executionMode) 2 }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: specs-view
+  namespace: {{.Values.namespace}}
+spec:
+  ports:
+  - port: {{.Values.services.specsView.port}}
+    protocol: TCP
+    targetPort: {{.Values.services.specsView.port}}
+    {{- if  hasKey .Values.services.specsView "nodePort"}}
+    nodePort: {{.Values.services.specsView.nodePort}}
+    {{- end }}
+  selector:
+    app: {{.Release.Name}}-specs-view
+  sessionAffinity: None
+  {{- if eq (toString (.Values.services.specsView.typeService)) "C"}}
+  type: ClusterIP
+  {{- else if eq (toString (.Values.services.specsView.typeService)) "L"}}
+  type: LoadBalancer
+  {{- else }}
+  type: NodePort
+  {{- end }}
+  {{- end }}

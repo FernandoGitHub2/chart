@@ -1,0 +1,174 @@
+services:
+  secretRegistry: aws-registry
+  registry: 277232507401.dkr.ecr.us-west-2.amazonaws.com/jteller/
+  catalog:
+    image: catalog-service-kube
+    tag: v7.6.a
+    port: 2102
+    memoryLimit: 600Mi
+    replicas: 1  # Opcional si no se define se usa el general
+    typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
+    actuator:
+      url: /actuator
+  transactionCatalog:
+    image: transaction-catalog-service-kube
+    tag: v7.6.e
+    port: 2103
+    typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
+    memoryLimit: 600Mi
+    actuator:
+      url: /actuator
+  transactionEngine:
+    image: transaction-engine-service-kube
+    tag: v7.6.0.b
+    port: 2107
+    typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
+    memoryLimit: 1000Mi
+    actuator:
+      url: /v1/actuator
+  management:
+    image: operation-management-service-kube
+    tag: v7.6.c
+    port: 2107
+    typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
+    memoryLimit: 1000Mi
+    actuator:
+      url: /v1/actuator
+  specsView:
+    image: jt-frontend-kube-dev
+    tag: dev.1.0.28.a
+    typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
+    port: 8080
+  operationView:
+    image: jt-operation-view-kube-dev
+    tag: dev.1.0.84.178.b
+    typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
+    port: 8080
+  security:
+    image: security-service-kube
+    tag: v7.6.b
+    port: 1119
+    typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
+    memoryLimit: 600Mi
+    actuator:
+      url: /v1/actuator
+  resource:
+    image: resource-service-kube
+    tag: dev.1.0.12.c
+    port: 2110
+    typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
+    memoryLimit: 600Mi
+    actuator:
+      url: /v1/actuator
+  personData:
+    image: person-data-service
+    tag: jtv7.6.0.a
+    port: 8080
+    typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
+    memoryLimit: 600Mi
+    actuator:
+      url: /v1/actuator
+  personConf:
+    image: person-conf-service
+    tag: jtv7.6.0.a
+    port: 8080
+    typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
+    memoryLimit: 600Mi
+    actuator:
+      url: /v1/actuator
+  logdat:
+    image: logdat-jteller-service-kube
+    tag: v7.6.0.a
+    port: 8080
+    typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
+    memoryLimit: 600Mi
+  mongo:
+    image: mongo
+    tag: latest
+    port: 27017
+    typeService: N  # C - ClusterIp, N - NodePort, L - LoadBalancer
+    nodePort: 30004
+    pvcName: pvc-mongo
+  minio:
+    image: minio/minio
+    tag: RELEASE.2020-11-25T22-36-25Z
+    port: 9000
+    typeService: N  # C - ClusterIp, N - NodePort, L - LoadBalancer
+    nodePort: 30005
+    pvcName: pvc-minio
+  keycloak:
+    image: quay.io/keycloak/keycloak
+    tag: 23.0.0
+    port: 8080
+    typeService: N  # C - ClusterIp, N - NodePort, L - LoadBalancer
+    nodePort: 30012
+    proxy: edge
+    hostname: false
+  hermes:
+    image: hermes-kube
+    tag: v7.6.b
+    port: 1120
+    typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
+    memoryLimit: 600Mi
+    actuator:
+      url: /v1/actuator
+  firmasView:
+    image: firmas-front-kube
+    tag: dev.1.1.12.17.1
+    port: 8080
+    typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
+  firmas:
+    image: firmas-service-kube
+    tag: v7.6.0.c
+    port: 2114
+    typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
+    memoryLimit: 600Mi
+  distributorView:
+    image: distributor-view-kube
+    tag: dev.1.1.25.B
+    port: 8080
+    typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
+  distributor:
+    image: distributor-service-kube
+    tag: v7.6.0.a
+    port: 8080
+    typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
+    memoryLimit: 600Mi
+  distributorClient:
+    image: distributor-client-service-kube
+    tag: v7.6.0.a
+    port: 8080
+    typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
+    memoryLimit: 600Mi
+  binnacleFix:
+    image: binnacle-fix-kube
+    tag: dev.0.0
+    port: 8080
+    typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
+    memoryLimit: 600Mi
+  common:
+    image: common-service-kube
+    tag: jtv7.6.0.a
+    port: 8080
+    typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
+    memoryLimit: 600Mi
+    actuator:
+      url: /v1/actuator
+  gateway:
+    image: binnacle-fix-kube
+    tag: dev.0.0
+    port: 8080
+    typeService: N  # C - ClusterIp, N - NodePort, L - LoadBalancer
+    nodePort: 30010
+    memoryLimit: 600Mi
+  adminView:
+    image: admin-view-kube-dev
+    tag: dev.1.0.7
+    port: 8080
+    typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
+  rabbitmq:
+    image: rabbitmq-kube
+    tag: 3.8-management
+    port: 8080
+    typeService: N  # C - ClusterIp, N - NodePort, L - LoadBalancer
+    nodePort: 30042

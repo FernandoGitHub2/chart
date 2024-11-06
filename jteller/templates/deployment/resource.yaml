@@ -1,0 +1,102 @@
+{{- if eq (int .Values.executionMode) 2 }}
+{{- $username := .Values.services.mongo.username | b64dec}}
+{{- $password := .Values.services.mongo.password | b64dec }}
+{{- $port := .Values.services.mongo.port }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-resource
+  namespace: {{ .Values.namespace }}
+spec:
+  {{- if hasKey .Values.services.resource "replicas" }}
+  replicas:  {{ .Values.services.resource.replicas }}
+  {{- else }}
+  replicas: {{.Values.replicas}}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-resource
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-resource
+    spec:
+      containers:
+      - name: {{ .Release.Name }}-resource
+        image: {{ .Values.services.registry }}{{ .Values.services.resource.image }}:{{ .Values.services.resource.tag }}
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: server.port
+          value: "{{ .Values.services.resource.port }}"
+        - name: minio.server.host
+          value: minio
+        - name: minio.server.port
+          value: "{{ .Values.services.minio.port }}"
+        - name: minio.accessKey
+          valueFrom:
+            secretKeyRef:
+              name: general-secret
+              key: minioUser
+        - name: minio.secretKey
+          valueFrom:
+            secretKeyRef:
+              name: general-secret
+              key: minioPassword
+{{/*        - name: spring.data.mongodb.uri*/}}
+{{/*          value: "mongodb://{{ $username }}:{{ $password }}@mongo:{{ $port }}"*/}}
+        - name: logging.level.org.hibernate.type.descriptor.sql.BasicBinder
+          value: "{{ .Values.environment.database.sqlBasicBinder }}"
+        - name: spring.jpa.properties.hibernate.format_sql
+          value: "{{ .Values.environment.database.formatSql }}"
+        - name: spring.jpa.show-sql
+          value: "{{ .Values.environment.database.showSql }}"
+        ports:
+        - containerPort: {{ .Values.services.resource.port }}
+          protocol: TCP
+        resources:
+          limits:
+            memory: {{ .Values.services.resource.memoryLimit | default "756Mi" }}
+          requests:
+            memory: {{ .Values.services.resource.memoryRequest | default "756Mi" }}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /keycloak/
+          name: keycloak-be-vol
+        {{- if hasKey .Values.services.resource "actuator" }}
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: {{ join .Values.services.resource.actuator.url "/health" }}
+            port: {{ .Values.services.resource.port }}
+            scheme: HTTP
+          initialDelaySeconds: 100
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: {{ join .Values.services.resource.actuator.url "/health/readiness" }}
+            port: {{ .Values.services.resource.port }}
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 3
+          timeoutSeconds: 1
+        {{- end }}
+      dnsPolicy: ClusterFirst
+      {{- if hasKey .Values.services "secretRegistry"}}
+      imagePullSecrets:
+      - name: {{.Values.services.secretRegistry}}
+      {{- end }}
+      volumes:
+      - name: keycloak-be-vol
+        configMap:
+          defaultMode: 420
+          items:
+          - key: {{ .Values.environment.keycloak.realmInHeader }}-keycloak
+            path: {{ .Values.environment.keycloak.realmInHeader }}-keycloak.json
+          name: be-configmap
+  {{- end }}

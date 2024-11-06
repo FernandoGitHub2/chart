@@ -1,0 +1,55 @@
+{{- if eq (int .Values.executionMode) 2 }}
+{{- if eq (int .Values.distributor) 1 }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-distributor-view
+  namespace: {{ .Values.namespace }}
+spec:
+  {{- if hasKey .Values.services.distributorView "replicas" }}
+  replicas: {{ .Values.services.distributorView.replicas }}
+  {{- else }}
+  replicas: {{.Values.replicas}}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-distributor-view
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-distributor-view
+    spec:
+      containers:
+      - image: {{.Values.services.registry}}{{.Values.services.distributorView.image}}:{{.Values.services.distributorView.tag }}
+        imagePullPolicy: IfNotPresent
+        name: {{ .Release.Name }}-distributor-view
+        ports:
+        - containerPort: {{ .Values.services.distributorView.port }}
+          protocol: TCP
+        resources:
+          limits:
+            memory: 512Mi
+          requests:
+            memory: 64Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /app/assets/config
+          name: keycloak-distributor-view-vol
+      dnsPolicy: ClusterFirst
+      {{- if hasKey .Values.services "secretRegistry"}}
+      imagePullSecrets:
+      - name: {{.Values.services.secretRegistry}}
+      {{- end }}
+      volumes:
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: config.json
+            path: config.json
+          name: distributor-fe-configmap
+        name: keycloak-distributor-view-vol
+  {{- end }}
+  {{- end }}

@@ -1,0 +1,56 @@
+{{- if eq (int .Values.executionMode) 2 }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Release.Name}}-binnacle-fix
+  namespace: {{.Values.namespace}}
+spec:
+  {{- if hasKey .Values.services.binnacleFix "replicas" }}
+  replicas:  {{ .Values.services.binnacleFix.replicas }}
+  {{- else }}
+  replicas: {{.Values.replicas}}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{.Release.Name}}-binnacle-fix
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{.Release.Name}}-binnacle-fix
+    spec:
+      containers:
+      - env:
+        - name: spring.datasource.url
+          value: {{.Values.environment.database.url}}
+        - name: spring.datasource.username
+          valueFrom:
+            secretKeyRef:
+              name: general-secret
+              key: logdatUsername
+        - name: spring.datasource.password
+          valueFrom:
+            secretKeyRef:
+              name: general-secret
+              key: logdatPassword
+        image: {{.Values.services.registry}}{{.Values.services.binnacleFix.image}}:{{.Values.services.binnacleFix.tag}}
+        imagePullPolicy: IfNotPresent
+        name: {{.Release.Name}}-binnacle-fix
+        ports:
+        - containerPort: {{.Values.services.binnacleFix.port}}
+          protocol: TCP
+        resources:
+          limits:
+            memory: {{.Values.services.catalog.memoryLimit | default "512Mi"}}
+          requests:
+            memory: {{.Values.services.catalog.memoryLimit | default "512Mi"}}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      {{- if hasKey .Values.services "secretRegistry"}}
+      imagePullSecrets:
+      - name: {{.Values.services.secretRegistry}}
+      {{- end }}
+      restartPolicy: Always
+  {{- end }}

@@ -1,0 +1,63 @@
+{{- if eq (int .Values.executionMode) 2 }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Release.Name}}-api-gateway
+  namespace: {{.Values.namespace}}
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: {{.Release.Name}}-api-gateway
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{.Release.Name}}-api-gateway
+    spec:
+      containers:
+      - args:
+        - -R:MaxHeapSize=500m
+        - -Xmx500mb
+        env:
+        - name: logging.level.org.springframework.data
+          value: TRACE
+        - name: server.port
+          value: "8080"
+        - name: micronaut.http.client.read-timeout
+          value: "160"
+        - name: MICRONAUT_CONFIG_FILES
+          value: /app/config/application.yml
+        image: {{.Values.services.registry}}{{.Values.services.gateway.image}}:{{.Values.services.gateway.tag}}
+        imagePullPolicy: IfNotPresent
+        name: {{.Release.Name}}-api-gateway
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources:
+          limits:
+            memory: {{.Values.services.catalog.memoryLimit | default "512Mi"}}
+          requests:
+            memory: {{.Values.services.catalog.memoryLimit | default "512Mi"}}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /app/config
+          name: config-volume
+      dnsPolicy: ClusterFirst
+      {{- if hasKey .Values.services "secretRegistry"}}
+      imagePullSecrets:
+      - name: {{.Values.services.secretRegistry}}
+      {{- end }}
+      volumes:
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: application.yml
+            path: application.yml
+          name: gateway-application.yml
+        name: config-volume
+  {{- end }}

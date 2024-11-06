@@ -1,0 +1,203 @@
+environment:
+  database:
+    url: jdbc:mysql://152.42.151.98:3306/
+    type: mysql
+    audScheme: logdat
+    showSql: true
+    sqlBasicBinder: INFO
+    formatSql: false
+    mysqlScheme:
+      operation: jtellerv7
+      security: security
+      audit: logdat
+      signature: jsignature
+      distributor: distributor
+      distributor-client: distributor
+      keycloak: keycloak
+  keycloak:
+    securityOpt: 2
+    url: http://64.225.80.76:8080/
+    realm: jteller
+    roles:
+      - user
+      - admin
+    jtellerSpec:
+      resource: specs-configuration
+      secret: GTBBWADFYWnRf9jlI0hJQHaaiozYBHW0
+    jtellerOv: 
+      resource: jt-backend
+      secret: XmM6SHXqvYxEkqQdB7iPGCryudJjkuZ0
+    distributor:
+      resource: distributor
+      secret: z6c5qpxgMCnSRTO3PPx2dvbvQ97sPcVF
+    signature:
+      resource: firmas-be
+      secret: OEvYbXYabb1fVubvDozqCBRY8OAjSwC5
+    configuration:
+      resource: configuration-service
+      secret: oXupVyvGvvT7kc7nlO8L0lmqtI6R1lf0
+    realmInHeader: jteller
+  backend:
+    resolver: fixed
+    timeZone: America/Guatemala
+    locale: es
+    enableDist: 1
+    personInterface: 1
+    personUrl: http://person-data-service:8080
+    commonUrl: http://common-service:8080
+    catalogUrl: http://catalog:2102
+    minioUrl: http://minio:9000
+    securityCore: http://security:1119
+    securityClient: http://security:1119
+    distributorUrl: http://distributor:8080
+    minioTimeout: 8
+    mailResetPass: 1
+    validUserMove: 0
+    mail:
+      host: smtp.gmail.com
+      port: 587
+      auth: true
+      connectiontimeout: 5000
+      timeout: 5000
+      writetimeout: 5000
+      starttls: true
+    numberFormat:
+      includeThousandsSeparator: 1
+      allowDecimal: 1
+      decimalSymbol: "."
+      thousandsSeparatorSymbol: ","
+      decimalLimit: 2
+      decimalLimitOnRate: 4
+    whatsapp:
+      token: EAAK02w5gL8IBO2rvWaofISogbiV7L5dLasCs1hLB4uGHvjQBcfYTbRlrBcK4Lp5ipcMD5e1MEoeDlXZCW0j3e7q73vgivL5qbNX7AxZBHUpZBXgbEkt0s7JvRztAu5LpZA99tI8PKNJfZBZB4zIPkfhPmlNrJnlec9iAyRfbYmMT6cBI8veEm01ksfDugFCdG8ZApfXq72976m5syKTlFD5maH5tFIZD
+      id: 225010557368287
+      version: v18.0
+      templateName: comprobante
+      templateLanguage: es
+    rabbitmq:
+      port: 30042
+      host: 172.16.10.105
+      queue: journal-process-queue
+  frontend:
+    aceptedUrls:
+     - http://172.16.21.10:30001
+     - https://keycloak.bytesw.cloud:30000 
+     - https://bytesw.cloud:30000
+     - http://172.16.10.105:30009
+     - https://keycloak.bytesw.cloud:30010
+     - https://galaxia.bytesw.com:30010
+     - http://telepay.bytesw.com:8989
+     - https://jteller-sura.mocklab.io
+     - http://telepay.bytesw.com:8787
+     - https://j1z3y.mocklab.io
+     - http://172.16.21.10:30000
+replicas: 1
+namespace: jteller
+executionMode: 0 # 0 - arquitectura, 1 - database, 2 - jteller
+verifyDevice: 0
+notRequireverify: 2
+liquibaseEnable: true
+liquibaseContext: mysql,prod
+enableSura: 0
+distributor: 0 # 0 - desabilitado, 1 - core , 2 - cliente , 3 - ambos
+signature: 0 # 0 - desabilitado, 1 - centralizado , 2 - distribuidos
+camposTabla:
+  tabla-101: |
+    nameTable: tabla-101
+    columns:
+      -
+       name: columna a 
+       number: 0
+       label: Core
+       nameObject: CORE
+       dataType: A
+       length: 10
+       editionCode: null
+       resource: RECLAMOS,L,0|RECLAMO,O|CORE,O
+      -
+       name: columna b
+       number: 1
+       label: No Poliza
+       nameObject: NUMERO_DE_POLIZA
+       dataType: A
+       length: 20
+       editionCode: null
+       resource: RECLAMOS,L,0|RECLAMO,O|NUMERO_DE_POLIZA,O
+      -
+       name: columna c
+       number: 2
+       label: No Reclamo
+       nameObject: NO_RECLAMO
+       dataType: A
+       length: 12
+       editionCode: null
+       resource: RECLAMOS,L,0|RECLAMO,O|NO_RECLAMO,O
+      -
+       name: columna d
+       number: 3
+       label: No Cobertura
+       nameObject: NO_COBERTURA
+       dataType: A
+       length: 10
+       editionCode: null
+       resource: RECLAMOS,L,0|RECLAMO,O|COBERTURA,O|NO_COBERTURA,O
+      -
+       name: columna e
+       number: 4
+       label: F Reclamo
+       nameObject: FECHA_REGISTRO
+       dataType: A
+       length: 10
+       editionCode: null
+       resource: RECLAMOS,L,0|RECLAMO,O|FECHA_REGITRO,O
+      -
+       name: columna f
+       number: 5
+       label: Saldo
+       nameObject: MONTO_DEDUCIBLE
+       dataType: V
+       length: 12
+       editionCode: null
+       resource: RECLAMOS,L,0|RECLAMOS,O|COBERTURAS,O|MONTO_DEDUCIBLE,O
+      -
+       name: columna g
+       number: 6
+       label: Valor a Pagar
+       nameObject: cashToPay
+       dataType: V
+       length: 12
+       editionCode: null
+       resource: 0
+     isTotalize: 1
+     columnsToTotalize:
+      -
+       columnToTotalizeNumber: 5
+       correlativeField: 60
+      modifiable:
+       isModifiable: 1
+       isTotalize: 1
+       columnToTotalizeNumber: 6
+       correlativeField: 61
+  app-payments: |
+    typeFile: "JSON"
+    moreMessages: false
+    fieldNameData: null
+    fieldDataArray: false
+    finalObject: null
+    objectOfLst:
+      fields:
+        -
+          name: "reqAuthorization"
+          type: 'C'
+          start: null
+          end: null
+          length: 1
+          defectVal: false
+    acceptedWhen:
+      field: "errorCode"
+      value: 0000
+    reqAuthorizationWhen:
+      field: "reqAuthorization"
+      value: true
+    rejectedWhen: null
+    

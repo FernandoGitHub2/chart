@@ -1,0 +1,30 @@
+{{- if or (eq (int .Values.executionMode) 0) (eq (int .Values.executionMode) 1) (eq (int .Values.executionMode) 2) }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+  namespace: {{.Values.namespace}}
+spec:
+  ports:
+  - name: web
+    {{- if  hasKey .Values.services.rabbitmq "nodePort"}}
+    nodePort: {{.Values.services.rabbitmq.nodePort}}
+    {{- end }}
+    port: 15672
+    protocol: TCP
+    targetPort: 15672
+  - name: amqp
+    port: 5672
+    protocol: TCP
+    targetPort: 5672
+  selector:
+    app: rabbitmq
+  sessionAffinity: None
+  {{- if eq (toString (.Values.services.rabbitmq.typeService)) "C"}}
+  type: ClusterIP
+  {{- else if eq (toString (.Values.services.rabbitmq.typeService)) "L"}}
+  type: LoadBalancer
+  {{- else }}
+  type: NodePort
+  {{- end }}
+  {{- end }}

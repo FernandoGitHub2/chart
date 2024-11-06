@@ -1,0 +1,76 @@
+{{- if or (eq (int .Values.executionMode) 0) (eq (int .Values.executionMode) 1) (eq (int .Values.executionMode) 2) }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Release.Name}}-minio
+  namespace: {{.Values.namespace}}
+spec:
+  progressDeadlineSeconds: 600
+  {{- if hasKey .Values.services.minio "replicas" }}
+  replicas:  {{ .Values.services.minio.replicas }}
+  {{- else }}
+  replicas: {{.Values.replicas}}
+  {{- end }}
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: {{.Release.Name}}-minio
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{.Release.Name}}-minio
+    spec:
+      containers:
+      - args:
+        - server
+        - /storage
+        command:
+        - minio
+        env:
+        - name: PORT
+          value: "{{.Values.services.minio.port}}"
+        - name: MINIO_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: general-secret
+              key: minioUser
+        - name: MINIO_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: general-secret
+              key: minioPassword
+        - name: MINIO_ROOT_USER
+          valueFrom:
+            secretKeyRef:
+              name: general-secret
+              key: minioUser
+        - name: MINIO_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: general-secret
+              key: minioPassword
+        image: {{.Values.services.minio.image}}:{{.Values.services.minio.tag }}
+        imagePullPolicy: IfNotPresent
+        name: {{.Release.Name}}-minio
+        ports:
+        - containerPort: {{ .Values.services.minio.port }}
+          name: {{.Release.Name}}-minio
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /storage
+          name: storage
+      dnsPolicy: ClusterFirst
+      volumes:
+      - name: storage
+        persistentVolumeClaim:
+          claimName: {{ .Values.services.minio.pvcName }}
+      {{- if hasKey .Values.services "secretRegistry"}}
+      imagePullSecrets:
+      - name: {{.Values.services.secretRegistry}}
+      {{- end }}
+  {{- end }}

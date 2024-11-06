@@ -1,0 +1,20 @@
+{{- if eq (int .Values.executionMode) 2 }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: be-configmap
+  namespace: {{ .Values.namespace }}
+data:
+  {{ printf "%s-%s" .Values.environment.keycloak.realmInHeader "keycloak"}}: |
+    {
+      "realm" : "{{ .Values.environment.keycloak.realm }}",
+      "resource" : "{{ .Values.environment.keycloak.jtellerOv.resource }}",
+      "auth-server-url" : "{{ .Values.environment.keycloak.url }}",
+      "ssl-required" : "external",
+      "use-resource-role-mappings": true,
+      "bearer-only": true,
+      "credentials" : {
+        "secret": "{{ .Values.environment.keycloak.jtellerOv.secret }}"
+       }
+    }
+  {{- end }}

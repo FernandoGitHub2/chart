@@ -1,0 +1,171 @@
+{{- if eq (int .Values.executionMode) 2 }}
+{{- if eq (int .Values.distributor) 1 }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Release.Name}}-distributor
+  namespace: {{.Values.namespace}}
+spec:
+  {{- if hasKey .Values.services.distributor "replicas" }}
+  replicas:  {{ .Values.services.distributor.replicas }}
+  {{- else }}
+  replicas: {{.Values.replicas}}
+  {{- end }}
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: {{.Release.Name}}-distributor
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{.Release.Name}}-distributor
+    spec:
+      containers:
+      - env:
+        - name: JAVA_OPTS
+          value: '-Dspring.profiles.active=docker'
+        - name: server.port
+          value: "{{.Values.services.distributor.port}}"
+       {{- if eq .Values.environment.database.type "oracle" }}
+        - name: spring.datasource.driver-class-name
+          value: "oracle.jdbc.OracleDriver"
+        - name: spring.jpa.database-platform
+          value: "org.hibernate.dialect.Oracle12cDialect"
+        {{- else if eq .Values.environment.database.type "mysql" }}
+        - name: spring.datasource.driver-class-name
+          value: "com.mysql.cj.jdbc.Driver"
+        - name: spring.jpa.database-platform
+          value: "org.hibernate.dialect.MySQL5InnoDBDialect"
+        {{- end }}
+        - name: db.local.password
+          valueFrom:
+            secretKeyRef:
+              key: distributorPassword
+              name: general-secret
+        - name: db.local.user
+          valueFrom:
+            secretKeyRef:
+              key: distributorUsername
+              name: general-secret
+        - name: keycloak.realm
+          value: {{.Values.environment.keycloak.realm}}
+        - name: keycloak.auth
+          value: {{.Values.environment.keycloak.url}}
+        - name: keycloak.secret
+          value: {{.Values.environment.keycloak.distributor.secret}}
+        - name: config.commonService
+          value: {{.Values.environment.backend.commonUrl}}
+        - name: config.realm
+          value: {{.Values.environment.keycloak.realmInHeader}}
+        - name: config.credentials.user
+          valueFrom:
+            secretKeyRef:
+              key: usercore
+              name: general-secret
+        - name: config.credentials.password
+          valueFrom:
+            secretKeyRef:
+              key: passcore
+              name: general-secret
+        - name: config.credentials.security
+          value: {{.Values.environment.backend.securityCore}}
+        - name: config.catalogService
+          value: {{.Values.environment.backend.catalogUrl}}
+        - name: minio.url
+          value: {{.Values.environment.backend.minioUrl}}
+        - name: migration.enabled
+          value: {{.Values.liquibaseEnable}}
+        - name: migration.context
+          value: {{.Values.liquibaseContext}}
+        - name: spring.jpa.properties.org.hibernate.envers.default_schema
+          value: {{.Values.environment.database.audScheme}}
+        - name: spring.mail.host
+          value: {{ .Values.environment.backend.mail.host }}
+        - name: spring.mail.port
+          value: {{ .Values.environment.backend.mail.port }}
+        - name: spring.mail.properties.mail.smtp.auth
+          value: {{ .Values.environment.backend.mail.auth }}
+        - name: spring.mail.properties.mail.smtp.starttls.enable
+          value: {{ .Values.environment.backend.mail.starttls }}
+        - name: spring.mail.properties.mail.smtp.timeout
+          value: {{ .Values.environment.backend.mail.timeout }}
+        - name: spring.mail.properties.mail.smtp.writetimeout
+          value: {{ .Values.environment.backend.mail.writetimeout }}
+        - name: spring.mail.properties.mail.smtp.connectiontimeout
+          value: {{ .Values.environment.backend.mail.connectiontimeout }}
+        - name: spring.mail.password
+          valueFrom:
+            secretKeyRef:
+              name: general-secret
+              key: mailServerPassword
+        - name: spring.mail.username
+          valueFrom:
+            secretKeyRef:
+              name: general-secret
+              key: mailServerUser
+        - name: spring.jpa.properties.hibernate.format_sql
+          value: {{.Values.environment.database.formatSql}}
+        - name: spring.jpa.show-sql
+          value: {{.Values.environment.database.showSql}}
+        - name: logging.level.org.hibernate.type.descriptor.sql.BasicBinder
+          value: {{.Values.environment.database.sqlBasicBinder}}
+        - name: spring.mvc.locale
+          value: {{.Values.environment.backend.locale}}
+        - name: spring.mvc.locale-resolver
+          value: {{.Values.environment.backend.resolver}}
+        image: {{.Values.services.registry}}{{.Values.services.distributor.image}}:{{.Values.services.distributor.tag}}
+        imagePullPolicy: IfNotPresent
+        name: {{.Release.Name}}-distributor
+        {{- if hasKey .Values.services.distributor "actuator" }}
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: {{ join .Values.services.distributor.actuator.url "/health" }}
+            port: {{ .Values.services.distributor.port }}
+            scheme: HTTP
+          initialDelaySeconds: 100
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: {{ join .Values.services.distributor.actuator.url "/health/readiness" }}
+            port: {{ .Values.services.distributor.port }}
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 3
+          timeoutSeconds: 1
+        {{- end }}
+        ports:
+        - containerPort: {{.Values.services.distributor.port}}
+          protocol: TCP
+        resources:
+          limits:
+            memory: {{.Values.services.distributor.memoryLimit | default "512Mi"}}
+          requests:
+            memory: {{.Values.services.distributor.memoryLimit | default "512Mi"}}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /keycloak/
+          name: keycloak-be-vol
+          readOnly: true
+      dnsPolicy: ClusterFirst
+      {{- if hasKey .Values.services "secretRegistry"}}
+      imagePullSecrets:
+      - name: {{.Values.services.secretRegistry}}
+      {{- end }}
+      restartPolicy: Always
+      volumes:
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: {{.Values.environment.keycloak.realmInHeader}}-keycloak
+            path: {{.Values.environment.keycloak.realmInHeader}}-keycloak.json
+          name: be-configmap
+        name: keycloak-be-vol
+  {{- end }}
+  {{- end }}

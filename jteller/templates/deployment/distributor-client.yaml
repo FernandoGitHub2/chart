@@ -1,0 +1,148 @@
+{{- if eq (int .Values.executionMode) 2 }}
+  {{- if eq (int .Values.distributor) 2 }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-distributor-client
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.services.distributorClient.replicas | default .Values.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-distributor-client
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-distributor-client
+    spec:
+      containers:
+      - name: {{ .Release.Name }}-distributor-client
+        image: {{ .Values.services.registry }}{{ .Values.services.distributorClient.image }}:{{ .Values.services.distributorClient.tag }}
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: JAVA_OPTS
+          value: "-Dspring.profiles.active=docker"
+        - name: server.port
+          value: "{{ .Values.services.distributor.port }}"
+        {{- if eq .Values.environment.database.type "oracle" }}
+        - name: spring.datasource.driver-class-name
+          value: "oracle.jdbc.OracleDriver"
+        - name: spring.jpa.database-platform
+          value: "org.hibernate.dialect.Oracle12cDialect"
+        {{- else if eq .Values.environment.database.type "mysql" }}
+        - name: spring.datasource.driver-class-name
+          value: "com.mysql.cj.jdbc.Driver"
+        - name: spring.jpa.database-platform
+          value: "org.hibernate.dialect.MySQL5InnoDBDialect"
+        {{- end }}
+        - name: db.local.host
+          value: "{{ .Values.environment.database.url }}"
+        - name: spring.datasource.username
+          valueFrom:
+            secretKeyRef:
+              name: general-secret
+              key: clientUsername
+        - name: spring.datasource.password
+          valueFrom:
+            secretKeyRef:
+              name: general-secret
+              key: clientPassword
+        - name: config.distCore
+          value: "{{ .Values.environment.backend.distributorUrl }}"
+        - name: config.credentials.securityClient
+          value: "{{ .Values.environment.backend.securityClient }}"
+        - name: config.credentials.securityCore
+          value: "{{ .Values.environment.backend.securityCore }}"
+        - name: config.credentials.userClient
+          valueFrom:
+            secretKeyRef:
+              name: general-secret
+              key: userclient
+        - name: config.credentials.passClient
+          valueFrom:
+            secretKeyRef:
+              name: general-secret
+              key: passclient
+        - name: config.credentials.userCore
+          valueFrom:
+            secretKeyRef:
+              name: general-secret
+              key: usercore
+        - name: config.credentials.passCore
+          valueFrom:
+            secretKeyRef:
+              name: general-secret
+              key: passcore
+        - name: config.credentials.realmCore
+          value: "{{ .Values.environment.keycloak.realmInHeader }}"
+        - name: config.credentials.realmClient
+          value: "{{ .Values.environment.keycloak.realmInHeader }}"
+        - name: keycloak.realm
+          value: "{{ .Values.environment.keycloak.realm }}"
+        - name: keycloak.auth-server-url
+          value: "{{ .Values.environment.keycloak.url }}"
+        - name: keycloak.credentials.secret
+          value: "{{ .Values.environment.keycloak.distributor.secret }}"
+        - name: minio.url
+          value: "{{ .Values.environment.backend.minioUrl }}"
+        - name: config.path-kubect
+          value: "/kubeconf/config"
+        - name: config.namespace
+          value: "{{ .Values.namespace }}"
+        - name: spring.jpa.properties.hibernate.format_sql
+          value: "{{ .Values.environment.database.formatSql }}"
+        - name: spring.jpa.show-sql
+          value: "{{ .Values.environment.database.showSql }}"
+        - name: logging.level.org.hibernate.type.descriptor.sql.BasicBinder
+          value: "{{ .Values.environment.database.sqlBasicBinder }}"
+        ports:
+        - containerPort: {{ .Values.services.distributorClient.port }}
+          protocol: TCP
+        resources:
+          limits:
+            memory: {{ .Values.services.distributorClient.memoryLimit | default "756Mi" }}
+          requests:
+            memory: {{ .Values.services.distributorClient.memoryLimit | default "756Mi" }}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /kubeconf/
+          name: kube-conf-vol
+        {{- if hasKey .Values.services.distributorClient "actuator" }}
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: {{ join .Values.services.distributorClient.actuator.url "/health" }}
+            port: {{ .Values.services.distributorClient.port }}
+            scheme: HTTP
+          initialDelaySeconds: 100
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: {{ join .Values.services.distributorClient.actuator.url "/health/readiness" }}
+            port: {{ .Values.services.distributorClient.port }}
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 3
+          timeoutSeconds: 1
+        {{- end }}
+      dnsPolicy: ClusterFirst
+      {{- if hasKey .Values.services "secretRegistry"}}
+      imagePullSecrets:
+      - name: {{.Values.services.secretRegistry}}
+      {{- end }}
+      volumes:
+      - name: kube-conf-vol
+        configMap:
+          defaultMode: 420
+          items:
+          - key: config
+            path: config
+          name: integrator-kubeconf
+  {{- end }}
+  {{- end }}

@@ -1,0 +1,1518 @@
+{{- if eq (int .Values.executionMode) 2 }}
+apiVersion: v1
+data:
+  application.yml: |
+    server:
+      port: ${port:2101}
+      compression:
+        enabled: true
+        mime-types: text/html, text/xml, text/plain, text/css, application/javascript, application/json
+        min-response-size: 1024
+      production: 1
+    eureka:
+      instance:
+        statusPageUrlPath: /info
+        healthCheckUrlPath: /health
+        preferIpAddress: true
+      client:
+        serviceUrl:
+          defaultZone: http://registry:1111/eureka/
+        enabled: ${eureka.discovery.enabled:false}
+    spring:
+      application:
+        name: catalog-service
+      datasource:
+        url: ${db.local.host:jdbc:oracle:thin:@//172.16.21.10:1521:xe}
+        username: ${db.local.user:jtellerv7}
+        password: ${db.local.password:jtellerv7}
+        driver-class-name: oracle.jdbc.OracleDriver
+        hikari:
+          minimum-idle: ${db.pool.min-idle:1}
+          maximum-pool-size: ${db.pool.max-pool-size:5}
+          idle-timeout: ${db.pool.idle-timeout:600000}
+          connection-timeout: ${db.pool.connection-timeout:30000}
+          maxLifetime: ${db.pool.maxLifetime:1800000}
+      main:
+        allow-bean-definition-overriding: true
+      jpa:
+        database-platform: org.hibernate.dialect.Oracle12cDialect
+        show-sql: ${db.jpa.show-sql:true}
+        hibernate:
+          ddl-auto: none
+        properties:
+          hibernate.generate_statistics: ${hibernate.generate-statistics:false}
+          org:
+            hibernate:
+              envers:
+                default_schema: jtellerv7
+                do_not_audit_optimistic_locking_field: false
+                store_data_at_delete: true
+      jackson:
+        serialization:
+          write-dates-as-timestamps: true
+          fail-on-empty-beans: ${jackson.serialization.fail-on-empty-beans:false}
+      mvc:
+        locale-resolver: fixed
+        locale: es
+    app:
+      commons:
+        report:
+          maxNumberItemsReport: 1000
+          imagePathReport: classpath:logoByte.png
+    logging:
+      level:
+        com.bytesw: ${log.level.bytesw:INFO}
+        org.hibernate: ${log.level.hibernate:INFO}
+        org.springframework: ${log.level.spring:INFO}
+        com.netflix.discovery.shared.resolver.aws: ${log.level.netflix.eureka.aws:OFF}
+        springfox.documentation.spring.web: ${log.level.springfox:OFF}
+    liquibase:
+      change-log: classpath:dbchangelog.xml
+      contexts: ${migration.context:production}
+      enabled: ${migration.enabled:false}
+    management:
+      health:
+        probes:
+          enabled: true
+      endpoint:
+        health:
+          show-details: always
+    byte:
+      swagger:
+        api:
+          enabled: ${swagger.enabled:true}
+          title: Catalog service
+          description: Documentation of the catalog service API's
+          terms-of-service-url: http://www.bytesw.com
+          license: Byte
+          license-url: http://www.bytesw.com
+          version: 1.0.0
+          paths:
+            - /bank
+            - /barcode
+            - /barcodeDetail
+            - /cashierLevel
+            - /changeEffectiveDateSpec
+            - /channel
+            - /checkDigit
+            - /countriesUseMoney
+            - /country
+            - /customerType
+            - /dataFrame
+            - /dataFrameDetail
+            - /dataType
+            - /denominationSpec
+            - /departament
+            - /errorMessage
+            - /eventType
+            - /format
+            - /formatDetail
+            - /formula
+            - /formulaDetail
+            - /generalParameters
+            - /geographicLevel1
+            - /geographicLevel2
+            - /geographicLevel3
+            - /globalValues
+            - /groupService
+            - /indicator
+            - /money
+            - /nonWorkingDays
+            - /offlinePaymentRule
+            - /products
+            - /reasonRefusalAuth
+            - /reasonsUserBlock
+            - /region
+            - /reportColumns
+            - /report
+            - /reportDetail
+            - /routine
+            - /serviceOperator
+            - /servicePay
+            - /table
+            - /tableDetail
+            - /totalReportByTree
+            - /totalsReport
+            - /transactionsByTreebranch
+            - /typeBalance
+            - /typeCashier
+            - /typeRoutine
+            - /typeTreebranch
+            - /user
+            - /userRole
+            - /workday
+            - /characteristicSpec
+      resource:
+        config:
+          enabled: ${resource.security.enabled:false}
+    keycloak:
+      realm: ${keycloak.realmName:JTeller}
+      resource: ${keycloak.client:specs-configuration}
+      ssl-required: external
+      auth-server-url: ${keycloak.auth:https://keycloak.bytesw.cloud:30000}
+      bearer-only: true
+      credentials:
+        secret: ${keycloak.secret:smKzP5GNRS4XieHByrqzIsppscABge3L}
+      config:
+        number: 1 # 1 -> resources/file.json , 2 -> conf in yaml
+      securityConstraints:
+        - authRoles:
+            {{- range  $index, $role := .Values.environment.keycloak.roles}}
+            - {{$role}}
+            {{- end }}
+          securityCollections:
+            - name: example-service
+              patterns:
+                - /api/example/*
+            - name: validate-service
+              patterns:
+                - /v1/validateAccess/*
+            - name: user-service
+              patterns:
+                - /v1/user/*
+            - name: additional-entity-fields-resource
+              patterns:
+                - /v1/additionalEntityFields/*
+            - name: additional-fields-per-entity-resource
+              patterns:
+                - /v1/additionalFieldsPerEntity/*
+            - name: apply-changes-resource
+              patterns:
+                - /v1/applyChanges/*
+            - name: auth-level-resource
+              patterns:
+                - /v1/authLevel/*
+            - name: auth-permit-by-tree-resource
+              patterns:
+                - /v1/authPermitByTree/*
+            - name: bank-resource
+              patterns:
+                - /v1/bank/*
+            - name: barcode-resource
+              patterns:
+                - /v1/barcode/*
+            - name: barcode-detail-resource
+              patterns:
+                - /v1/barcodeDetail/*
+            - name: cashier-level-resource
+              patterns:
+                - /v1/cashierLevel/*
+            - name: change-effective-date-spec-resource
+              patterns:
+                - /v1/changeEffectiveDateSpec/*
+            - name: channel-resource
+              patterns:
+                - /v1/channel/*
+            - name: characteristic-equivalencies-resource
+              patterns:
+                - /v1/characteristicEquivalencies/*
+            - name: check-digit-resource
+              patterns:
+                - /v1/checkDigit/*
+            - name: collector-hos-info-resource
+              patterns:
+                - /v1/collectorHosInfo/*
+            - name: countries-use-money-resource
+              patterns:
+                - /v1/countriesUseMoney/*
+            - name: country-resource
+              patterns:
+                - /v1/country/*
+            - name: customer-type-resource
+              patterns:
+                - /v1/customerType/*
+            - name: data-frame-resource
+              patterns:
+                - /v1/dataFrame/*
+            - name: data-frame-detail-resource
+              patterns:
+                - /v1/data_frame_detail/*
+            - name: data-type-resource
+              patterns:
+                - /v1/dataType/*
+            - name: denomination-spec-resource
+              patterns:
+                - /v1/denominationSpec/*
+            - name: departament-resource
+              patterns:
+                - /v1/departament/*
+            - name: equivalencies-resource
+              patterns:
+                - /v1/equivalencies/*
+            - name: error-messages-resource
+              patterns:
+                - /v1/errorMessages/*
+            - name: event-type-resource
+              patterns:
+                - /v1/eventType/*
+            - name: format-resource
+              patterns:
+                - /v1/format/*
+            - name: format-detail-resource
+              patterns:
+                - /v1/formatDetail/*
+            - name: formula-resource
+              patterns:
+                - /v1/formula/*
+            - name: formula-detail-resource
+              patterns:
+                - /v1/formulaDetail/*
+            - name: general-parameters-resource
+              patterns:
+                - /v1/generalParameters/*
+            - name: geographic-level1-resource
+              patterns:
+                - /v1/geographicLevel1/*
+            - name: geographic-level2-resource
+              patterns:
+                - /v1/geographicLevel2/*
+            - name: geographic-level3-resource
+              patterns:
+                - /v1/geographicLevel3/*
+            - name: global-values-by-organization-tree-resource
+              patterns:
+                - /v1/globalValuesByOrganizationTree/*
+            - name: global-values-resource
+              patterns:
+                - /v1/globalValues/*
+            - name: group-service-resource
+              patterns:
+                - /v1/groupService/*
+            - name: indicator-resource
+              patterns:
+                - /v1/indicator/*
+            - name: money-resource
+              patterns:
+                - /v1/money/*
+            - name: non-working-days-resource
+              patterns:
+                - /v1/nonWorkingDays/*
+            - name: offline-payment-rule-resource
+              patterns:
+                - /v1/offlinePaymentRule/*
+            - name: operational-version-source
+              patterns:
+                - /v1/operationalVersion/*
+            - name: organization-tree-resource
+              patterns:
+                - /v1/organizationTree/*
+            - name: permits-resource
+              patterns:
+                - /v1/permits/*
+            - name: products-resource
+              patterns:
+                - /v1/products/*
+            - name: provide-requirement-spec-resource
+              patterns:
+                - /v1/provideRequirementSpec/*
+            - name: get-changes-user-resource
+              patterns:
+                - /v1/getChangesUser/*
+            - name: reason-refusal-auth-resource
+              patterns:
+                - /v1/reasonRefusalAuth/*
+            - name: reasons-reverse-resource
+              patterns:
+                - /v1/reasonsReverse/*
+            - name: reasons-user-block-resource
+              patterns:
+                - /v1/reasonsUserBlock/*
+            - name: region-resource
+              patterns:
+                - /v1/region/*
+            - name: report-columns-resource
+              patterns:
+                - /v1/reportColumns/*
+            - name: report-resource
+              patterns:
+                - /v1/report/*
+            - name: report-detail-resource
+              patterns:
+                - /v1/reportDetail/*
+            - name: responsible-vault-resource
+              patterns:
+                - /v1/responsibleVault/*
+            - name: routine-resource
+              patterns:
+                - /v1/routine/*
+            - name: service-attributes-resource
+              patterns:
+                - /v1/serviceAttributes/*
+            - name: service-attribute-value-resource
+              patterns:
+                - /v1/serviceAttributeValue/*
+            - name: service-operator-resource
+              patterns:
+                - /v1/serviceOperator/*
+            - name: service-pay-resource
+              patterns:
+                - /v1/servicePay/*
+            - name: table-resource
+              patterns:
+                - /v1/table/*
+            - name: table-detail-resource
+              patterns:
+                - /v1/tableDetail/*
+            - name: total-report-by-tree-resource
+              patterns:
+                - /v1/totalReportByTree/*
+            - name: totals-report-resource
+              patterns:
+                - /v1/totalsReport/*
+            - name: transactions-by-treebranch-resource
+              patterns:
+                - /v1/transactionsByTreebranch/*
+            - name: tree-labels-resource
+              patterns:
+                - /v1/treeLabels/*
+            - name: type-balance-resource
+              patterns:
+                - /v1/typeBalance/*
+            - name: type-cashier-resource
+              patterns:
+                - /v1/typeCashier/*
+            - name: type-routine-resource
+              patterns:
+                - /v1/typeRoutine/*
+            - name: type-treebranch-resource
+              patterns:
+                - /v1/typeTreebranch/*
+            - name: user-branches-resource
+              patterns:
+                - /v1/userBranches/*
+            - name: user-requirement-resource
+              patterns:
+                - /v1/userRequirement/*
+            - name: user-role-resource
+              patterns:
+                - /v1/userRole/*
+            - name: vault-spec-resource
+              patterns:
+                - /v1/vaultSpec/*
+            - name: workday-resource
+              patterns:
+                - /v1/workday/*
+            - name: control-requirement-resource
+              patterns:
+                - /v1/entityControlRequirement/*
+      policy-enforcer-config:
+        paths:
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+            path: /api/example/*
+          - methods:
+              - method: POST
+                scopes:
+                  - create
+            path: /v1/validateAccess/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/user/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/additionalEntityFields/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/additionalFieldsPerEntity/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/applyChanges/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/authLevel/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/authPermitByTree/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/bank/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/barcode/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/barcodeDetail/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/cashierLevel/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/changeEffectiveDateSpec/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/channel/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/characteristicEquivalencies/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/checkDigit/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/collectorHosInfo
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/countriesUseMoney/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/country/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/customerType/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/dataFrame/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/data_frame_detail/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/dataType/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/denominationSpec/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/departament/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/equivalencies/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/errorMessages/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/eventType/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/format/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/formatDetail/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/formula/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/formulaDetail/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/generalParameters/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/geographicLevel1/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/geographicLevel2/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/geographicLevel3/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/globalValuesByOrganizationTree/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/globalValues/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/groupService/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/indicator/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/money/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/nonWorkingDays/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/offlinePaymentRule/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/operationalVersion/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/organizationTree/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/permits/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/products/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/provideRequirementSpec/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/getChangesUser/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/reasonRefusalAuth/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/reasonsReverse/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/reasonsUserBlock/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/region/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/reportColumns/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/report/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/reportDetail/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/responsibleVault/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/routine/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/serviceAttributes/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/serviceAttributeValue/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/serviceOperator/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/servicePay/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/table/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/tableDetail/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/totalReportByTree/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/totalsReport/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/transactionsByTreebranch/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/treeLabels/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/typeBalance/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/typeCashier/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/typeRoutine/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/typeTreebranch/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/userBranches/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/userRequirement/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/userRole/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/vaultSpec/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/workday/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/entityControlRequirement/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+            path: /actuator/**
+            enforcementMode: DISABLED
+    AUT_TRX_BY_BRANCH: 0
+    config:
+      personInterface: "false"
+      realm: jteller
+      mailResetPass: 1
+      personConfService: http://person-conf-service:8080
+      catalogService: http://catalog:2102
+      savePersonURL: http://172.16.21.10:30012/service/person-data/person/savePerson
+      updatePersonURL: http://172.16.21.10:30012/service/person-data/person/updatePerson
+      getPersonURL: http://172.16.21.10:30012/service/person-data/person/getPerson
+      distEnable: 0
+      #Se agrega variable para controlar si es necesario que las jornadas se cierren para que un usuario cambie de jornada
+      # 0 - No se permite cambio de jornada si no se cierran las jornadas.
+      # 1 - Se permite cambio de jornada aunque no se cierren las jornadas.
+      validUserMove: 1
+      keycloak:
+        username: admin
+        password: admin
+    ---
+
+    spring:
+      profiles: test
+    server:
+      port: 0
+
+    ---
+
+    spring:
+      profiles: docker
+    eureka:
+      instance:
+        hostname: ${byte.net.hostname:catalog-service}
+        ipAddress: ${byte.net.address}
+kind: ConfigMap
+metadata:
+  name: keycloak-catalog
+  namespace: {{.Values.namespace}}
+
+  {{- end }}

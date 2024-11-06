@@ -1,0 +1,6 @@
+apiVersion: v2
+name: jteller
+description: JTELLER APPLICATION
+type: application
+version: 0.1.1
+appVersion: "7.6"

@@ -1,0 +1,27 @@
+{{- if eq (int .Values.executionMode) 2 }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-configmap
+  namespace: {{ .Values.namespace }}
+data:
+  keycloak.json: |
+    {
+     "keycloak": {
+                 "issuer": "{{ printf "%s/%s/%s" .Values.environment.keycloak.url "realms" .Values.environment.keycloak.realm }}",
+                 "redirectUri": "window.location.origin",
+                 "clientId": "jt-frontend",
+                 "responseType": "code",
+                 "scope": "openid profile email offline_access",
+                 "showDebugInformation": true,
+                 "requireHttps": false,
+                 "disableAtHashCheck": true,
+                 "realmInHeader": "{{.Values.environment.keycloak.realmInHeader}}",
+                 "haveDistributor": true,
+                 "personInterface": true,
+                 "firmasInterface": false,
+                 "language": "es",
+                 "hasGranularSecurity": true
+                 }
+    }
+  {{- end }}

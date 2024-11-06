@@ -1,0 +1,248 @@
+{{- if eq (int .Values.executionMode) 2 }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Release.Name}}-transaction-catalog
+  namespace: {{ .Values.namespace }}
+spec:
+  {{- if hasKey .Values.services.transactionCatalog "replicas" }}
+  replicas:  {{ .Values.services.transactionCatalog.replicas }}
+  {{- else }}
+  replicas: {{.Values.replicas}}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{.Release.Name}}-transaction-catalog
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{.Release.Name}}-transaction-catalog
+    spec:
+      containers:
+        - env:
+            - name: server.port
+              value: "{{ .Values.services.transactionCatalog.port }}"
+            - name: spring.datasource.url
+              value: {{ quote .Values.environment.database.url }}
+            {{- if eq .Values.environment.database.type "oracle" }}
+            - name: spring.datasource.driver-class-name
+              value: "oracle.jdbc.OracleDriver"
+            - name: spring.jpa.database-platform
+              value: "org.hibernate.dialect.Oracle12cDialect"
+            {{- else if eq .Values.environment.database.type "mysql" }}
+            - name: spring.datasource.driver-class-name
+              value: "com.mysql.cj.jdbc.Driver"
+            - name: spring.jpa.database-platform
+              value: "org.hibernate.dialect.MySQL5InnoDBDialect"
+            {{- end }}
+            - name: keycloak.config.number
+              value: {{ .Values.environment.keycloak.securityOpt }}
+            - name: keycloak.auth-server-url
+              value: {{ .Values.environment.keycloak.url }}
+            - name: keycloak.realm
+              value: {{ .Values.environment.keycloak.realm }}
+            - name: spring.mvc.locale-resolver
+              value: {{ .Values.environment.backend.resolver }}
+            - name: spring.mvc.locale
+              value: {{ .Values.environment.backend.locale }}
+            - name: config.keycloak.username
+              valueFrom:
+                secretKeyRef:
+                  name: general-secret
+                  key: keycloakAdminUsername
+            - name: config.keycloak.password
+              valueFrom:
+                secretKeyRef:
+                  name: general-secret
+                  key: keycloakAdminPassword
+            - name: config.distEnable
+              value: {{ .Values.environment.backend.enableDist }}
+            - name: config.personInterface
+              value: {{ .Values.environment.backend.personInterface }}
+            - name: config.savePersonURL
+              value: {{ .Values.environment.backend.personUrl }}/service/person-data/person/savePerson
+            - name: config.updatePersonURL
+              value: {{ .Values.environment.backend.personUrl }}/service/person-data/person/updatePerson
+            - name: config.getPersonURL
+              value: {{ .Values.environment.backend.personUrl }}/service/person-data/person/getPerson
+            - name: config.mailResetPass
+              value: {{ .Values.environment.backend.mailResetPass }}
+            - name: config.validUserMove
+              value: {{ .Values.environment.backend.validUserMove }}
+            - name: spring.datasource.username
+              valueFrom:
+                secretKeyRef:
+                  name: general-secret
+                  key: jtellerUsername
+            - name: spring.datasource.password
+              valueFrom:
+                secretKeyRef:
+                  name: general-secret
+                  key: jtellerPassword
+            - name: keycloak.resource
+              value: {{ .Values.environment.keycloak.jtellerSpec.resource }}
+            - name: keycloak.credentials.secret
+              value: {{ .Values.environment.keycloak.jtellerSpec.secret }}
+            - name: spring.jpa.properties.org.hibernate.envers.default_schema
+              value: {{ .Values.environment.database.audScheme }}
+            - name: spring.jpa.show-sql
+              value: {{ .Values.environment.database.showSql }}
+            - name: logging.level.org.hibernate.type.descriptor.sql.BasicBinder
+              value: {{ .Values.environment.database.sqlBasicBinder }}
+            - name: spring.jpa.properties.hibernate.format_sql
+              value: {{ .Values.environment.database.formatSql }}
+            - name: spring.jpa.show-sql
+              value: {{ .Values.environment.database.showSql }}
+            - name: config.ambiente
+              value: {{ .Values.environment.keycloak.realm }}
+            - name: mail.host
+              value: {{ .Values.environment.backend.mail.host }}
+            - name: mail.port
+              value: {{ .Values.environment.backend.mail.port }}
+            - name: mail.auth
+              value: {{ .Values.environment.backend.mail.auth }}
+            - name: mail.tls
+              value: {{ .Values.environment.backend.mail.starttls }}
+            - name: mail.password
+              valueFrom:
+                secretKeyRef:
+                  name: general-secret
+                  key: mailServerPassword
+            - name: mail.user
+              valueFrom:
+                secretKeyRef:
+                  name: general-secret
+                  key: mailServerUser
+            - name: spring.mail.host
+              value: {{ .Values.environment.backend.mail.host }}
+            - name: spring.mail.port
+              value: {{ .Values.environment.backend.mail.port }}
+            - name: spring.mail.properties.mail.smtp.auth
+              value: {{ .Values.environment.backend.mail.auth }}
+            - name: spring.mail.properties.mail.smtp.starttls.enable
+              value: {{ .Values.environment.backend.mail.starttls }}
+            - name: spring.mail.properties.mail.smtp.timeout
+              value: {{ .Values.environment.backend.mail.timeout }}
+            - name: spring.mail.properties.mail.smtp.writetimeout
+              value: {{ .Values.environment.backend.mail.writetimeout }}
+            - name: spring.mail.properties.mail.smtp.connectiontimeout
+              value: {{ .Values.environment.backend.mail.connectiontimeout }}
+            - name: spring.mail.password
+              valueFrom:
+                secretKeyRef:
+                  name: general-secret
+                  key: mailServerPassword
+            - name: spring.mail.username
+              valueFrom:
+                secretKeyRef:
+                  name: general-secret
+                  key: mailServerUser
+            - name: config.numberFormat.includeThousandsSeparator
+              value: {{ .Values.environment.backend.numberFormat.includeThousandsSeparator }}
+            - name: config.numberFormat.thousandsSeparatorSymbol
+              value: "{{ .Values.environment.backend.numberFormat.thousandsSeparatorSymbol }}"
+            - name: config.numberFormat.allowDecimal
+              value: {{ .Values.environment.backend.numberFormat.allowDecimal }}
+            - name: config.numberFormat.decimalSymbol
+              value: {{ .Values.environment.backend.numberFormat.decimalSymbol }}
+            - name: config.numberFormat.decimalLimit
+              value: {{ .Values.environment.backend.numberFormat.decimalLimit }}
+            - name: config.numberFormat.decimalLimitOnRate
+              value: {{ .Values.environment.backend.numberFormat.decimalLimitOnRate }}
+            - name: config.whatsapp.token
+              value: {{ .Values.environment.backend.whatsapp.token }}
+            - name: config.whatsapp.id
+              value: {{ .Values.environment.backend.whatsapp.id }}
+            - name: config.whatsapp.version
+              value: {{ .Values.environment.backend.whatsapp.version }}
+            - name: config.whatsapp.templateName
+              value: {{ .Values.environment.backend.whatsapp.templateName }}
+            - name: config.whatsapp.templateLanguage
+              value: {{ .Values.environment.backend.whatsapp.templateLanguage }}
+            - name: spring.rabbitmq.password
+              valueFrom:
+                secretKeyRef:
+                  name: general-secret
+                  key: rabbitPassword
+            - name: spring.rabbitmq.username
+              valueFrom:
+                secretKeyRef:
+                  name: general-secret
+                  key: rabbitUsername
+            - name: spring.rabbitmq.port
+              value: {{ .Values.environment.backend.rabbitmq.port }}
+            - name: spring.rabbitmq.host
+              value: {{ .Values.environment.backend.rabbitmq.host }}
+            - name: spring.rabbitmq.queue
+              value: {{ .Values.environment.backend.rabbitmq.queue }}
+          image: {{.Values.services.registry}}{{.Values.services.transactionCatalog.image}}:{{.Values.services.transactionCatalog.tag }}
+          imagePullPolicy: IfNotPresent
+          {{- if hasKey .Values.services.transactionCatalog "actuator" }}
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: {{join .Values.services.transactionCatalog.actuator.url "/health" }}
+              port: {{ .Values.services.transactionCatalog.port }}
+              scheme: HTTP
+            initialDelaySeconds: 100
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 1
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: {{join .Values.services.transactionCatalog.actuator.url "/health/readiness" }}
+              port: {{ .Values.services.transactionCatalog.port }}
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 3
+            timeoutSeconds: 1
+          {{- end }}
+          name: {{.Release.Name}}-transaction-catalog
+          ports:
+          - containerPort: {{ .Values.services.transactionCatalog.port }}
+            protocol: TCP
+          resources:
+            limits:
+              {{- if hasKey .Values.services.transactionCatalog "memoryLimit" }}
+              memory: {{ .Values.services.transactionCatalog.memoryLimit }}
+              {{- else}}
+              memory: 756Mi
+              {{- end }}
+            requests:
+              {{- if hasKey .Values.services.transactionCatalog "memoryLimit" }}
+              memory: {{ .Values.services.transactionCatalog.memoryLimit }}
+              {{- else}}
+              memory: 756Mi
+              {{- end }}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /keycloak/
+            name: keycloak-be-vol
+          - mountPath: /config/
+            name: keycloak-conf
+            readOnly: true
+      dnsPolicy: ClusterFirst
+      {{- if hasKey .Values.services "secretRegistry"}}
+      imagePullSecrets:
+      - name: {{.Values.services.secretRegistry}}
+      {{- end }}
+      volumes:
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: {{.Values.environment.keycloak.realmInHeader}}-keycloak
+            path: {{.Values.environment.keycloak.realmInHeader}}-keycloak.json
+          name: be-configmap
+        name: keycloak-be-vol
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: application.yml
+            path: application.yml
+          name: keycloak-transaction-catalog
+        name: keycloak-conf
+  {{- end }}

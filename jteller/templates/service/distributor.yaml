@@ -1,0 +1,25 @@
+{{- if eq (int .Values.executionMode) 2 }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: distributor
+  namespace: {{.Values.namespace}}
+spec:
+  ports:
+  - port: {{.Values.services.distributor.port}}
+    protocol: TCP
+    targetPort: {{.Values.services.distributor.port}}
+    {{- if  hasKey .Values.services.distributor "nodePort"}}
+    nodePort: {{.Values.services.distributor.nodePort}}
+    {{- end }}
+  selector:
+    app: {{.Release.Name}}-distributor
+  sessionAffinity: None
+  {{- if eq (toString (.Values.services.distributor.typeService)) "C"}}
+  type: ClusterIP
+  {{- else if eq (toString (.Values.services.distributor.typeService)) "L"}}
+  type: LoadBalancer
+  {{- else }}
+  type: NodePort
+  {{- end }}
+  {{- end }}

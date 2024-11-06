@@ -1,0 +1,39 @@
+{{- if eq (int .Values.executionMode) 2 }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: operation-view-configmap
+  namespace: {{ .Values.namespace }}
+data:
+  config.json: |
+    {
+     "config": {
+                 "issuer": "{{ printf "%s/%s/%s" .Values.environment.keycloak.url "realms" .Values.environment.keycloak.realm }}",
+                 "redirectUri": "window.location.origin",
+                 "clientId": "operation-view",
+                 "responseType": "code",
+                 "scope": "openid profile email offline_access",
+                 "showDebugInformation": true,
+                 "requireHttps": false,
+                 "disableAtHashCheck": true,
+                 "realmInHeader": "{{.Values.environment.keycloak.realmInHeader}}",
+                 "idleTime": "6",
+                 "deviceControl":false,
+                 "timeHttp":"90000",
+                 "selectBranches":true,
+                 "theme":"jteller",
+                 "language":"es",
+                 "localeSettings":{
+                   "includeThousandsSeparator": true,
+                   "thousandsSeparatorSymbol": "{{.Values.environment.backend.numberFormat.thousandsSeparatorSymbol}}",
+                   "allowDecimal": {{ if eq (int .Values.environment.backend.numberFormat.allowDecimal) 1 }} true {{else}} false {{end}},
+                   "requireDecimal": {{ if eq (int .Values.environment.backend.numberFormat.allowDecimal) 1}} true {{else}} false {{end}},
+                   "decimalSymbol": "{{.Values.environment.backend.numberFormat.decimalSymbol}}",
+                   "decimalLimit": {{.Values.environment.backend.numberFormat.decimalLimit}},
+                   "exchangeRateDecimalLimit": {{.Values.environment.backend.numberFormat.decimalLimitOnRate}}
+                   }
+                 }
+    }
+
+
+  {{- end }}

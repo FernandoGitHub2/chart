@@ -1,0 +1,53 @@
+{{- if eq (int .Values.executionMode) 2 }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Release.Name}}-admin-view
+  namespace: {{.Values.namespace}}
+spec:
+  {{- if hasKey .Values.services.adminView "replicas" }}
+  replicas:  {{ .Values.services.adminView.replicas }}
+  {{- else }}
+  replicas: {{.Values.replicas}}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{.Release.Name}}-admin-view
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{.Release.Name}}-admin-view
+    spec:
+      containers:
+      - image: {{.Values.services.registry}}{{.Values.services.adminView.image}}:{{.Values.services.adminView.tag}}
+        imagePullPolicy: IfNotPresent
+        name: {{.Release.Name}}-admin-view
+        ports:
+        - containerPort: {{.Values.services.adminView.port}}
+          protocol: TCP
+        resources:
+          limits:
+            memory: {{.Values.services.adminView.memoryLimit | default "512Mi"}}
+          requests:
+            memory: {{.Values.services.adminView.memoryLimit | default "512Mi"}}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /app/assets/config
+          name: keycloak-admin-view-vol
+      dnsPolicy: ClusterFirst
+      {{- if hasKey .Values.services "secretRegistry"}}
+      imagePullSecrets:
+      - name: {{.Values.services.secretRegistry}}
+      {{- end }}
+      volumes:
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: config.json
+            path: config.json
+          name: admin-view-configmap
+        name: keycloak-admin-view-vol
+  {{- end }}
