@@ -1,6 +1,6 @@
 environment:
   database:
-    url: jdbc:mysql://152.42.151.98:3306/
+    url: jdbc:mysql://172.16.10.101:3306/
     type: mysql
     audScheme: logdat
     showSql: true
