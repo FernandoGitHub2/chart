@@ -1,4 +1,4 @@
-{{- if eq (int .Values.executionMode) 2 }}
+{{- if or eq ((int .Values.executionMode) 3) ((int .Values.executionMode) 2) ((int .Values.executionMode) 1) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
