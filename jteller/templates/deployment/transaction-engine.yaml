@@ -28,6 +28,8 @@ spec:
     spec:
       containers:
         - env:
+            - name: JAVA_OPTS
+              value: "-XX:MaxRAMPercentage=75.0 -XX:MinRAMPercentage=50.0"
             - name: server.port
               value: "{{ .Values.services.transactionEngine.port }}"
             - name: spring.datasource.url
