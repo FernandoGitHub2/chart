@@ -18,7 +18,7 @@ spec:
     protocol: TCP
     targetPort: 5672
   selector:
-    app: rabbitmq
+    app: {{ .Release.Name }}-rabbitmq
   sessionAffinity: None
   {{- if eq (toString (.Values.services.rabbitmq.typeService)) "C"}}
   type: ClusterIP
