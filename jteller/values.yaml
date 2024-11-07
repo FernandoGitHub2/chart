@@ -55,7 +55,7 @@ environment:
     validUserMove: 0
     isAlive:
       read: select count(*) from jtellerv7.IS_ALIVE_CONTROL
-      write: insert into jtellerv7.IS_ALIVE_CONTROL(CONTROL_DATE) VALUES (SYSDATE)
+      write: insert into jtellerv7.IS_ALIVE_CONTROL(CONTROL_DATE) VALUES (now())
     mail:
       host: smtp.gmail.com
       port: 587
