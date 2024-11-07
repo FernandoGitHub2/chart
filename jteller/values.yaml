@@ -178,7 +178,7 @@ camposTabla:
        isTotalize: 1
        columnToTotalizeNumber: 6
        correlativeField: 61
-  app-payments: |
+  appPayments: |
     typeFile: "JSON"
     moreMessages: false
     fieldNameData: null

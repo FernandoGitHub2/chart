@@ -224,8 +224,10 @@ spec:
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
+          {{- if hasKey .Values "camposTabla"}}
           - mountPath: /config/
             name: transaction-engine-vol
+          {{- end }}
           - mountPath: /keycloak/
             name: keycloak-be-vol
       dnsPolicy: ClusterFirst
@@ -234,33 +236,17 @@ spec:
       - name: {{.Values.services.secretRegistry}}
       {{- end }}
       volumes:
+      {{- if hasKey .Values "camposTabla"}}
       - configMap:
           defaultMode: 420
           items:
-          - key: table
-            path: table.yml
-          - key: app-payments
-            path: AppPayments.yml
-          - key: trama-accepted
-            path: TramaAccepted.yml
-          - key: trama-more-messages
-            path: TramaMoreMessages.yml
-          - key: trama-rejected
-            path: TramaRejected.yml
-          - key: tabla-100
-            path: tabla-100.yml
-          - key: tabla-101
-            path: tabla-101.yml
-          - key: tabla-102
-            path: tabla-102.yml
-          - key: tabla-103
-            path: tabla-103.yml
-          - key: tabla-104
-            path: tabla-104.yml
-          - key: tabla-105
-            path: tabla-105.yml
+          {{- range $key, $value := .Values.camposTabla }}
+          - key: {{$key}}
+            path: {{$key}}.yml
+          {{- end }}
           name: transaction-engine-config-map
         name: transaction-engine-vol
+        {{- end }}
       - configMap:
           defaultMode: 420
           items:
