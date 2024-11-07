@@ -65,12 +65,6 @@ spec:
               value: "{{ .Values.environment.backend.enableDist }}"
             - name: config.personInterface
               value: "{{ .Values.environment.backend.personInterface }}"
-            - name: config.savePersonURL
-              value: {{ .Values.environment.backend.personUrl }}/service/person-data/person/savePerson
-            - name: config.updatePersonURL
-              value: {{ .Values.environment.backend.personUrl }}/service/person-data/person/updatePerson
-            - name: config.getPersonURL
-              value: {{ .Values.environment.backend.personUrl }}/service/person-data/person/getPerson
             - name: config.mailResetPass
               value: "{{ .Values.environment.backend.mailResetPass }}"
             - name: config.validUserMove
@@ -113,6 +107,10 @@ spec:
               value: "{{ .Values.environment.backend.mail.writetimeout }}"
             - name: spring.mail.properties.mail.smtp.connectiontimeout
               value: "{{ .Values.environment.backend.mail.connectiontimeout }}"
+            - name: spring.liquibase.enable
+              value: "{{ .Values.liquibaseEnable }}"
+            - name: spring.liquibase.contexts
+              value: "{{ .Values.liquibaseContext }}"
             - name: spring.mail.password
               valueFrom:
                 secretKeyRef:

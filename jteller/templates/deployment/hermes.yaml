@@ -63,12 +63,6 @@ spec:
               value: "{{ .Values.environment.backend.enableDist }}"
             - name: config.personInterface
               value: "{{ .Values.environment.backend.personInterface }}"
-            - name: config.savePersonURL
-              value: {{ .Values.environment.backend.personUrl }}/service/person-data/person/savePerson
-            - name: config.updatePersonURL
-              value: {{ .Values.environment.backend.personUrl }}/service/person-data/person/updatePerson
-            - name: config.getPersonURL
-              value: {{ .Values.environment.backend.personUrl }}/service/person-data/person/getPerson
             - name: config.mailResetPass
               value: "{{ .Values.environment.backend.mailResetPass }}"
             - name: config.validUserMove

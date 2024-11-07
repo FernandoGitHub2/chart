@@ -183,6 +183,10 @@ spec:
               value: {{ .Values.environment.backend.rabbitmq.host }}
             - name: spring.rabbitmq.queue
               value: {{ .Values.environment.backend.rabbitmq.queue }}
+            - name: spring.liquibase.enable
+              value: "{{ .Values.liquibaseEnable }}"
+            - name: spring.liquibase.contexts
+              value: "{{ .Values.liquibaseContext }}"
           image: {{ .Values.services.registry}}{{.Values.services.transactionEngine.image}}:{{.Values.services.transactionEngine.tag }}
           imagePullPolicy: IfNotPresent
           {{- if hasKey .Values.services.transactionEngine "actuator" }}

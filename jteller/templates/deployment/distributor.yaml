@@ -117,6 +117,10 @@ spec:
           value: {{.Values.environment.backend.locale}}
         - name: spring.mvc.locale-resolver
           value: {{.Values.environment.backend.resolver}}
+        - name: spring.liquibase.enable
+          value: "{{ .Values.liquibaseEnable }}"
+        - name: spring.liquibase.contexts
+          value: "{{ .Values.liquibaseContext }}"
         image: {{.Values.services.registry}}{{.Values.services.distributor.image}}:{{.Values.services.distributor.tag}}
         imagePullPolicy: IfNotPresent
         name: {{.Release.Name}}-distributor

@@ -89,6 +89,10 @@ spec:
               value: {{ .Values.environment.database.showSql }}
             - name: config.ambiente
               value: {{ .Values.environment.keycloak.realm }}
+            - name: spring.liquibase.enable
+              value: "{{ .Values.liquibaseEnable }}"
+            - name: spring.liquibase.contexts
+              value: "{{ .Values.liquibaseContext }}"
           image: {{ .Values.services.registry}}{{.Values.services.personData.image}}:{{.Values.services.personData.tag }}
           imagePullPolicy: IfNotPresent
           {{- if hasKey .Values.services.personData "actuator" }}

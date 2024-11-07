@@ -97,6 +97,10 @@ spec:
           value: "{{ .Values.environment.database.showSql }}"
         - name: logging.level.org.hibernate.type.descriptor.sql.BasicBinder
           value: "{{ .Values.environment.database.sqlBasicBinder }}"
+        - name: spring.liquibase.enable
+          value: "{{ .Values.liquibaseEnable }}"
+        - name: spring.liquibase.contexts
+          value: "{{ .Values.liquibaseContext }}"
         ports:
         - containerPort: {{ .Values.services.distributorClient.port }}
           protocol: TCP
