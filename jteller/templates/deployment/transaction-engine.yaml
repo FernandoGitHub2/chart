@@ -98,7 +98,7 @@ spec:
             - name: spring.jpa.properties.hibernate.format_sql
               value: "{{ .Values.environment.database.formatSql }}"
             - name: spring.jpa.show-sql
-              value: {{ .Values.environment.database.showSql }}
+              value: "{{ .Values.environment.database.showSql }}"
             - name: config.ambiente
               value: {{ .Values.environment.keycloak.realm }}
             - name: mail.host
