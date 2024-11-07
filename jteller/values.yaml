@@ -70,8 +70,8 @@ environment:
       templateName: comprobante
       templateLanguage: es
     rabbitmq:
-      port: 30042
-      host: 172.16.10.105
+      port: 5672
+      host: rabbitmq
       queue: journal-process-queue
   frontend:
     aceptedUrls:
