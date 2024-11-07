@@ -1,4 +1,4 @@
-{{- if eq (int .Values.executionMode) 2 }}
+{{- if eq (int .Values.executionMode) 3 }}
 {{- $username := .Values.services.mongo.username | b64dec}}
 {{- $password := .Values.services.mongo.password | b64dec }}
 {{- $port := .Values.services.mongo.port }}
