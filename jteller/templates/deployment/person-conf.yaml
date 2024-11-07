@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{.Release.Name}}-person-conf-service
-  namespace: jteller-7-50
+  namespace: {{.Values.namespace}}
 spec:
   {{- if hasKey .Values.services.personConf "replicas" }}
   replicas:  {{ .Values.services.personConf.replicas }}
