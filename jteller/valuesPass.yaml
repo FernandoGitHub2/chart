@@ -6,8 +6,8 @@ environment:
     username: bWluaW8=
     password: bWluaW8xMjM=
   database:
-    jtellerUsername: anRlbGxlcl9yZWxlYXNl
-    jtellerPassword: anRlbGxlcl9yZWxlYXNl
+    jtellerUsername: anRlbGxlcnY3
+    jtellerPassword: anRlbGxlcnY3
     distributorUsername: ZGlzdHJpYnV0b3I=
     distributorPassword: ZGlzdHJpYnV0b3I=
     clientUsername: ZGlzdHJpYnV0b3JfY2xpZW50
