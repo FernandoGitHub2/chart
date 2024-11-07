@@ -44,7 +44,7 @@ spec:
               value: "org.hibernate.dialect.MySQL5InnoDBDialect"
             {{- end }}
             - name: keycloak.config.number
-              value: {{ .Values.environment.keycloak.securityOpt }}
+              value: "{{ .Values.environment.keycloak.securityOpt }}"
             - name: keycloak.auth-server-url
               value: {{ .Values.environment.keycloak.url }}
             - name: keycloak.realm
@@ -64,9 +64,9 @@ spec:
                   name: general-secret
                   key: keycloakAdminPassword
             - name: config.distEnable
-              value: {{ .Values.environment.backend.enableDist }}
+              value: "{{ .Values.environment.backend.enableDist }}"
             - name: config.personInterface
-              value: {{ .Values.environment.backend.personInterface }}
+              value: "{{ .Values.environment.backend.personInterface }}"
             - name: config.savePersonURL
               value: {{ .Values.environment.backend.personUrl }}/service/person-data/person/savePerson
             - name: config.updatePersonURL
@@ -74,9 +74,9 @@ spec:
             - name: config.getPersonURL
               value: {{ .Values.environment.backend.personUrl }}/service/person-data/person/getPerson
             - name: config.mailResetPass
-              value: {{ .Values.environment.backend.mailResetPass }}
+              value: "{{ .Values.environment.backend.mailResetPass }}"
             - name: config.validUserMove
-              value: {{ .Values.environment.backend.validUserMove }}
+              value: "{{ .Values.environment.backend.validUserMove }}"
             - name: spring.datasource.username
               valueFrom:
                 secretKeyRef:
@@ -104,7 +104,7 @@ spec:
             - name: mail.host
               value: {{ .Values.environment.backend.mail.host }}
             - name: mail.port
-              value: {{ .Values.environment.backend.mail.port }}
+              value: "{{ .Values.environment.backend.mail.port }}"
             - name: mail.auth
               value: "{{ .Values.environment.backend.mail.auth }}"
             - name: mail.tls
@@ -122,7 +122,7 @@ spec:
             - name: spring.mail.host
               value: {{ .Values.environment.backend.mail.host }}
             - name: spring.mail.port
-              value: {{ .Values.environment.backend.mail.port }}
+              value: "{{ .Values.environment.backend.mail.port }}"
             - name: spring.mail.properties.mail.smtp.auth
               value: "{{ .Values.environment.backend.mail.auth }}"
             - name: spring.mail.properties.mail.smtp.starttls.enable
@@ -152,9 +152,9 @@ spec:
             - name: config.numberFormat.decimalSymbol
               value: {{ .Values.environment.backend.numberFormat.decimalSymbol }}
             - name: config.numberFormat.decimalLimit
-              value: {{ .Values.environment.backend.numberFormat.decimalLimit }}
+              value: "{{ .Values.environment.backend.numberFormat.decimalLimit }}"
             - name: config.numberFormat.decimalLimitOnRate
-              value: {{ .Values.environment.backend.numberFormat.decimalLimitOnRate }}
+              value: "{{ .Values.environment.backend.numberFormat.decimalLimitOnRate }}"
             - name: config.whatsapp.token
               value: {{ .Values.environment.backend.whatsapp.token }}
             - name: config.whatsapp.id
@@ -176,7 +176,7 @@ spec:
                   name: general-secret
                   key: rabbitUsername
             - name: spring.rabbitmq.port
-              value: {{ .Values.environment.backend.rabbitmq.port }}
+              value: "{{ .Values.environment.backend.rabbitmq.port }}"
             - name: spring.rabbitmq.host
               value: {{ .Values.environment.backend.rabbitmq.host }}
             - name: spring.rabbitmq.queue
