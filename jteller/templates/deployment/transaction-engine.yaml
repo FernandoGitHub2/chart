@@ -93,8 +93,6 @@ spec:
               value: {{ .Values.environment.keycloak.jtellerOv.secret }}
             - name: spring.jpa.properties.org.hibernate.envers.default_schema
               value: {{ .Values.environment.database.audScheme }}
-            - name: spring.jpa.show-sql
-              value: {{ .Values.environment.database.showSql }}
             - name: logging.level.org.hibernate.type.descriptor.sql.BasicBinder
               value: {{ .Values.environment.database.sqlBasicBinder }}
             - name: spring.jpa.properties.hibernate.format_sql
@@ -108,9 +106,9 @@ spec:
             - name: mail.port
               value: {{ .Values.environment.backend.mail.port }}
             - name: mail.auth
-              value: {{ .Values.environment.backend.mail.auth }}
+              value: "{{ .Values.environment.backend.mail.auth }}"
             - name: mail.tls
-              value: {{ .Values.environment.backend.mail.starttls }}
+              value: "{{ .Values.environment.backend.mail.starttls }}"
             - name: mail.password
               valueFrom:
                 secretKeyRef:
@@ -126,9 +124,9 @@ spec:
             - name: spring.mail.port
               value: {{ .Values.environment.backend.mail.port }}
             - name: spring.mail.properties.mail.smtp.auth
-              value: {{ .Values.environment.backend.mail.auth }}
+              value: "{{ .Values.environment.backend.mail.auth }}"
             - name: spring.mail.properties.mail.smtp.starttls.enable
-              value: {{ .Values.environment.backend.mail.starttls }}
+              value: "{{ .Values.environment.backend.mail.starttls }}"
             - name: spring.mail.properties.mail.smtp.timeout
               value: {{ .Values.environment.backend.mail.timeout }}
             - name: spring.mail.properties.mail.smtp.writetimeout
@@ -160,7 +158,7 @@ spec:
             - name: config.whatsapp.token
               value: {{ .Values.environment.backend.whatsapp.token }}
             - name: config.whatsapp.id
-              value: {{ .Values.environment.backend.whatsapp.id }}
+              value: "{{ .Values.environment.backend.whatsapp.id }}"
             - name: config.whatsapp.version
               value: {{ .Values.environment.backend.whatsapp.version }}
             - name: config.whatsapp.templateName
