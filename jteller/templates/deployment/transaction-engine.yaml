@@ -187,7 +187,7 @@ spec:
           livenessProbe:
             failureThreshold: 3
             httpGet:
-              path: {{join .Values.services.transactionEngine.actuator.url "/health" }}
+              path: {{.Values.services.transactionEngine.actuator.url }}/health
               port: {{ .Values.services.transactionEngine.port }}
               scheme: HTTP
             initialDelaySeconds: 100
@@ -197,7 +197,7 @@ spec:
           readinessProbe:
             failureThreshold: 3
             httpGet:
-              path: {{join .Values.services.transactionEngine.actuator.url "/health/readiness" }}
+              path: {{.Values.services.transactionEngine.actuator.url }}/health/readiness
               port: {{ .Values.services.transactionEngine.port }}
               scheme: HTTP
             periodSeconds: 10
