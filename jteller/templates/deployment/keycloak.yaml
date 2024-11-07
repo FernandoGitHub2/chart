@@ -23,7 +23,7 @@ spec:
       containers:
       - env:
         - name: KC_DB_URL
-          value: {{.Values.environment.database.url}}{{if eq .Values.environment.database.type "mysql"}}{{.Values.environment.database.mysqlScheme.keycloak}}?useUnicode=true{{end}}
+          value: {{.Values.environment.database.url}}{{if eq .Values.environment.database.type "mysql"}}{{.Values.environment.database.keycloakUsername | b64dec}}?useUnicode=true{{end}}
         - name: TZ
           value: {{ .Values.environment.backend.timeZone }}
         - name: KEYCLOAK_FEATURES

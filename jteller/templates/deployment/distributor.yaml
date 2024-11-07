@@ -40,7 +40,7 @@ spec:
           value: "org.hibernate.dialect.MySQL5InnoDBDialect"
         {{- end }}
         - name: spring.datasource.url
-          value: "{{ .Values.environment.database.url }}{{if eq .Values.environment.database.type "mysql"}}{{.Values.environment.database.mysqlScheme.distributor}}?useUnicode=true{{end}}"
+          value: "{{ .Values.environment.database.url }}{{if eq .Values.environment.database.type "mysql"}}{{.Values.environment.database.distributorUsername | b64dec}}?useUnicode=true{{end}}"
         - name: db.local.password
           valueFrom:
             secretKeyRef:

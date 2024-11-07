@@ -28,7 +28,7 @@ spec:
             - name: server.port
               value: "{{ .Values.services.firmas.port }}"
             - name: spring.datasource.url
-              value: "{{ .Values.environment.database.url }}{{if eq .Values.environment.database.type "mysql"}}{{.Values.environment.database.mysqlScheme.signature}}?useUnicode=true{{end}}"
+              value: "{{ .Values.environment.database.url }}{{if eq .Values.environment.database.type "mysql"}}{{.Values.environment.database.signatureUsername | b64dec}}?useUnicode=true{{end}}"
             {{- if eq .Values.environment.database.type "oracle" }}
             - name: spring.datasource.driver-class-name
               value: "oracle.jdbc.OracleDriver"

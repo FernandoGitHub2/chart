@@ -33,7 +33,7 @@ spec:
             - name: server.port
               value: "{{ .Values.services.transactionEngine.port }}"
             - name: spring.datasource.url
-              value: "{{ .Values.environment.database.url }}{{if eq .Values.environment.database.type "mysql"}}{{.Values.environment.database.mysqlScheme.operation}}?useUnicode=true{{end}}"
+              value: "{{ .Values.environment.database.url }}{{if eq .Values.environment.database.type "mysql"}}{{.Values.environment.database.jtellerUsername | b64dec }}?useUnicode=true{{end}}"
             {{- if eq .Values.environment.database.type "oracle" }}
             - name: spring.datasource.driver-class-name
               value: "oracle.jdbc.OracleDriver"

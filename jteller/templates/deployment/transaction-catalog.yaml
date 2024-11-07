@@ -27,7 +27,7 @@ spec:
             - name: server.port
               value: "{{ .Values.services.transactionCatalog.port }}"
             - name: spring.datasource.url
-              value: "{{ .Values.environment.database.url }}{{if eq .Values.environment.database.type "mysql"}}{{.Values.environment.database.mysqlScheme.operation}}?useUnicode=true{{end}}"
+              value: "{{ .Values.environment.database.url }}{{if eq .Values.environment.database.type "mysql"}}{{.Values.environment.database.jtellerUsername | b64dec }}?useUnicode=true{{end}}"
             {{- if eq .Values.environment.database.type "oracle" }}
             - name: spring.datasource.driver-class-name
               value: "oracle.jdbc.OracleDriver"
@@ -84,9 +84,9 @@ spec:
                   name: general-secret
                   key: jtellerPassword
             - name: keycloak.resource
-              value: {{ .Values.environment.keycloak.jtellerOv.resource }}
+              value: {{ .Values.environment.keycloak.jtellerSpec.resource }}
             - name: keycloak.credentials.secret
-              value: {{ .Values.environment.keycloak.jtellerOv.secret }}
+              value: {{ .Values.environment.keycloak.jtellerSpec.secret }}
             - name: spring.jpa.properties.org.hibernate.envers.default_schema
               value: {{ .Values.environment.database.audScheme }}
             - name: logging.level.org.hibernate.type.descriptor.sql.BasicBinder

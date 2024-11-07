@@ -6,14 +6,6 @@ environment:
     showSql: true
     sqlBasicBinder: INFO
     formatSql: false
-    mysqlScheme:
-      operation: jtellerv7
-      security: security
-      audit: logdat
-      signature: jsignature
-      distributor: distributor
-      distributorClient: distributor_client
-      keycloak: keycloak
   keycloak:
     securityOpt: 2
     url: http://172.16.10.101:30012

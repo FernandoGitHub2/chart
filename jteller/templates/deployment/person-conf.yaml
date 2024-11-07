@@ -23,11 +23,11 @@ spec:
       containers:
         - env:
             - name: JAVA_OPTS
-              value: '-Dspring.profiles.active=docker -Dspring.config.import=optional:configmap:/config/person-conf-application.yml '
+              value: '-XX:MaxRAMPercentage=75.0 -XX:MinRAMPercentage=50.0 -Dspring.config.import=optional:configmap:/config/person-conf-application.yml '
             - name: server.port
               value: "{{ .Values.services.transactionCatalog.port }}"
             - name: spring.datasource.url
-              value: {{ quote .Values.environment.database.url }}
+              value: "{{ .Values.environment.database.url }}{{if eq .Values.environment.database.type "mysql"}}{{.Values.environment.database.personConfUsername | b64dec }}?useUnicode=true{{end}}"
             {{- if eq .Values.environment.database.type "oracle" }}
             - name: spring.datasource.driver-class-name
               value: "oracle.jdbc.OracleDriver"
@@ -40,7 +40,7 @@ spec:
               value: "org.hibernate.dialect.MySQL5InnoDBDialect"
             {{- end }}
             - name: keycloak.config.number
-              value: {{ .Values.environment.keycloak.securityOpt }}
+              value: "{{ .Values.environment.keycloak.securityOpt }}"
             - name: keycloak.auth-server-url
               value: {{ .Values.environment.keycloak.url }}
             - name: keycloak.realm
@@ -60,11 +60,11 @@ spec:
                   name: general-secret
                   key: keycloakAdminPassword
             - name: config.distEnable
-              value: {{ .Values.environment.backend.enableDist }}
+              value: "{{ .Values.environment.backend.enableDist }}"
             - name: config.mailResetPass
-              value: {{ .Values.environment.backend.mailResetPass }}
+              value: "{{ .Values.environment.backend.mailResetPass }}"
             - name: config.validUserMove
-              value: {{ .Values.environment.backend.validUserMove }}
+              value: "{{ .Values.environment.backend.validUserMove }}"
             - name: spring.datasource.username
               valueFrom:
                 secretKeyRef:
@@ -82,13 +82,13 @@ spec:
             - name: spring.jpa.properties.org.hibernate.envers.default_schema
               value: {{ .Values.environment.database.audScheme }}
             - name: spring.jpa.show-sql
-              value: {{ .Values.environment.database.showSql }}
+              value: "{{ .Values.environment.database.showSql }}"
             - name: logging.level.org.hibernate.type.descriptor.sql.BasicBinder
               value: {{ .Values.environment.database.sqlBasicBinder }}
             - name: spring.jpa.properties.hibernate.format_sql
               value: {{ .Values.environment.database.formatSql }}
             - name: spring.jpa.show-sql
-              value: {{ .Values.environment.database.showSql }}
+              value: "{{ .Values.environment.database.showSql }}"
             - name: config.ambiente
               value: {{ .Values.environment.keycloak.realm }}
             - name: spring.liquibase.enable

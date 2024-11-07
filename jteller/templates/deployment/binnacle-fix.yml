@@ -23,7 +23,7 @@ spec:
       containers:
       - env:
         - name: spring.datasource.url
-          value: {{.Values.environment.database.url}}
+          value: "{{ .Values.environment.database.url }}{{if eq .Values.environment.database.type "mysql"}}{{.Values.environment.database.logdatUsername | b64dec }}?useUnicode=true{{end}}"
         - name: spring.datasource.username
           valueFrom:
             secretKeyRef:

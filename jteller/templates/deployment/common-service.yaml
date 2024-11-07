@@ -23,9 +23,9 @@ spec:
       containers:
       - env:
         - name: JAVA_OPTS
-          value: '-Dspring.profiles.active=docker -Dspring.config.import=optional:configmap:/config/common-keycloak.yml '
+          value: '-XX:MaxRAMPercentage=75.0 -XX:MinRAMPercentage=50.0 -Dspring.profiles.active=docker -Dspring.config.import=optional:configmap:/config/common-application.yml '
         - name: spring.datasource.url
-          value: {{ quote .Values.environment.database.url }}
+          value: "{{ .Values.environment.database.url }}{{if eq .Values.environment.database.type "mysql"}}{{.Values.environment.database.commonUsername | b64dec }}?useUnicode=true{{end}}"
         {{- if eq .Values.environment.database.type "oracle" }}
         - name: spring.datasource.driver-class-name
           value: "oracle.jdbc.OracleDriver"
@@ -63,7 +63,7 @@ spec:
         - name: keycloak.credentials.secret
           value: {{.Values.environment.keycloak.configuration.secret}}
         - name: spring.liquibase.enabled
-          value: {{.Values.liquibaseEnable}}
+          value: "{{.Values.liquibaseEnable}}"
         - name: spring.liquibase.contexts
           value: {{.Values.liquibaseContext}}
         - name: spring.mvc.locale
@@ -117,7 +117,7 @@ spec:
       - configMap:
           defaultMode: 420
           items:
-          - key: common-keycloak.yml
+          - key: common-application.yml
             path: application.yml
           name: common-application
         name: keycloak-conf
