@@ -143,7 +143,7 @@ services:
     typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
     memoryLimit: 600Mi
     actuator:
-      url: /distributor-service/actuator
+      url: /distributor-client-service/actuator
   binnacleFix:
     image: binnacle-fix-kube
     tag: dev.0.0
