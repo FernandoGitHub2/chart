@@ -12,7 +12,7 @@ environment:
       audit: logdat
       signature: jsignature
       distributor: distributor
-      distributorClient: distributor
+      distributorClient: distributor_client
       keycloak: keycloak
   keycloak:
     securityOpt: 2
