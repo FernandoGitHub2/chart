@@ -1,4 +1,4 @@
-{{- if eq (int .Values.executionMode) 2 }}
+{{- if ne (int .Values.executionMode) 0 }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -24,10 +24,12 @@ spec:
     spec:
       containers:
         - env:
+            - name: JAVA_OPTS
+              value: "-XX:MaxRAMPercentage=75.0 -XX:MinRAMPercentage=50.0"
             - name: server.port
-              value: "{{ .Values.services.transactionEngine.port }}"
+              value: "{{ .Values.services.security.port }}"
             - name: spring.datasource.url
-              value: {{ quote .Values.environment.database.url }}
+              value: "{{ .Values.environment.database.url }}{{if eq .Values.environment.database.type "mysql"}}{{.Values.environment.database.mysqlScheme.security}}?useUnicode=true{{end}}"
             {{- if eq .Values.environment.database.type "oracle" }}
             - name: spring.datasource.driver-class-name
               value: "oracle.jdbc.OracleDriver"
@@ -40,7 +42,7 @@ spec:
               value: "org.hibernate.dialect.MySQL5InnoDBDialect"
             {{- end }}
             - name: keycloak.config.number
-              value: {{ .Values.environment.keycloak.securityOpt }}
+              value: "{{ .Values.environment.keycloak.securityOpt }}"
             - name: keycloak.auth-server-url
               value: {{ .Values.environment.keycloak.url }}
             - name: keycloak.realm
@@ -60,9 +62,9 @@ spec:
                   name: general-secret
                   key: keycloakAdminPassword
             - name: config.distEnable
-              value: {{ .Values.environment.backend.enableDist }}
+              value: "{{ .Values.environment.backend.enableDist }}"
             - name: config.personInterface
-              value: {{ .Values.environment.backend.personInterface }}
+              value: "{{ .Values.environment.backend.personInterface }}"
             - name: config.savePersonURL
               value: {{ .Values.environment.backend.personUrl }}/service/person-data/person/savePerson
             - name: config.updatePersonURL
@@ -70,9 +72,9 @@ spec:
             - name: config.getPersonURL
               value: {{ .Values.environment.backend.personUrl }}/service/person-data/person/getPerson
             - name: config.mailResetPass
-              value: {{ .Values.environment.backend.mailResetPass }}
+              value: "{{ .Values.environment.backend.mailResetPass }}"
             - name: config.validUserMove
-              value: {{ .Values.environment.backend.validUserMove }}
+              value: "{{ .Values.environment.backend.validUserMove }}"
             - name: spring.datasource.username
               valueFrom:
                 secretKeyRef:
@@ -89,48 +91,28 @@ spec:
               value: {{ .Values.environment.keycloak.jtellerOv.secret }}
             - name: spring.jpa.properties.org.hibernate.envers.default_schema
               value: {{ .Values.environment.database.audScheme }}
-            - name: spring.jpa.show-sql
-              value: {{ .Values.environment.database.showSql }}
             - name: logging.level.org.hibernate.type.descriptor.sql.BasicBinder
               value: {{ .Values.environment.database.sqlBasicBinder }}
             - name: spring.jpa.properties.hibernate.format_sql
-              value: {{ .Values.environment.database.formatSql }}
+              value: "{{ .Values.environment.database.formatSql }}"
             - name: spring.jpa.show-sql
-              value: {{ .Values.environment.database.showSql }}
+              value: "{{ .Values.environment.database.showSql }}"
             - name: config.ambiente
               value: {{ .Values.environment.keycloak.realm }}
-            - name: mail.host
-              value: {{ .Values.environment.backend.mail.host }}
-            - name: mail.port
-              value: {{ .Values.environment.backend.mail.port }}
-            - name: mail.auth
-              value: {{ .Values.environment.backend.mail.auth }}
-            - name: mail.tls
-              value: {{ .Values.environment.backend.mail.starttls }}
-            - name: mail.password
-              valueFrom:
-                secretKeyRef:
-                  name: general-secret
-                  key: mailServerPassword
-            - name: mail.user
-              valueFrom:
-                secretKeyRef:
-                  name: general-secret
-                  key: mailServerUser
             - name: spring.mail.host
               value: {{ .Values.environment.backend.mail.host }}
             - name: spring.mail.port
-              value: {{ .Values.environment.backend.mail.port }}
+              value: "{{ .Values.environment.backend.mail.port }}"
             - name: spring.mail.properties.mail.smtp.auth
-              value: {{ .Values.environment.backend.mail.auth }}
+              value: "{{ .Values.environment.backend.mail.auth }}"
             - name: spring.mail.properties.mail.smtp.starttls.enable
-              value: {{ .Values.environment.backend.mail.starttls }}
+              value: "{{ .Values.environment.backend.mail.starttls }}"
             - name: spring.mail.properties.mail.smtp.timeout
-              value: {{ .Values.environment.backend.mail.timeout }}
+              value: "{{ .Values.environment.backend.mail.timeout }}"
             - name: spring.mail.properties.mail.smtp.writetimeout
-              value: {{ .Values.environment.backend.mail.writetimeout }}
+              value: "{{ .Values.environment.backend.mail.writetimeout }}"
             - name: spring.mail.properties.mail.smtp.connectiontimeout
-              value: {{ .Values.environment.backend.mail.connectiontimeout }}
+              value: "{{ .Values.environment.backend.mail.connectiontimeout }}"
             - name: spring.mail.password
               valueFrom:
                 secretKeyRef:
@@ -141,51 +123,13 @@ spec:
                 secretKeyRef:
                   name: general-secret
                   key: mailServerUser
-            - name: config.numberFormat.includeThousandsSeparator
-              value: {{ .Values.environment.backend.numberFormat.includeThousandsSeparator }}
-            - name: config.numberFormat.thousandsSeparatorSymbol
-              value: "{{ .Values.environment.backend.numberFormat.thousandsSeparatorSymbol }}"
-            - name: config.numberFormat.allowDecimal
-              value: {{ .Values.environment.backend.numberFormat.allowDecimal }}
-            - name: config.numberFormat.decimalSymbol
-              value: {{ .Values.environment.backend.numberFormat.decimalSymbol }}
-            - name: config.numberFormat.decimalLimit
-              value: {{ .Values.environment.backend.numberFormat.decimalLimit }}
-            - name: config.numberFormat.decimalLimitOnRate
-              value: {{ .Values.environment.backend.numberFormat.decimalLimitOnRate }}
-            - name: config.whatsapp.token
-              value: {{ .Values.environment.backend.whatsapp.token }}
-            - name: config.whatsapp.id
-              value: {{ .Values.environment.backend.whatsapp.id }}
-            - name: config.whatsapp.version
-              value: {{ .Values.environment.backend.whatsapp.version }}
-            - name: config.whatsapp.templateName
-              value: {{ .Values.environment.backend.whatsapp.templateName }}
-            - name: config.whatsapp.templateLanguage
-              value: {{ .Values.environment.backend.whatsapp.templateLanguage }}
-            - name: spring.rabbitmq.password
-              valueFrom:
-                secretKeyRef:
-                  name: general-secret
-                  key: rabbitPassword
-            - name: spring.rabbitmq.username
-              valueFrom:
-                secretKeyRef:
-                  name: general-secret
-                  key: rabbitUsername
-            - name: spring.rabbitmq.port
-              value: {{ .Values.environment.backend.rabbitmq.port }}
-            - name: spring.rabbitmq.host
-              value: {{ .Values.environment.backend.rabbitmq.host }}
-            - name: spring.rabbitmq.queue
-              value: {{ .Values.environment.backend.rabbitmq.queue }}
           image: {{.Values.services.registry}}{{.Values.services.security.image}}:{{.Values.services.security.tag }}
           imagePullPolicy: IfNotPresent
           {{- if hasKey .Values.services.security "actuator" }}
           livenessProbe:
             failureThreshold: 3
             httpGet:
-              path: {{join .Values.services.security.actuator.url "/health" }}
+              path: {{.Values.services.security.actuator.url }}/health
               port: {{ .Values.services.security.port }}
               scheme: HTTP
             initialDelaySeconds: 100
@@ -195,7 +139,7 @@ spec:
           readinessProbe:
             failureThreshold: 3
             httpGet:
-              path: {{join .Values.services.security.actuator.url "/health/readiness" }}
+              path: {{ .Values.services.security.actuator.url }}/health/readiness
               port: {{ .Values.services.security.port }}
               scheme: HTTP
             periodSeconds: 10

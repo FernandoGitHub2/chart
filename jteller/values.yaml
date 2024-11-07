@@ -12,7 +12,7 @@ environment:
       audit: logdat
       signature: jsignature
       distributor: distributor
-      distributor-client: distributor
+      distributorClient: distributor
       keycloak: keycloak
   keycloak:
     securityOpt: 2
@@ -70,7 +70,7 @@ environment:
       decimalLimitOnRate: 4
     whatsapp:
       token: EAAK02w5gL8IBO2rvWaofISogbiV7L5dLasCs1hLB4uGHvjQBcfYTbRlrBcK4Lp5ipcMD5e1MEoeDlXZCW0j3e7q73vgivL5qbNX7AxZBHUpZBXgbEkt0s7JvRztAu5LpZA99tI8PKNJfZBZB4zIPkfhPmlNrJnlec9iAyRfbYmMT6cBI8veEm01ksfDugFCdG8ZApfXq72976m5syKTlFD5maH5tFIZD
-      id: 225010557368287
+      id: "225010557368287"
       version: v18.0
       templateName: comprobante
       templateLanguage: es

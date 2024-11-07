@@ -1,5 +1,5 @@
-{{- if eq (int .Values.executionMode) 2 }}
-{{- if eq (int .Values.distributor) 1 }}
+{{- if ne (int .Values.executionMode) 0 }}
+{{- if and (ne (int .Values.distributor) 0) (ne (int .Values.distributor) 2)}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -25,7 +25,7 @@ spec:
       containers:
       - env:
         - name: JAVA_OPTS
-          value: '-Dspring.profiles.active=docker'
+          value: "-XX:MaxRAMPercentage=75.0 -XX:MinRAMPercentage=50.0"
         - name: server.port
           value: "{{.Values.services.distributor.port}}"
        {{- if eq .Values.environment.database.type "oracle" }}
@@ -39,6 +39,8 @@ spec:
         - name: spring.jpa.database-platform
           value: "org.hibernate.dialect.MySQL5InnoDBDialect"
         {{- end }}
+        - name: spring.datasource.url
+          value: "{{ .Values.environment.database.url }}{{if eq .Values.environment.database.type "mysql"}}{{.Values.environment.database.mysqlScheme.distributor}}?useUnicode=true{{end}}"
         - name: db.local.password
           valueFrom:
             secretKeyRef:
@@ -122,7 +124,7 @@ spec:
         livenessProbe:
           failureThreshold: 3
           httpGet:
-            path: {{ join .Values.services.distributor.actuator.url "/health" }}
+            path: {{ .Values.services.distributor.actuator.url }}/health
             port: {{ .Values.services.distributor.port }}
             scheme: HTTP
           initialDelaySeconds: 100
@@ -132,7 +134,7 @@ spec:
         readinessProbe:
           failureThreshold: 3
           httpGet:
-            path: {{ join .Values.services.distributor.actuator.url "/health/readiness" }}
+            path: {{ .Values.services.distributor.actuator.url }}/health/readiness
             port: {{ .Values.services.distributor.port }}
             scheme: HTTP
           periodSeconds: 10

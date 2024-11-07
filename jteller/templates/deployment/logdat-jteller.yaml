@@ -1,4 +1,4 @@
-{{- if eq (int .Values.executionMode) 2 }}
+{{- if ne (int .Values.executionMode) 0 }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -23,9 +23,9 @@ spec:
       containers:
       - env:
         - name: JAVA_OPTS
-          value: -Dspring.profiles.active=docker
+          value: "-XX:MaxRAMPercentage=75.0 -XX:MinRAMPercentage=50.0"
         - name: server.port
-          value: "8080"
+          value: "{{.Values.services.logdat.port}}"
         - name: spring.datasource.username
           valueFrom:
             secretKeyRef:
@@ -37,11 +37,11 @@ spec:
               name: general-secret
               key: logdatPassword
         - name: spring.liquibase.enable
-          value: {{ .Values.liquibaseEnable }}
+          value: "{{ .Values.liquibaseEnable }}"
         - name: spring.liquibase.contexts
           value: "{{ .Values.liquibaseContext }}"
         - name: spring.datasource.url
-          value: {{ quote .Values.environment.database.url }}
+          value: "{{ .Values.environment.database.url }}{{if eq .Values.environment.database.type "mysql"}}{{.Values.environment.database.mysqlScheme.audit}}?useUnicode=true{{end}}"
           {{- if eq .Values.environment.database.type "oracle" }}
         - name: spring.datasource.driver-class-name
           value: "oracle.jdbc.OracleDriver"

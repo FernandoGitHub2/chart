@@ -134,12 +134,16 @@ services:
     port: 8080
     typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
     memoryLimit: 600Mi
+    actuator:
+      url: /distributor-service/actuator
   distributorClient:
     image: distributor-client-service-kube
     tag: v7.6.0.a
     port: 8080
     typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
     memoryLimit: 600Mi
+    actuator:
+      url: /distributor-service/actuator
   binnacleFix:
     image: binnacle-fix-kube
     tag: dev.0.0
