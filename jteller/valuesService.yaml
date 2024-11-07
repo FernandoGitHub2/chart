@@ -46,7 +46,7 @@ services:
     port: 8080
   security:
     image: security-service-kube
-    tag: v7.6.b
+    tag: v7.6.c
     port: 1119
     typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
     memoryLimit: 600Mi
