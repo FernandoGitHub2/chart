@@ -12,7 +12,7 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      app: specs-view
+      app: {{.Release.Name}}-specs-view
   strategy:
     type: RollingUpdate
   template:
