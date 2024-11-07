@@ -16,26 +16,26 @@ environment:
       keycloak: keycloak
   keycloak:
     securityOpt: 2
-    url: http://64.225.80.76:8080/
+    url: http://172.16.10.101:30012
     realm: jteller
     roles:
       - user
       - admin
     jtellerSpec:
       resource: specs-configuration
-      secret: GTBBWADFYWnRf9jlI0hJQHaaiozYBHW0
+      secret: vtwHXtbLX3fPBYkgxEqHJn5Sx7Hsb3bA
     jtellerOv: 
       resource: jt-backend
-      secret: XmM6SHXqvYxEkqQdB7iPGCryudJjkuZ0
+      secret: 0LtmM7KRMEb3OSWkYq4EnU6IFlt6OEke
     distributor:
       resource: distributor
-      secret: z6c5qpxgMCnSRTO3PPx2dvbvQ97sPcVF
+      secret: EXzEfGSNqS476O1stTzPV3J5xxQ34IHf
     signature:
       resource: firmas-be
-      secret: OEvYbXYabb1fVubvDozqCBRY8OAjSwC5
+      secret: mP9ncOAe8mENDcehXpE3vrN5j9uaJjom
     configuration:
       resource: configuration-service
-      secret: oXupVyvGvvT7kc7nlO8L0lmqtI6R1lf0
+      secret: WGltCd6392oUO7YhuhmAPrLF5U3EoNKV
     realmInHeader: jteller
   backend:
     resolver: fixed
