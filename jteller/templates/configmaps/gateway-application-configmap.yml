@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: gateway-application.yml
-  namespace: {{if .Values.namespace}}
+  namespace: {{ if .Values.namespace }}{{ .Values.namespace }}{{ end }}
 data:
   application.yml: |
     micronaut:
@@ -11,15 +11,15 @@ data:
       ssl:
         enabled: false
         key-store:
-         path: file:/tmp/cert.p12
-         type: PKCS12
-         password: platillovolador
+          path: file:/tmp/cert.p12
+          type: PKCS12
+          password: platillovolador
         port: 8080
       server:
-       dual-protocol: true
-       ssl:
-        protocols: TLSv1.2,TLSv1.3
-        port: 8080
+        dual-protocol: true
+        ssl:
+          protocols: TLSv1.2,TLSv1.3
+          port: 8080
     conf:
       routes:
         - route: /operation-view
