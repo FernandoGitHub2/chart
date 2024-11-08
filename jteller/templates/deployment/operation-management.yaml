@@ -181,6 +181,31 @@ spec:
               value: {{.Values.environment.backend.isAlive.read}}
             - name: app.actuator.write-query
               value: {{.Values.environment.backend.isAlive.write}}
+            {{- if eq (int .Values.environment.backend.opensearch.enable) 0}}
+            - name: management.health.opensearch.enabled
+              value: "false"
+            {{- else }}
+            - name: byte.opensearch.password
+              valueFrom:
+                secretKeyRef:
+                  key: opensearchPass
+                  name: general-secret
+            - name: byte.opensearch.userName
+              valueFrom:
+                secretKeyRef:
+                  key: opensearchUser
+                  name: general-secret
+            - name: byte.opensearch.host
+              value: {{.Values.environment.backend.opensearch.host}}
+            - name: byte.opensearch.port
+              value: "{{.Values.environment.backend.opensearch.port}}"
+            - name: byte.opensearch.protocol
+              value: {{.Values.environment.backend.opensearch.protocol}}
+            - name: byte.opensearch.enable
+              value: "{{.Values.environment.backend.opensearch.enable}}"
+            - name: byte.opensearch.resendOpensearch
+              value: "{{.Values.environment.backend.opensearch.resendOpensearch}}"
+            {{- end }}
           image: {{.Values.services.registry}}{{.Values.services.management.image}}:{{.Values.services.management.tag }}
           imagePullPolicy: IfNotPresent
           {{- if hasKey .Values.services.management "actuator" }}

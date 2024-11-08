@@ -73,6 +73,12 @@ environment:
       port: 5672
       host: rabbitmq
       queue: journal-process-queue
+    opensearch:
+      enable: 1
+      host: 172.16.10.105
+      protocol: http
+      port: 30044
+      resendOpensearch: 21600000
   frontend:
     aceptedUrls:
      - http://172.16.21.10:30001

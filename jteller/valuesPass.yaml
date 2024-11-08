@@ -41,3 +41,6 @@ environment:
       passcore: QXZlbGFzY28=
       userClient: YXZlbGFzY28=
       passClient: QXZlbGFzY28=
+    opensearch:
+      username: YWRtaW4=
+      password: YWRtaW4=
