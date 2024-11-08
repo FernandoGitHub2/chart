@@ -182,7 +182,7 @@ spec:
             - name: app.actuator.write-query
               value: {{.Values.environment.backend.isAlive.write}}
             {{- if eq (int .Values.environment.backend.opensearch.enable) 0}}
-            - name: management.health.opensearch.enabled
+            - name: management.health.elasticsearch.enabled
               value: "false"
             {{- else }}
             - name: byte.opensearch.password
