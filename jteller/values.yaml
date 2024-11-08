@@ -74,7 +74,7 @@ environment:
       host: rabbitmq
       queue: journal-process-queue
     opensearch:
-      enable: 1
+      enable: 0
       host: 172.16.10.105
       protocol: http
       port: 30044
