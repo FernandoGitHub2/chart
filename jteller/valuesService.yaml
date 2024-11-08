@@ -159,8 +159,8 @@ services:
     actuator:
       url: /v1/actuator
   gateway:
-    image: binnacle-fix-kube
-    tag: dev.0.0
+    image: api-gateway-kube
+    tag: v.2023-05-30.1
     port: 8080
     typeService: N  # C - ClusterIp, N - NodePort, L - LoadBalancer
     nodePort: 30010
