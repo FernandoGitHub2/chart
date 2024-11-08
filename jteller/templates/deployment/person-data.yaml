@@ -99,7 +99,7 @@ spec:
           livenessProbe:
             failureThreshold: 3
             httpGet:
-              path: {{join .Values.services.personData.actuator.url "/health" }}
+              path: {{.Values.services.personData.actuator.url  }}/health
               port: {{ .Values.services.personData.port }}
               scheme: HTTP
             initialDelaySeconds: 100
@@ -109,7 +109,7 @@ spec:
           readinessProbe:
             failureThreshold: 3
             httpGet:
-              path: {{join .Values.services.personData.actuator.url "/health/readiness" }}
+              path: {{ .Values.services.personData.actuator.url  }}/health/readiness
               port: {{ .Values.services.personData.port }}
               scheme: HTTP
             periodSeconds: 10
