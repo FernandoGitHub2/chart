@@ -177,6 +177,10 @@ spec:
               value: {{ .Values.environment.backend.rabbitmq.host }}
             - name: spring.rabbitmq.queue
               value: {{ .Values.environment.backend.rabbitmq.queue }}
+            - name: app.actuator.read-query
+              value: {{.Values.environment.backend.isAlive.read}}
+            - name: app.actuator.write-query
+              value: {{.Values.environment.backend.isAlive.write}}
           image: {{.Values.services.registry}}{{.Values.services.management.image}}:{{.Values.services.management.tag }}
           imagePullPolicy: IfNotPresent
           {{- if hasKey .Values.services.management "actuator" }}

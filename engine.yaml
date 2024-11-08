@@ -1,32 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: jteller-transaction-engine
-  namespace:  jteller
-  labels:
-    helm.sh/chart: services-0.1.0
-    app.kubernetes.io/name: services
-    app.kubernetes.io/instance: RELEASE-NAME
-    app.kubernetes.io/version: "1.16.0"
-    app.kubernetes.io/managed-by: Helm
+  name: jteller-person-data-service
+  namespace: jteller
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: jteller-transaction-engine
+      app: jteller-person-data-service
   strategy:
     type: RollingUpdate
   template:
     metadata:
       labels:
-        app: jteller-transaction-engine
+        app: jteller-person-data-service
     spec:
       containers:
         - env:
+            - name: JAVA_OPTS
+              value: '-XX:MaxRAMPercentage=75.0 -XX:MinRAMPercentage=50.0 -Dspring.config.import=optional:configmap:/config/person-data-application.yml '
             - name: server.port
-              value: "2107"
+              value: "2103"
             - name: spring.datasource.url
-              value: "jdbc:mysql://172.16.10.101:3306/jtellerv7?useUnicode=true"
+              value: "jdbc:mysql://172.16.10.101:3306/jsigperson_data?useUnicode=true"
             - name: spring.datasource.driver-class-name
               value: "com.mysql.cj.jdbc.Driver"
             - name: spring.jpa.database-platform
@@ -53,14 +49,6 @@ spec:
                   key: keycloakAdminPassword
             - name: config.distEnable
               value: "1"
-            - name: config.personInterface
-              value: "1"
-            - name: config.savePersonURL
-              value: http://person-data-service:8080/service/person-data/person/savePerson
-            - name: config.updatePersonURL
-              value: http://person-data-service:8080/service/person-data/person/updatePerson
-            - name: config.getPersonURL
-              value: http://person-data-service:8080/service/person-data/person/getPerson
             - name: config.mailResetPass
               value: "1"
             - name: config.validUserMove
@@ -69,113 +57,37 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: general-secret
-                  key: jtellerUsername
+                  key: personDataUsername
             - name: spring.datasource.password
               valueFrom:
                 secretKeyRef:
                   name: general-secret
-                  key: jtellerPassword
+                  key: personDataPassword
             - name: keycloak.resource
-              value: jt-backend
+              value: configuration-service
             - name: keycloak.credentials.secret
-              value: 0LtmM7KRMEb3OSWkYq4EnU6IFlt6OEke
+              value: WGltCd6392oUO7YhuhmAPrLF5U3EoNKV
             - name: spring.jpa.properties.org.hibernate.envers.default_schema
               value: logdat
             - name: logging.level.org.hibernate.type.descriptor.sql.BasicBinder
               value: INFO
             - name: spring.jpa.properties.hibernate.format_sql
-              value: "false"
+              value: false
             - name: spring.jpa.show-sql
               value: "true"
             - name: config.ambiente
               value: jteller
-            - name: mail.host
-              value: smtp.gmail.com
-            - name: mail.port
-              value: "587"
-            - name: mail.auth
+            - name: spring.liquibase.enable
               value: "true"
-            - name: mail.tls
-              value: "true"
-            - name: mail.password
-              valueFrom:
-                secretKeyRef:
-                  name: general-secret
-                  key: mailServerPassword
-            - name: mail.user
-              valueFrom:
-                secretKeyRef:
-                  name: general-secret
-                  key: mailServerUser
-            - name: spring.mail.host
-              value: smtp.gmail.com
-            - name: spring.mail.port
-              value: "587"
-            - name: spring.mail.properties.mail.smtp.auth
-              value: "true"
-            - name: spring.mail.properties.mail.smtp.starttls.enable
-              value: "true"
-            - name: spring.mail.properties.mail.smtp.timeout
-              value: 5000
-            - name: spring.mail.properties.mail.smtp.writetimeout
-              value: 5000
-            - name: spring.mail.properties.mail.smtp.connectiontimeout
-              value: 5000
-            - name: spring.mail.password
-              valueFrom:
-                secretKeyRef:
-                  name: general-secret
-                  key: mailServerPassword
-            - name: spring.mail.username
-              valueFrom:
-                secretKeyRef:
-                  name: general-secret
-                  key: mailServerUser
-            - name: config.numberFormat.includeThousandsSeparator
-              value: 1
-            - name: config.numberFormat.thousandsSeparatorSymbol
-              value: ","
-            - name: config.numberFormat.allowDecimal
-              value: 1
-            - name: config.numberFormat.decimalSymbol
-              value: .
-            - name: config.numberFormat.decimalLimit
-              value: "2"
-            - name: config.numberFormat.decimalLimitOnRate
-              value: "4"
-            - name: config.whatsapp.token
-              value: EAAK02w5gL8IBO2rvWaofISogbiV7L5dLasCs1hLB4uGHvjQBcfYTbRlrBcK4Lp5ipcMD5e1MEoeDlXZCW0j3e7q73vgivL5qbNX7AxZBHUpZBXgbEkt0s7JvRztAu5LpZA99tI8PKNJfZBZB4zIPkfhPmlNrJnlec9iAyRfbYmMT6cBI8veEm01ksfDugFCdG8ZApfXq72976m5syKTlFD5maH5tFIZD
-            - name: config.whatsapp.id
-              value: "2.25010557368287e+14"
-            - name: config.whatsapp.version
-              value: v18.0
-            - name: config.whatsapp.templateName
-              value: comprobante
-            - name: config.whatsapp.templateLanguage
-              value: es
-            - name: spring.rabbitmq.password
-              valueFrom:
-                secretKeyRef:
-                  name: general-secret
-                  key: rabbitPassword
-            - name: spring.rabbitmq.username
-              valueFrom:
-                secretKeyRef:
-                  name: general-secret
-                  key: rabbitUsername
-            - name: spring.rabbitmq.port
-              value: "30042"
-            - name: spring.rabbitmq.host
-              value: 172.16.10.105
-            - name: spring.rabbitmq.queue
-              value: journal-process-queue
-          image: 277232507401.dkr.ecr.us-west-2.amazonaws.com/jteller/transaction-engine-service-kube:v7.6.0.b
+            - name: spring.liquibase.contexts
+              value: "mysql,prod"
+          image: 277232507401.dkr.ecr.us-west-2.amazonaws.com/jteller/person-data-service:jtv7.6.0.a
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 3
             httpGet:
               path: /health
-              port: 2107
+              port: 8080
               scheme: HTTP
             initialDelaySeconds: 100
             periodSeconds: 5
@@ -185,27 +97,26 @@ spec:
             failureThreshold: 3
             httpGet:
               path: /health/readiness
-              port: 2107
+              port: 8080
               scheme: HTTP
             periodSeconds: 10
             successThreshold: 3
             timeoutSeconds: 1
-          name: jteller-transaction-engine
+          name: jteller-person-data-service
           ports:
-          - containerPort: 2107
+          - containerPort: 8080
             protocol: TCP
           resources:
             limits:
-              memory: 1000Mi
+              memory: 600Mi
             requests:
-              memory: 1000Mi
+              memory: 600Mi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
-          - mountPath: /config/
-            name: transaction-engine-vol
-          - mountPath: /keycloak/
-            name: keycloak-be-vol
+          - mountPath: /config
+            name: keycloak-conf
+            readOnly: true
       dnsPolicy: ClusterFirst
       imagePullSecrets:
       - name: aws-registry
@@ -213,34 +124,7 @@ spec:
       - configMap:
           defaultMode: 420
           items:
-          - key: table
-            path: table.yml
-          - key: app-payments
-            path: AppPayments.yml
-          - key: trama-accepted
-            path: TramaAccepted.yml
-          - key: trama-more-messages
-            path: TramaMoreMessages.yml
-          - key: trama-rejected
-            path: TramaRejected.yml
-          - key: tabla-100
-            path: tabla-100.yml
-          - key: tabla-101
-            path: tabla-101.yml
-          - key: tabla-102
-            path: tabla-102.yml
-          - key: tabla-103
-            path: tabla-103.yml
-          - key: tabla-104
-            path: tabla-104.yml
-          - key: tabla-105
-            path: tabla-105.yml
-          name: transaction-engine-config-map
-        name: transaction-engine-vol
-      - configMap:
-          defaultMode: 420
-          items:
-          - key: jteller-keycloak
-            path: jteller-keycloak.json
-          name: be-configmap
-        name: keycloak-be-vol
+          - key: person-data-application.yml
+            path: application.yml
+          name: person-data-application
+        name: keycloak-conf
