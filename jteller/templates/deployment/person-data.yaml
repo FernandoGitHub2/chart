@@ -25,7 +25,7 @@ spec:
             - name: JAVA_OPTS
               value: '-XX:MaxRAMPercentage=75.0 -XX:MinRAMPercentage=50.0 -Dspring.config.import=optional:configmap:/config/person-data-application.yml '
             - name: server.port
-              value: "{{ .Values.services.transactionCatalog.port }}"
+              value: "{{ .Values.services.personData.port }}"
             - name: spring.datasource.url
               value: "{{ .Values.environment.database.url }}{{if eq .Values.environment.database.type "mysql"}}{{.Values.environment.database.personDataUsername | b64dec }}?useUnicode=true{{end}}"
             {{- if eq .Values.environment.database.type "oracle" }}
