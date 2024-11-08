@@ -1029,21 +1029,6 @@ data:
             enforcementMode: DISABLED
     config:
       distEnable: 0
-    ---
-
-    spring:
-      profiles: test
-    server:
-      port: 0
-
-    ---
-
-    spring:
-      profiles: docker
-    eureka:
-      instance:
-        hostname: ${byte.net.hostname:transaction-catalog-service}
-        ipAddress: ${byte.net.address}
 kind: ConfigMap
 metadata:
   name: keycloak-transaction-catalog

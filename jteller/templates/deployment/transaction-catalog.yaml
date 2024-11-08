@@ -23,7 +23,7 @@ spec:
       containers:
         - env:
             - name: JAVA_OPTS
-              value: "-XX:MaxRAMPercentage=75.0 -XX:MinRAMPercentage=50.0"
+              value: "-XX:MaxRAMPercentage=75.0 -XX:MinRAMPercentage=50.0 --spring.config.location=/config/application.yml "
             - name: server.port
               value: "{{ .Values.services.transactionCatalog.port }}"
             - name: spring.datasource.url
@@ -187,7 +187,7 @@ spec:
           livenessProbe:
             failureThreshold: 3
             httpGet:
-              path: {{join .Values.services.transactionCatalog.actuator.url "/health" }}
+              path: {{.Values.services.transactionCatalog.actuator.url  }}/health
               port: {{ .Values.services.transactionCatalog.port }}
               scheme: HTTP
             initialDelaySeconds: 100
@@ -197,7 +197,7 @@ spec:
           readinessProbe:
             failureThreshold: 3
             httpGet:
-              path: {{join .Values.services.transactionCatalog.actuator.url "/health/readiness" }}
+              path: {{ .Values.services.transactionCatalog.actuator.url  }}/health/readiness
               port: {{ .Values.services.transactionCatalog.port }}
               scheme: HTTP
             periodSeconds: 10
