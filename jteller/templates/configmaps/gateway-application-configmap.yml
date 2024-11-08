@@ -8,18 +8,6 @@ data:
     micronaut:
       application:
         name: apiGateway2
-      ssl:
-        enabled: false
-        key-store:
-          path: file:/tmp/cert.p12
-          type: PKCS12
-          password: platillovolador
-        port: 8080
-      server:
-        dual-protocol: true
-        ssl:
-          protocols: TLSv1.2,TLSv1.3
-          port: 8080
     conf:
       routes:
         - route: /operation-view
