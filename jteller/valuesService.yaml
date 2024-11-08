@@ -67,7 +67,7 @@ services:
     typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
     memoryLimit: 600Mi
     actuator:
-      url: /v1/actuator
+      url: /actuator
   personConf:
     image: person-conf-service
     tag: jtv7.6.0.a
@@ -75,7 +75,7 @@ services:
     typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
     memoryLimit: 600Mi
     actuator:
-      url: /v1/actuator
+      url: /actuator
   logdat:
     image: logdat-jteller-service-kube
     tag: v7.6.0.a
@@ -157,7 +157,7 @@ services:
     typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
     memoryLimit: 600Mi
     actuator:
-      url: /v1/actuator
+      url: /actuator
   gateway:
     image: api-gateway-kube
     tag: v.2023-05-30.1
