@@ -29,9 +29,9 @@ spec:
           protocol: TCP
         resources:
           limits:
-            memory: 128Mi
+            memory: {{.Values.services.operationView.memoryLimit | default "512Mi" }}
           requests:
-            memory: 64Mi
+            memory: {{.Values.services.operationView.memoryLimit | default "512Mi" }}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
         volumeMounts:
