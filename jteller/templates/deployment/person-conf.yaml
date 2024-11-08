@@ -93,6 +93,10 @@ spec:
               value: "{{ .Values.liquibaseEnable }}"
             - name: spring.liquibase.contexts
               value: "{{ .Values.liquibaseContext }}"
+            - name: app.actuator.read-query
+              value: {{.Values.environment.backend.isAlive.read}}
+            - name: app.actuator.write-query
+              value: {{.Values.environment.backend.isAlive.write}}
           image: {{.Values.services.registry}}{{.Values.services.personConf.image}}:{{.Values.services.personConf.tag }}
           imagePullPolicy: IfNotPresent
           {{- if hasKey .Values.services.personConf "actuator" }}

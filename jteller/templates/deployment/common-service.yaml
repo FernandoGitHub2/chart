@@ -70,6 +70,10 @@ spec:
           value: {{.Values.environment.backend.locale}}
         - name: spring.mvc.locale-resolver
           value: {{.Values.environment.backend.resolver}}
+        - name: app.actuator.read-query
+          value: {{.Values.environment.backend.isAlive.read}}
+        - name: app.actuator.write-query
+          value: {{.Values.environment.backend.isAlive.write}}
         image: {{.Values.services.registry}}{{.Values.services.common.image}}:{{.Values.services.common.tag}}
         imagePullPolicy: IfNotPresent
         name: {{.Release.Name}}-common-service
