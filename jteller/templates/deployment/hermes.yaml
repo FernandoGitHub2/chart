@@ -119,6 +119,10 @@ spec:
                 secretKeyRef:
                   name: general-secret
                   key: mailServerUser
+            - name: app.actuator.read-query
+              value: {{.Values.environment.backend.isAlive.read}}
+            - name: app.actuator.write-query
+              value: {{.Values.environment.backend.isAlive.write}}
           image: {{.Values.services.registry }}{{.Values.services.hermes.image}}:{{.Values.services.hermes.tag }}
           imagePullPolicy: IfNotPresent
           {{- if hasKey .Values.services.hermes "actuator" }}
