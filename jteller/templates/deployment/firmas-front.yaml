@@ -38,10 +38,6 @@ spec:
         - mountPath: /app/assets/config
           name: keycloak-firmas-front-vol
       dnsPolicy: ClusterFirst
-      {{- if hasKey .Values.services "secretRegistry"}}
-      imagePullSecrets:
-      - name: {{.Values.services.secretRegistry}}
-      {{- end }}
       volumes:
       - configMap:
           defaultMode: 420
@@ -50,4 +46,8 @@ spec:
             path: config.json
           name: firmas-fe-configmap
         name: keycloak-firmas-front-vol
+      {{- if hasKey .Values.services "secretRegistry"}}
+      imagePullSecrets:
+      - name: {{.Values.services.secretRegistry}}
+      {{- end }}
   {{- end }}
