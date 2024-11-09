@@ -123,6 +123,8 @@ services:
     port: 2114
     typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
     memoryLimit: 900Mi
+    actuator:
+      url: /firmas-service/actuator
   distributorView:
     image: distributor-view-kube
     tag: dev.1.1.25.B
