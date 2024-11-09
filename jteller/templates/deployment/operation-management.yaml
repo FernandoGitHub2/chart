@@ -206,6 +206,8 @@ spec:
             - name: byte.opensearch.resendOpensearch
               value: "{{.Values.environment.backend.opensearch.resendOpensearch}}"
             {{- end }}
+            - name: management.health.mail.enabled
+              value: "false"
           image: {{.Values.services.registry}}{{.Values.services.management.image}}:{{.Values.services.management.tag }}
           imagePullPolicy: IfNotPresent
           {{- if hasKey .Values.services.management "actuator" }}
