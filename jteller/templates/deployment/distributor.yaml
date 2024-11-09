@@ -120,7 +120,7 @@ spec:
         - name: spring.liquibase.enable
           value: "{{ .Values.liquibaseEnable }}"
         - name: spring.liquibase.contexts
-          value: "{{ .Values.liquibaseContext }}"
+          value: "{{ .Values.liquibaseContext }}{{- if .Values.liquibaseInit }},init{{- end }}"
         image: {{.Values.services.registry}}{{.Values.services.distributor.image}}:{{.Values.services.distributor.tag}}
         imagePullPolicy: IfNotPresent
         name: {{.Release.Name}}-distributor

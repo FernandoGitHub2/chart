@@ -92,7 +92,7 @@ spec:
             - name: spring.liquibase.enable
               value: "{{ .Values.liquibaseEnable }}"
             - name: spring.liquibase.contexts
-              value: "{{ .Values.liquibaseContext }}"
+              value: "{{ .Values.liquibaseContext }}{{- if .Values.liquibaseInit }},init{{- end }}"
             - name: app.actuator.read-query
               value: {{.Values.environment.backend.isAlive.read}}
             - name: app.actuator.write-query

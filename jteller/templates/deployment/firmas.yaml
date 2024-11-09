@@ -115,7 +115,7 @@ spec:
             - name: spring.liquibase.enable
               value: "{{ .Values.liquibaseEnable }}"
             - name: spring.liquibase.contexts
-              value: "{{ .Values.liquibaseContext }}"
+              value: "{{ .Values.liquibaseContext }}{{- if .Values.liquibaseInit }},init{{- end }}"
             image: {{.Values.services.registry }} {{.Values.services.firmas.image}}:{{.Values.services.firmas.tag }}
             imagePullPolicy: IfNotPresent
             {{- if hasKey .Values.services.firmas "actuator" }}
