@@ -145,17 +145,9 @@ spec:
               protocol: TCP
             resources:
               limits:
-                {{- if hasKey .Values.services.firmas "memoryLimit" }}
-                memory: {{ .Values.services.firmas.memoryLimit }}
-                {{- else}}
-                memory: 756Mi
-                {{- end }}
+                memory: {{.Values.services.firmas.memoryLimit | default "800Mi" }}
               requests:
-                {{- if hasKey .Values.services.firmas "memoryLimit" }}
-                memory: {{ .Values.services.firmas.memoryLimit }}
-                {{- else}}
-                memory: 756Mi
-                {{- end }}
+                memory: {{.Values.services.firmas.memoryLimit | default "800Mi" }}
             terminationMessagePath: /dev/termination-log
             terminationMessagePolicy: File
       dnsPolicy: ClusterFirst
