@@ -121,6 +121,8 @@ spec:
           value: "{{ .Values.liquibaseEnable }}"
         - name: spring.liquibase.contexts
           value: "{{ .Values.liquibaseContext }}{{- if .Values.liquibaseInit }},init{{- end }}"
+        - name: management.health.mail.enabled
+          value: "false"
         image: {{.Values.services.registry}}{{.Values.services.distributor.image}}:{{.Values.services.distributor.tag}}
         imagePullPolicy: IfNotPresent
         name: {{.Release.Name}}-distributor
