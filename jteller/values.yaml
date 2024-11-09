@@ -101,8 +101,8 @@ liquibaseEnable: true
 liquibaseContext: mysql,prod
 liquibaseInit: true
 enableSura: 0
-distributor: 0 # 0 - desabilitado, 1 - core , 2 - cliente , 3 - ambos
-signature: 0 # 0 - desabilitado, 1 - centralizado , 2 - distribuidos
+distributor: 3 # 0 - desabilitado, 1 - core , 2 - cliente , 3 - ambos
+signature: 1 # 0 - desabilitado, 1 - centralizado , 2 - distribuidos
 camposTabla:
   tabla-101: |
     nameTable: tabla-101
