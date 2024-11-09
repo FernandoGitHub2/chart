@@ -130,7 +130,7 @@ services:
     typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
   distributor:
     image: distributor-service-kube
-    tag: v7.6.0.a
+    tag: v7.6.h
     port: 8080
     typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
     memoryLimit: 600Mi
