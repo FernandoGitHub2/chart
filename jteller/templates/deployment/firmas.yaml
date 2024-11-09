@@ -122,7 +122,7 @@ spec:
             livenessProbe:
               failureThreshold: 3
               httpGet:
-                path: {{ .Values.services.hermes.actuator.url }}/health
+                path: {{ .Values.services.firmas.actuator.url }}/health
                 port: {{ .Values.services.hermes.port }}
                 scheme: HTTP
               initialDelaySeconds: 100
@@ -132,7 +132,7 @@ spec:
             readinessProbe:
               failureThreshold: 3
               httpGet:
-                path: {{.Values.services.hermes.actuator.url }}/health/readiness
+                path: {{.Values.services.firmas.actuator.url }}/health/readiness
                 port: {{ .Values.services.hermes.port }}
                 scheme: HTTP
               periodSeconds: 10
