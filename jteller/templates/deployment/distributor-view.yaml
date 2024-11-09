@@ -1,5 +1,5 @@
 {{- if eq (int .Values.executionMode) 2 }}
-{{- if eq (int .Values.distributor) 1 }}
+{{- if and (ne (int .Values.distributor) 0) (ne (int .Values.distributor) 2)}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
