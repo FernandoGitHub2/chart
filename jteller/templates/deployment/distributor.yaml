@@ -108,7 +108,7 @@ spec:
               name: general-secret
               key: mailServerUser
         - name: spring.jpa.properties.hibernate.format_sql
-          value: {{.Values.environment.database.formatSql}}
+          value: "{{.Values.environment.database.formatSql}}"
         - name: spring.jpa.show-sql
           value: "{{.Values.environment.database.showSql}}"
         - name: logging.level.org.hibernate.type.descriptor.sql.BasicBinder
