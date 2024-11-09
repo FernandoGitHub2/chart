@@ -78,7 +78,7 @@ spec:
         - name: minio.url
           value: {{.Values.environment.backend.minioUrl}}
         - name: migration.enabled
-          value: {{.Values.liquibaseEnable}}
+          value: "{{.Values.liquibaseEnable}}"
         - name: migration.context
           value: {{.Values.liquibaseContext}}
         - name: spring.jpa.properties.org.hibernate.envers.default_schema
@@ -86,17 +86,17 @@ spec:
         - name: spring.mail.host
           value: {{ .Values.environment.backend.mail.host }}
         - name: spring.mail.port
-          value: {{ .Values.environment.backend.mail.port }}
+          value: "{{ .Values.environment.backend.mail.port }}"
         - name: spring.mail.properties.mail.smtp.auth
-          value: {{ .Values.environment.backend.mail.auth }}
+          value: "{{ .Values.environment.backend.mail.auth }}"
         - name: spring.mail.properties.mail.smtp.starttls.enable
-          value: {{ .Values.environment.backend.mail.starttls }}
+          value: "{{ .Values.environment.backend.mail.starttls }}"
         - name: spring.mail.properties.mail.smtp.timeout
-          value: {{ .Values.environment.backend.mail.timeout }}
+          value: "{{ .Values.environment.backend.mail.timeout }}"
         - name: spring.mail.properties.mail.smtp.writetimeout
-          value: {{ .Values.environment.backend.mail.writetimeout }}
+          value: "{{ .Values.environment.backend.mail.writetimeout }}"
         - name: spring.mail.properties.mail.smtp.connectiontimeout
-          value: {{ .Values.environment.backend.mail.connectiontimeout }}
+          value: "{{ .Values.environment.backend.mail.connectiontimeout }}"
         - name: spring.mail.password
           valueFrom:
             secretKeyRef:
@@ -110,7 +110,7 @@ spec:
         - name: spring.jpa.properties.hibernate.format_sql
           value: {{.Values.environment.database.formatSql}}
         - name: spring.jpa.show-sql
-          value: {{.Values.environment.database.showSql}}
+          value: "{{.Values.environment.database.showSql}}"
         - name: logging.level.org.hibernate.type.descriptor.sql.BasicBinder
           value: {{.Values.environment.database.sqlBasicBinder}}
         - name: spring.mvc.locale
