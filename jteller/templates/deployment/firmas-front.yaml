@@ -29,9 +29,9 @@ spec:
           protocol: TCP
         resources:
           limits:
-            memory: {{.Values.services.firmasView.memoryLimit | default "512Mi" }}
+            memory: {{.Values.services.firmasView.memoryLimit | default "256Mi" }}
           requests:
-            memory: {{.Values.services.firmasView.memoryLimit | default "512Mi" }}
+            memory: {{.Values.services.firmasView.memoryLimit | default "256Mi" }}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
         volumeMounts:

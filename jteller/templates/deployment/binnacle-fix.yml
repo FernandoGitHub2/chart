@@ -54,9 +54,9 @@ spec:
           protocol: TCP
         resources:
           limits:
-            memory: {{.Values.services.catalog.memoryLimit | default "512Mi"}}
+            memory: {{.Values.services.binnacleFix.memoryLimit | default "512Mi"}}
           requests:
-            memory: {{.Values.services.catalog.memoryLimit | default "512Mi"}}
+            memory: {{.Values.services.binnacleFix.memoryLimit | default "512Mi"}}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
       dnsPolicy: ClusterFirst
