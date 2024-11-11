@@ -17,7 +17,7 @@ data:
                  "requireHttps": false,
                  "disableAtHashCheck": true,
                  "realmInHeader": "{{.Values.environment.keycloak.realmInHeader}}",
-                 "haveDistributor": true,
+                 "haveDistributor": {{- if (int .Values.distributor) 1 }} true{{- else }} false{{- end}},
                  "personInterface": {{- if eq (int .Values.environment.backend.personInterface) 1 }} true{{- else}} false{{- end}},
                  "firmasInterface": false,
                  "language": "es",

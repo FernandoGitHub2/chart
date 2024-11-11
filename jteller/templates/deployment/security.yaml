@@ -61,8 +61,6 @@ spec:
                 secretKeyRef:
                   name: general-secret
                   key: keycloakAdminPassword
-            - name: config.distEnable
-              value: "{{ .Values.environment.backend.enableDist }}"
             - name: config.personInterface
               value: "{{ .Values.environment.backend.personInterface }}"
             - name: config.mailResetPass

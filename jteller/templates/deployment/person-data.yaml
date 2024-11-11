@@ -60,7 +60,7 @@ spec:
                   name: general-secret
                   key: keycloakAdminPassword
             - name: config.distEnable
-              value: "{{ .Values.environment.backend.enableDist }}"
+              value: "{{- if (int .Values.distributor) 1 }}1{{- else }}0{{- end}}"
             - name: config.mailResetPass
               value: "{{ .Values.environment.backend.mailResetPass }}"
             - name: config.validUserMove
