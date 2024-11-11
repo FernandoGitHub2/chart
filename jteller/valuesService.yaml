@@ -20,7 +20,7 @@ services:
       url: /actuator
   transactionEngine:
     image: transaction-engine-service-kube
-    tag: v7.6.f.a
+    tag: v7.6.f.b
     port: 2107
     typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
     memoryLimit: 1000Mi
