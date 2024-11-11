@@ -1,4 +1,5 @@
 services:
+  actuatorDelay: 250
   secretRegistry: aws-registry
   registry: 277232507401.dkr.ecr.us-west-2.amazonaws.com/jteller/
   catalog:

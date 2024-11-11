@@ -190,7 +190,7 @@ spec:
               path: {{.Values.services.transactionCatalog.actuator.url  }}/health
               port: {{ .Values.services.transactionCatalog.port }}
               scheme: HTTP
-            initialDelaySeconds: {{ .Values.services.transactionCatalog.actuator.delay | default 150}}
+            initialDelaySeconds: {{ .Values.services.transactionCatalog.actuator.delay | default default .Values.services.actuatorDelay}}
             periodSeconds: 5
             successThreshold: 1
             timeoutSeconds: 1
