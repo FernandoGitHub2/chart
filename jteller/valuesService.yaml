@@ -26,6 +26,7 @@ services:
     memoryLimit: 1000Mi
     actuator:
       url: /v1/actuator
+      delay: 200
   management:
     image: operation-management-service-kube
     tag: v7.6.c

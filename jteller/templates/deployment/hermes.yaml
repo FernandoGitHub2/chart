@@ -130,7 +130,7 @@ spec:
               path: {{.Values.services.hermes.actuator.url }}/health
               port: {{ .Values.services.hermes.port }}
               scheme: HTTP
-            initialDelaySeconds: 100
+            initialDelaySeconds: {{ .Values.services.firmas.actuator.delay | default 150}}
             periodSeconds: 5
             successThreshold: 1
             timeoutSeconds: 1

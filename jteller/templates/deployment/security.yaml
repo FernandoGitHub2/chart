@@ -132,7 +132,7 @@ spec:
               path: {{.Values.services.security.actuator.url }}/health
               port: {{ .Values.services.security.port }}
               scheme: HTTP
-            initialDelaySeconds: 100
+            initialDelaySeconds: {{ .Values.services.security.actuator.delay | default 150}}
             periodSeconds: 5
             successThreshold: 1
             timeoutSeconds: 1

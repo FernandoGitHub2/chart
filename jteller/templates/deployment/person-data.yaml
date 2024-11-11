@@ -106,7 +106,7 @@ spec:
               path: {{.Values.services.personData.actuator.url  }}/health
               port: {{ .Values.services.personData.port }}
               scheme: HTTP
-            initialDelaySeconds: 100
+            initialDelaySeconds: {{ .Values.services.personData.actuator.delay | default 150}}
             periodSeconds: 5
             successThreshold: 1
             timeoutSeconds: 1
