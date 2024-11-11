@@ -34,7 +34,7 @@ environment:
     timeZone: America/Guatemala
     locale: es
     enableDist: 1
-    personInterface: 1
+    personInterface: 0
     personUrl: http://person-data-service:8080
     commonUrl: http://common-service:8080
     catalogUrl: http://catalog:2102
