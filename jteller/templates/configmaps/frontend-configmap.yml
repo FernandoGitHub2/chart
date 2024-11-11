@@ -18,7 +18,7 @@ data:
                  "disableAtHashCheck": true,
                  "realmInHeader": "{{.Values.environment.keycloak.realmInHeader}}",
                  "haveDistributor": true,
-                 "personInterface": {{- if eq (int .Values.environment.backend.personInterface) 1 }}true{{- else}}false{{- end}},
+                 "personInterface": {{- if eq (int .Values.environment.backend.personInterface) 1 }} true{{- else}} false{{- end}},
                  "firmasInterface": false,
                  "language": "es",
                  "hasGranularSecurity": true
