@@ -66,7 +66,7 @@ spec:
                   name: general-secret
                   key: keycloakAdminPassword
             - name: config.distEnable
-              value: "{{- if (int .Values.distributor) 1 }}1{{- else }}0{{- end}}"
+              value: "{{- if eq (int .Values.distributor) 1 }}1{{- else }}0{{- end}}"
             - name: config.personInterface
               value: "{{ .Values.environment.backend.personInterface }}"
             - name: config.savePersonURL
