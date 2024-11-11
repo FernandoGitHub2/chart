@@ -217,7 +217,7 @@ spec:
               path: {{.Values.services.management.actuator.url }}/health
               port: {{ .Values.services.management.port }}
               scheme: HTTP
-            initialDelaySeconds: {{ .Values.services.management.actuator.delay | default default .Values.services.actuatorDelay}}
+            initialDelaySeconds: {{ .Values.services.management.actuator.delay | default .Values.services.actuatorDelay}}
             periodSeconds: 5
             successThreshold: 1
             timeoutSeconds: 1

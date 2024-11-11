@@ -72,7 +72,7 @@ spec:
             path: {{ join .Values.services.resource.actuator.url "/health" }}
             port: {{ .Values.services.resource.port }}
             scheme: HTTP
-          initialDelaySeconds: {{ .Values.services.resource.actuator.delay | default default .Values.services.actuatorDelay}}
+          initialDelaySeconds: {{ .Values.services.resource.actuator.delay | default .Values.services.actuatorDelay}}
           periodSeconds: 5
           successThreshold: 1
           timeoutSeconds: 1
