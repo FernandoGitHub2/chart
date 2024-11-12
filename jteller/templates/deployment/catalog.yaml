@@ -41,7 +41,7 @@ spec:
             - name: spring.jpa.database-platform
               value: "org.hibernate.dialect.MySQL5InnoDBDialect"
             - name: spring.jpa.properties.hibernate.dialect
-              value: "org.hibernate.dialect.MySQL5Dialect"
+              value: "org.hibernate.dialect.MySQL5InnoDBDialect"
             {{- end }}
             - name: keycloak.config.number
               value: "{{ .Values.environment.keycloak.securityOpt }}"
