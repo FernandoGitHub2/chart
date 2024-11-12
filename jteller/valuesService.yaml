@@ -124,7 +124,7 @@ services:
     tag: v7.6.0.c
     port: 2114
     typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
-    memoryLimit: 700Mi
+    memoryLimit: 900Mi
     actuator:
       url: /firmas-service/actuator
   distributorView:
