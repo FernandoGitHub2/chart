@@ -51,13 +51,10 @@ spec:
             secretKeyRef:
               name: general-secret
               key: commonPassword
-        - name: spring.jpa.properties.hibernate.default_schema
-          valueFrom:
-            secretKeyRef:
-              key: commonUsername
-              name: general-secret
         - name: spring.jpa.properties.org.hibernate.envers.default_schema
-          value: {{.Values.environment.database.audScheme}}
+          value: {{ .Values.environment.database.audScheme }}
+        - name: spring.jpa.properties.org.hibernate.envers.default_catalog
+          value: {{ .Values.environment.database.audScheme }}
         - name: server.port
           value: "{{.Values.services.common.port}}"
         - name: keycloak.realm

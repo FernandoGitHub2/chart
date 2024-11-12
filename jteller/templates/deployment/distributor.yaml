@@ -86,7 +86,9 @@ spec:
         - name: migration.context
           value: {{.Values.liquibaseContext}}
         - name: spring.jpa.properties.org.hibernate.envers.default_schema
-          value: {{.Values.environment.database.audScheme}}
+          value: {{ .Values.environment.database.audScheme }}
+        - name: spring.jpa.properties.org.hibernate.envers.default_catalog
+          value: {{ .Values.environment.database.audScheme }}
         - name: spring.mail.host
           value: {{ .Values.environment.backend.mail.host }}
         - name: spring.mail.port

@@ -55,6 +55,10 @@ spec:
               key: clientPassword
         - name: config.distCore
           value: "{{ .Values.environment.backend.distributorUrl }}"
+        - name: spring.jpa.properties.org.hibernate.envers.default_schema
+          value: {{ .Values.environment.database.audScheme }}
+        - name: spring.jpa.properties.org.hibernate.envers.default_catalog
+          value: {{ .Values.environment.database.audScheme }}
         - name: config.credentials.securityClient
           value: "{{ .Values.environment.backend.securityClient }}"
         - name: config.credentials.securityCore

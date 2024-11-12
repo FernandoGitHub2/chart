@@ -93,6 +93,8 @@ spec:
               value: {{ .Values.environment.keycloak.jtellerSpec.secret }}
             - name: spring.jpa.properties.org.hibernate.envers.default_schema
               value: {{ .Values.environment.database.audScheme }}
+            - name: spring.jpa.properties.org.hibernate.envers.default_catalog
+              value: {{ .Values.environment.database.audScheme }}
             - name: logging.level.org.hibernate.type.descriptor.sql.BasicBinder
               value: {{ .Values.environment.database.sqlBasicBinder }}
             - name: spring.jpa.properties.hibernate.format_sql
