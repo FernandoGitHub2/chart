@@ -6,7 +6,7 @@ services:
     image: catalog-service-kube
     tag: v7.6.a
     port: 2102
-    memoryLimit: 256Mi
+    memoryLimit: 512Mi
     replicas: 1  # Opcional si no se define se usa el general
     typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
     actuator:
@@ -16,7 +16,7 @@ services:
     tag: v7.6.e
     port: 2103
     typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
-    memoryLimit: 256Mi
+    memoryLimit: 512Mi
     actuator:
       url: /actuator
   transactionEngine:
@@ -33,7 +33,7 @@ services:
     tag: v7.6.c
     port: 2107
     typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
-    memoryLimit: 512Mi
+    memoryLimit: 700Mi
     actuator:
       url: /v1/actuator
   specsView:
