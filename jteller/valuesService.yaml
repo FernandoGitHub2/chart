@@ -83,7 +83,7 @@ services:
     tag: v7.6.0.a
     port: 8080
     typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
-    memoryLimit: 256Mi
+    memoryLimit: 512Mi
   mongo:
     image: mongo
     tag: latest
