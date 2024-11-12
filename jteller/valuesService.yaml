@@ -51,7 +51,7 @@ services:
     tag: v7.6.d
     port: 1119
     typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
-    memoryLimit: 256Mi
+    memoryLimit: 512Mi
     actuator:
       url: /v1/actuator
   resource:
