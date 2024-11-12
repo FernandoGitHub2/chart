@@ -67,7 +67,7 @@ services:
     tag: jtv7.6.0.a
     port: 8080
     typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
-    memoryLimit: 256Mi
+    memoryLimit: 512Mi
     actuator:
       url: /actuator
   personConf:
@@ -159,7 +159,7 @@ services:
     tag: jtv7.6.0.a
     port: 8080
     typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
-    memoryLimit: 256Mi
+    memoryLimit: 512Mi
     actuator:
       url: /actuator
   gateway:
