@@ -91,7 +91,7 @@ spec:
               value: {{ .Values.environment.keycloak.jtellerSpec.resource }}
             - name: keycloak.credentials.secret
               value: {{ .Values.environment.keycloak.jtellerSpec.secret }}
-            - name: spring.jpa.properties.org.hibernate.envers.default_schema
+            - name: spring.jpa.properties.org.hibernate.envers.default_catalog
               value: {{ .Values.environment.database.audScheme }}
             - name: spring.jpa.properties.org.hibernate.default_catalog
               value: {{ .Values.environment.database.audScheme }}
