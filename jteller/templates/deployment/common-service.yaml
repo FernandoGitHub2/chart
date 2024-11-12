@@ -78,7 +78,7 @@ spec:
         image: {{.Values.services.registry}}{{.Values.services.common.image}}:{{.Values.services.common.tag}}
         imagePullPolicy: IfNotPresent
         name: {{.Release.Name}}-common-service
-        {{- if hasKey .Values.services.common "actuator" }}
+        {{- if and (hasKey .Values.services.common "actuator") (eq (int .Values.actuator) 1) }}
         livenessProbe:
           failureThreshold: 3
           httpGet:

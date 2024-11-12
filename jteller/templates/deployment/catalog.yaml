@@ -190,7 +190,7 @@ spec:
           image: {{.Values.services.registry}}{{.Values.services.catalog.image}}:{{.Values.services.catalog.tag}}
           imagePullPolicy: IfNotPresent
           name: {{.Release.Name}}-catalog
-          {{- if hasKey .Values.services.catalog "actuator" }}
+          {{- if and (hasKey .Values.services.catalog "actuator") (eq (int .Values.actuator) 1) }}
           livenessProbe:
             failureThreshold: 3
             httpGet:

@@ -199,7 +199,7 @@ spec:
               value: {{.Values.environment.backend.isAlive.write}}
           image: {{ .Values.services.registry}}{{.Values.services.transactionEngine.image}}:{{.Values.services.transactionEngine.tag }}
           imagePullPolicy: IfNotPresent
-          {{- if hasKey .Values.services.transactionEngine "actuator" }}
+          {{- if and (hasKey .Values.services.transactionEngine "actuator") (eq (int .Values.actuator) 1) }}
           livenessProbe:
             failureThreshold: 3
             httpGet:

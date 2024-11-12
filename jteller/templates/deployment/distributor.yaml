@@ -132,7 +132,7 @@ spec:
         image: {{.Values.services.registry}}{{.Values.services.distributor.image}}:{{.Values.services.distributor.tag}}
         imagePullPolicy: IfNotPresent
         name: {{.Release.Name}}-distributor
-        {{- if hasKey .Values.services.distributor "actuator" }}
+        {{- if and (hasKey .Values.services.distributor "actuator") (eq (int .Values.actuator) 1) }}
         livenessProbe:
           failureThreshold: 3
           httpGet:

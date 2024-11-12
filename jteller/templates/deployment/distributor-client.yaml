@@ -122,7 +122,7 @@ spec:
         volumeMounts:
         - mountPath: /kubeconf/
           name: kube-conf-vol
-        {{- if hasKey .Values.services.distributorClient "actuator" }}
+        {{- if and (hasKey .Values.services.distributorClient "actuator") (eq (int .Values.actuator) 1) }}
         livenessProbe:
           failureThreshold: 3
           httpGet:

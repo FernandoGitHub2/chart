@@ -105,7 +105,7 @@ spec:
               value: {{.Values.environment.backend.isAlive.write}}
           image: {{.Values.services.registry}}{{.Values.services.personConf.image}}:{{.Values.services.personConf.tag }}
           imagePullPolicy: IfNotPresent
-          {{- if hasKey .Values.services.personConf "actuator" }}
+          {{- if and (hasKey .Values.services.personConf "actuator") (eq (int .Values.actuator) 1) }}
           livenessProbe:
             failureThreshold: 3
             httpGet:

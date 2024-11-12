@@ -59,7 +59,7 @@ spec:
           {{- end }}
         image: {{ .Values.services.registry }}{{.Values.services.logdat.image }}:{{.Values.services.logdat.tag }}
         imagePullPolicy: IfNotPresent
-        {{- if hasKey .Values.services.logdat "actuator" }}
+        {{- if and (hasKey .Values.services.logdat "actuator") (eq (int .Values.actuator) 1) }}
         livenessProbe:
           failureThreshold: 3
           httpGet:

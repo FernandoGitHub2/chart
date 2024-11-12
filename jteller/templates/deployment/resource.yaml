@@ -65,7 +65,7 @@ spec:
         volumeMounts:
         - mountPath: /keycloak/
           name: keycloak-be-vol
-        {{- if hasKey .Values.services.resource "actuator" }}
+        {{- if and (hasKey .Values.services.resource "actuator") (eq (int .Values.actuator) 1) }}
         livenessProbe:
           failureThreshold: 3
           httpGet:
