@@ -41,7 +41,7 @@ spec:
             - name: spring.jpa.database-platform
               value: "org.hibernate.dialect.MySQL5InnoDBDialect"
             - name: spring.jpa.properties.hibernate.dialect
-              value: "org.hibernate.dialect.MySQL5InnoDBDialect"
+              value: "org.hibernate.dialect.MySQL5Dialect"
             {{- end }}
             - name: keycloak.config.number
               value: "{{ .Values.environment.keycloak.securityOpt }}"
@@ -91,8 +91,8 @@ spec:
               value: {{ .Values.environment.keycloak.jtellerSpec.resource }}
             - name: keycloak.credentials.secret
               value: {{ .Values.environment.keycloak.jtellerSpec.secret }}
-{{/*            - name: spring.jpa.properties.org.hibernate.envers.default_schema*/}}
-{{/*              value: {{ .Values.environment.database.audScheme }}*/}}
+            - name: spring.jpa.properties.org.hibernate.envers.default_schema
+              value: {{ .Values.environment.database.audScheme }}
             - name: logging.level.org.hibernate.type.descriptor.sql.BasicBinder
               value: {{ .Values.environment.database.sqlBasicBinder }}
             - name: spring.jpa.properties.hibernate.format_sql
