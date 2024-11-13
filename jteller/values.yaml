@@ -42,7 +42,7 @@ environment:
     securityClient: http://security:1119
     distributorUrl: http://distributor:8080
     minioTimeout: 8
-    mailResetPass: 1
+    mailResetPass: 0
     validUserMove: 0
     isAlive:
       read: select count(*) from jtellerv7.IS_ALIVE_CONTROL
