@@ -23,7 +23,7 @@ spec:
       containers:
         - env:
             - name: JAVA_OPTS
-              value: '-XX:MaxRAMPercentage=75.0 -XX:MinRAMPercentage=50.0 -Dspring.config.import=optional:configmap:/config/person-conf-application.yml '
+              value: '-XX:MaxRAMPercentage=75.0 -XX:MinRAMPercentage=50.0 -Dspring.config.import=optional:configmap:/config/application.yml '
             - name: server.port
               value: "{{ .Values.services.personConf.port }}"
             - name: spring.datasource.url
