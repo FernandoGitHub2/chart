@@ -23,7 +23,7 @@ spec:
       containers:
       - env:
         - name: JAVA_OPTS
-          value: '-XX:MaxRAMPercentage=75.0 -XX:MinRAMPercentage=50.0 -Dspring.profiles.active=docker -Dspring.config.import=optional:configmap:/config/common-application.yml '
+          value: '-XX:MaxRAMPercentage=75.0 -XX:MinRAMPercentage=50.0 -Dspring.profiles.active=docker -Dspring.config.import=optional:configmap:/config/application.yml '
         - name: spring.datasource.url
           value: "{{ .Values.environment.database.url }}{{if eq .Values.environment.database.type "mysql"}}{{.Values.environment.database.commonUsername | b64dec }}?useUnicode=true{{end}}"
         {{- if eq .Values.environment.database.type "oracle" }}
