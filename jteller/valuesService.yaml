@@ -33,7 +33,7 @@ services:
     tag: v7.6.c
     port: 2107
     typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
-    memoryLimit: 1200Mi
+    memoryLimit: 1300Mi
     actuator:
       url: /v1/actuator
   specsView:
