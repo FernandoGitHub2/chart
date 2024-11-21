@@ -1,0 +1,799 @@
+{{- if ne (int .Values.executionMode) 0 }}
+{{- if and (ne (int .Values.distributor) 0) (ne (int .Values.distributor) 2)}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: distributor-application
+  namespace: {{.Values.namespace}}
+data:
+  distributor-application.yml: |
+    server:
+      port: 9587
+    #datasourcesConfig:
+    #  datasources:
+    #    - name: tenant1
+    #      database-type: oracle
+    #      url: ${db.local.host:jdbc:oracle:thin:@//172.16.10.135:1521/orclpdb1}
+    #      driverClassName: oracle.jdbc.OracleDriver
+    #      username: ${db.local.user:distributor}
+    #      password: ${db.local.password:distributor}
+    #      minimum-idle: ${db.minimum-idle:1}
+    #      maximum-pool-size: ${db.maximum-pool-size:1}
+    #      default-schema: distributor
+    spring:
+      application:
+        name: distributor-service
+      datasource:
+        database-type: oracle
+        url: ${db.local.host:jdbc:oracle:thin:@//172.16.10.135:1521/orclpdb1}
+        driverClassName: oracle.jdbc.driver.OracleDriver
+        username: ${db.local.user:distributor}
+        password: ${db.local.password:distributor}
+        minimum-idle: ${db.minimum-idle:1}
+        maximum-pool-size: ${db.maximum-pool-size:1}
+      jpa:
+        show-sql: true
+        properties:
+    #      hibernate.dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+          org.hibernate.envers.do_not_audit_optimistic_locking_field: false
+          org.hibernate.envers.store_data_at_delete: true
+          org.hibernate.envers.default_schema: logdat
+        open-in-view: true
+      main:
+        allow-bean-definition-overriding: true
+      mvc:
+        format:
+          date-time: yyyy-MM-dd'T'HH:mm:ss
+        locale: es
+        locale-resolver: fixed
+      liquibase:
+        enabled: ${migration.enabled:false}
+        change-log: changelog/db.changelog-master.xml
+        contexts: ${migration.context:mysql,develop}
+    #    liquibase-schema: DISTRIBUTOR
+      mail:
+        template: template.ftl
+        subject: Notificación de cambio de paso
+        host: smtp.gmail.com
+        port: 587
+        username: senderdeveloper0@gmail.com
+        password: oglrfeiwouoidijd
+        properties:
+          mail:
+            smtp:
+              auth: true
+              connectiontimeout: 5000
+              timeout: 5000
+              writetimeout: 5000
+              starttls:
+                enable: true
+      jackson:
+        serialization:
+          fail_on_empty_beans: false
+    config:
+      commonService: https://keycloak.bytesw.cloud:30010
+      catalogService: https://keycloak.bytesw.cloud:30010/api/catalog-service
+      realm: jteller
+      maxAttemp: 20
+      credentials:
+        user: avelasco
+        password: Avelasco$2021
+        security: https://keycloak.bytesw.cloud:30000/api/security-service
+    minio:
+      url: http://172.16.10.105:30005
+      bucket: distributor
+      password: minio123
+      name: minio
+    logging:
+      level:
+        root: INFO
+        org.keycloak: INFO
+        org.hibernate: INFO
+    service-roles:
+      adminUser: admin
+      adminPassword: admin
+      clientId: admin-cli
+    byte:
+      multi-company:
+        enabled: false
+    management:
+      health:
+        probes:
+          enabled: true
+        mail:
+          enabled: false
+      endpoint:
+        health:
+          show-details: always
+      server:
+        port: 8080
+    keycloak:
+      realm: ${keycloak.realmName:JTeller}
+      resource: ${keycloak.client:distributor-service}
+      ssl-required: external
+      auth-server-url: ${keycloak.auth:https://keycloak.bytesw.cloud:30000}
+      bearer-only: true
+      credentials:
+        secret: ${keycloak.secret:646ed215-352d-41f9-8496-d5d23aaaa62e}
+      securityConstraints:
+        - authRoles:
+            {{- range  $index, $role := .Values.environment.keycloak.roles}}
+            - {{$role}}
+            {{- end }}
+          securityCollections:
+            - name: example-service
+              patterns:
+                - /api/example/*
+            - name: dstBranchCompLog-service
+              patterns:
+                - /distributor-service/dstBranchCompLog/*
+            - name: dstBranchComponentCtl-service
+              patterns:
+                - /distributor-service/dstBranchComponentCtl/*
+            - name: dstBranch-service
+              patterns:
+                - /distributor-service/dstBranch/*
+            - name: dstBranchFirmasCtl-service
+              patterns:
+                - /distributor-service/dstBranchFirmasCtl/*
+            - name: dstBranchFirmasLog-service
+              patterns:
+                - /distributor-service/dstBranchFirmasLog/*
+            - name: dstBranchSecChgCtl-service
+              patterns:
+                - /distributor-service/dstBranchSecChgCtl/*
+            - name: dstBranchSecChgLog-service
+              patterns:
+                - /distributor-service/dstBranchSecChgLog/*
+            - name: dstDistributionBranch-service
+              patterns:
+                - /distributor-service/dstDistributionBranch/*
+            - name: dstDistributionBranchDetail-service
+              patterns:
+                - /distributor-service/dstDistributionBranchDetail/*
+            - name: dstDistribution-service
+              patterns:
+                - /distributor-service/dstDistribution/*
+            - name: dstEnvironment-service
+              patterns:
+                - /distributor-service/dstEnvironment/*
+            - name: dstEnvironmentDistUsers-service
+              patterns:
+                - /distributor-service/dstEnvironmentDistUsers/*
+            - name: dstEnvironmentGroup-service
+              patterns:
+                - /distributor-service/dstEnvironmentGroup/*
+            - name: dstImportControl-service
+              patterns:
+                - /distributor-service/dstImportControl/*
+            - name: dstImportPolicy-service
+              patterns:
+                - /distributor-service/dstImportPolicy/*
+            - name: reqProcDef-service
+              patterns:
+                - /distributor-service/reqProcDef/*
+            - name: reqProcDefStep-service
+              patterns:
+                - /distributor-service/reqProcDefStep/*
+            - name: reqProcExecution-service
+              patterns:
+                - /distributor-service/reqProcExecution/*
+            - name: reqProcStepExecution-service
+              patterns:
+                - /distributor-service/reqProcStepExecution/*
+            - name: reqProcStepExeDetail-service
+              patterns:
+                - /distributor-service/reqProcStepExeDetail/*
+            - name: reqProcStepNot-service
+              patterns:
+                - /distributor-service/reqProcStepNot/*
+            - name: reqProcUserPool-service
+              patterns:
+                - /distributor-service/reqProcUserPool/*
+            - name: reqSolUploadedFile-service
+              patterns:
+                - /distributor-service/reqSolUploadedFile/*
+            - name: reqSolutionDetail-service
+              patterns:
+                - /distributor-service/reqSolutionDetail/*
+            - name: requirement-service
+              patterns:
+                - /distributor-service/requirement/*
+            - name: req-users-work-resource
+              patterns:
+                - /distributor-service/reqUsersWork/*
+            - name: mnemonics-resources
+              patterns:
+                - /distributor-service/mnemonics/*
+            - name: create-distribute-file-resources
+              patterns:
+                - /distributor-service/createFileToDistribute/*
+            - name: create-distribution-resource
+              patterns:
+                - /distributor-service/createDistribution/*
+            - name: receive-notification-resource
+              patterns:
+                - /distributor-service/receiveNotification/*
+            - name: entity-status-log-resource
+              patterns:
+                - /distributor-service/entityStatusLog/*
+            - name: export-distribution-service
+              patterns:
+                - /distributor-service/exportDistribution/*
+            - name: entity-status-log-view-resource
+              patterns:
+                - /distributor-service/entityStatusLogView/*
+            - name: import-distribution-service
+              patterns:
+                - /distributor-service/importDistribution/*
+      policy-enforcer-config:
+        paths:
+          - methods:
+              - method: POST
+                scopes:
+                  - view
+            path: /distributor-service/dstEnvironmentDistUsers/page
+          - methods:
+              - method: POST
+                scopes:
+                  - view
+            path: /distributor-service/dstEnvironmentGroup/page
+          - methods:
+              - method: POST
+                scopes:
+                  - view
+            path: /distributor-service/dstEnvironment/page
+          - methods:
+              - method: POST
+                scopes:
+                  - view
+            path: /distributor-service/dstBranch/page
+          - methods:
+              - method: POST
+                scopes:
+                  - view
+            path: /distributor-service/reqProcDef/page
+          - methods:
+              - method: POST
+                scopes:
+                  - view
+            path: /distributor-service/reqProcDefStep/page
+          - methods:
+              - method: POST
+                scopes:
+                  - view
+            path: /distributor-service/reqProcUserPool/page
+          - methods:
+              - method: POST
+                scopes:
+                  - view
+            path: /distributor-service/reqProcStepNot/page
+          - methods:
+              - method: POST
+                scopes:
+                  - view
+            path: /distributor-service/requirement/page
+          - methods:
+              - method: POST
+                scopes:
+                  - view
+            path: /distributor-service/dstDistribution/page
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+            path: /api/example/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: DELETE
+                scopes:
+                  - delete
+              - method: PUT
+                scopes:
+                  - update
+            path: /distributor-service/dstBranchCompLog/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: DELETE
+                scopes:
+                  - delete
+              - method: PUT
+                scopes:
+                  - update
+            path: /distributor-service/dstBranchComponentCtl/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: DELETE
+                scopes:
+                  - delete
+              - method: PUT
+                scopes:
+                  - update
+            path: /distributor-service/dstBranch/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: DELETE
+                scopes:
+                  - delete
+              - method: PUT
+                scopes:
+                  - update
+            path: /distributor-service/dstBranchFirmasCtl/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: DELETE
+                scopes:
+                  - delete
+              - method: PUT
+                scopes:
+                  - update
+            path: /distributor-service/dstBranchFirmasLog/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: DELETE
+                scopes:
+                  - delete
+              - method: PUT
+                scopes:
+                  - update
+            path: /distributor-service/dstBranchSecChgCtl/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: DELETE
+                scopes:
+                  - delete
+              - method: PUT
+                scopes:
+                  - update
+            path: /distributor-service/dstBranchSecChgLog/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: DELETE
+                scopes:
+                  - delete
+              - method: PUT
+                scopes:
+                  - update
+            path: /distributor-service/dstDistributionBranch/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: DELETE
+                scopes:
+                  - delete
+              - method: PUT
+                scopes:
+                  - update
+            path: /distributor-service/dstDistributionBranchDetail/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: DELETE
+                scopes:
+                  - delete
+              - method: PUT
+                scopes:
+                  - update
+            path: /distributor-service/dstDistribution/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: DELETE
+                scopes:
+                  - delete
+              - method: PUT
+                scopes:
+                  - update
+            path: /distributor-service/dstEnvironment/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: DELETE
+                scopes:
+                  - delete
+              - method: PUT
+                scopes:
+                  - update
+            path: /distributor-service/dstEnvironmentDistUsers/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: DELETE
+                scopes:
+                  - delete
+              - method: PUT
+                scopes:
+                  - update
+            path: /distributor-service/dstEnvironmentGroup/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: DELETE
+                scopes:
+                  - delete
+              - method: PUT
+                scopes:
+                  - update
+            path: /distributor-service/dstImportControl/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: DELETE
+                scopes:
+                  - delete
+              - method: PUT
+                scopes:
+                  - update
+            path: /distributor-service/dstImportPolicy/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: DELETE
+                scopes:
+                  - delete
+              - method: PUT
+                scopes:
+                  - update
+            path: /distributor-service/reqProcDef/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: DELETE
+                scopes:
+                  - delete
+              - method: PUT
+                scopes:
+                  - update
+            path: /distributor-service/reqProcDefStep/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: DELETE
+                scopes:
+                  - delete
+              - method: PUT
+                scopes:
+                  - update
+            path: /distributor-service/reqProcExecution/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: DELETE
+                scopes:
+                  - delete
+              - method: PUT
+                scopes:
+                  - update
+            path: /distributor-service/reqProcStepExecution/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: DELETE
+                scopes:
+                  - delete
+              - method: PUT
+                scopes:
+                  - update
+            path: /distributor-service/reqProcStepExeDetail/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: DELETE
+                scopes:
+                  - delete
+              - method: PUT
+                scopes:
+                  - update
+            path: /distributor-service/reqProcStepNot/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: DELETE
+                scopes:
+                  - delete
+              - method: PUT
+                scopes:
+                  - update
+            path: /distributor-service/reqProcUserPool/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: DELETE
+                scopes:
+                  - delete
+              - method: PUT
+                scopes:
+                  - update
+            path: /distributor-service/reqSolUploadedFile/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: DELETE
+                scopes:
+                  - delete
+              - method: PUT
+                scopes:
+                  - update
+            path: /distributor-service/reqSolutionDetail/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: DELETE
+                scopes:
+                  - delete
+              - method: PUT
+                scopes:
+                  - update
+            path: /distributor-service/requirement/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: DELETE
+                scopes:
+                  - delete
+              - method: PUT
+                scopes:
+                  - update
+            path: /distributor-service/reqUsersWork/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: DELETE
+                scopes:
+                  - delete
+              - method: PUT
+                scopes:
+                  - update
+            path: /distributor-service/mnemonics/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: DELETE
+                scopes:
+                  - delete
+              - method: PUT
+                scopes:
+                  - update
+            path: /distributor-service/createFileToDistribute/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: DELETE
+                scopes:
+                  - delete
+              - method: PUT
+                scopes:
+                  - update
+            path: /distributor-service/createDistribution/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: DELETE
+                scopes:
+                  - delete
+              - method: PUT
+                scopes:
+                  - update
+            path: /distributor-service/receiveNotification/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /distributor-service/entityStatusLog/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /distributor-service/exportDistribution/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /distributor-service/entityStatusLogView/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /distributor-service/importDistribution/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            enforcementMode: DISABLED
+            path: /distributor-service/validateAccess/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            enforcementMode: DISABLED
+            path: /distributor-service/checkAccess/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+            path: /actuator/**
+            enforcementMode: DISABLED
+  {{- end }}
+  {{- end }}

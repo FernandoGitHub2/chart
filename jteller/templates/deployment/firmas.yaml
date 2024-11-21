@@ -24,7 +24,7 @@ spec:
       containers:
           - env:
             - name: JAVA_OPTS
-              value: "-XX:MaxRAMPercentage=75.0 -XX:MinRAMPercentage=50.0"
+              value: "-XX:MaxRAMPercentage=75.0 -XX:MinRAMPercentage=50.0 -Dspring.config.location=/config/application.yml "
             - name: server.port
               value: "{{ .Values.services.firmas.port }}"
             - name: spring.datasource.url
@@ -154,10 +154,21 @@ spec:
                 memory: {{.Values.services.firmas.memoryLimit | default "800Mi" }}
             terminationMessagePath: /dev/termination-log
             terminationMessagePolicy: File
+            volumeMounts:
+            - mountPath: /config/
+              name: keycloak-conf
       dnsPolicy: ClusterFirst
       {{- if hasKey .Values.services "secretRegistry"}}
       imagePullSecrets:
       - name: {{.Values.services.secretRegistry}}
       {{- end }}
+      volumes:
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: firmas-application.yml
+            path: application.yml
+          name: firmas-application
+        name: keycloak-conf
   {{- end }}
   {{- end }}

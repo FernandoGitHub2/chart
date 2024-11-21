@@ -1,0 +1,710 @@
+{{- if ne (int .Values.executionMode) 0 }}
+{{- if ne (int .Values.signature) 0}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: firmas-application
+  namespace: {{.Values.namespace}}
+data:
+  firmas-application.yml: |
+    server:
+      port: 9080
+    byte:
+      multi-company:
+        enabled: false
+    spring:
+      application:
+        name: firmas-service
+      datasource:
+        database-type: oracle
+        url: ${db.local.host:jdbc:mysql://172.16.10.101:3306/jsignature?useUnicode=true}
+        driverClassName: com.mysql.cj.jdbc.Driver
+        username: ${db.local.user:jsignature}
+        password: ${db.local.password:jsignature}
+        minimum-idle: ${db.minimum-idle:1}
+        maximum-pool-size: ${db.maximum-pool-size:1}
+      jpa:
+        show-sql: true
+        properties:
+          hibernate.dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+          org.hibernate.envers.do_not_audit_optimistic_locking_field: false
+          org.hibernate.envers.store_data_at_delete: true
+          org.hibernate.envers.default_schema: logdat
+      main:
+        allow-bean-definition-overriding: true
+      liquibase:
+        enabled: true
+        change-log: changelog/db.changelog-master.xml
+        contexts: mysql, prod
+      mvc:
+        locale: es
+        locale-resolver: fixed
+    logging:
+      level:
+        root: INFO
+        org.keycloak: INFO
+        org.hibernate: INFO
+    management:
+      health:
+        probes:
+          enabled: true
+      endpoint:
+        health:
+          show-details: always
+    service-roles:
+      adminUser: admin
+      adminPassword: admin
+      clientId: admin-cli
+    minio:
+      server: http://172.16.10.105:30005
+      username: minio
+      password: minio123
+      bucket: firmas
+      encrypt: 1
+      timeout: 10
+    distEnvironment: 0
+    config:
+      signatureCore: http://provide-signature:8080/provide-signature-service/provideAccountData/
+      commonService: http://common-service:8080
+      coreBankClient: http://corebank-jsing:8080/coreBankResponse/getBycodigoCliente
+      coreBank: http://corebank-jsing:8080/coreBankResponse/getCoreBankResponse
+      realm : jteller
+      personDataService: http://person-data-service:8080
+      personConfService: http://person-conf-service:8080
+      jtellerCatalogService: http://catalog:2102
+      entityStatusAccountId: 2
+      entityStatusSignatureId: 5
+      deleteUserCard: 0
+    keycloak:
+      realm: ${keycloak.realmName:JTeller}
+      resource: ${keycloak.client:firmas-be}
+      ssl-required: external
+      auth-server-url: ${keycloak.auth:https://keycloak.bytesw.cloud:30000}
+      bearer-only: true
+      credentials:
+        secret: ${keycloak.secret:6adcea23-c214-4ad7-86f9-9a5f3cbfc198}
+      securityConstraints:
+        - authRoles:
+            {{- range  $index, $role := .Values.environment.keycloak.roles}}
+            - {{$role}}
+            {{- end }}
+          securityCollections:
+            - name: example-service
+              patterns:
+                - /api/example/*
+            - name: scantype-service
+              patterns:
+                - /firmas-service/scanType/*
+            - name: card-scan-service
+              patterns:
+                - /firmas-service/signatureType/*
+            - name: profile-service
+              patterns:
+                - /firmas-service/profile/*
+            - name: signature-class-service
+              patterns:
+                - /firmas-service/signatureClass/*
+            - name: card-scan-service
+              patterns:
+                - /firmas-service/cardScan/*
+            - name: card-scan-detail-service
+              patterns:
+                - /firmas-service/cardScanDetail/*
+            - name: scanner-service
+              patterns:
+                - /firmas-service/scanner/*
+            - name: device-scanner-service
+              patterns:
+                - /firmas-service/deviceScanner/*
+            - name: rangeprofile-service
+              patterns:
+                - /firmas-service/rangeProfile/*
+            - name: ocrequivalence-service
+              patterns:
+                - /firmas-service/ocrEquivalence/*
+            - name: card-save-service
+              patterns:
+                - /firmas-service/cardSave/*
+            - name: account-service
+              patterns:
+                - /firmas-service/account/*
+            - name: customer-service
+              patterns:
+                - /firmas-service/customer/*
+            - name: customer-comment-service
+              patterns:
+                - /firmas-service/customerComment/*
+            - name: signature-service
+              patterns:
+                - /firmas-service/signature/*
+            - name: group-account-service
+              patterns:
+                - /firmas-service/groupAccount/*
+            - name: range-account-service
+              patterns:
+                - /firmas-service/rangeAccount/*
+            - name: list-signatures-service
+              patterns:
+                - /firmas-service/listSignatures/*
+            - name: parameters-service
+              patterns:
+                - /firmas-service/parameters/*
+            - name: person-identification-service
+              patterns:
+                - /firmas-service/personIdentification/*
+            - name: available-status-service
+              patterns:
+                - /firmas-service/availableStatus/*
+            - name: entity-status-log-service
+              patterns:
+                - /firmas-service/entityStatusLogView/*
+            - name: entity-status-log-change-service
+              patterns:
+                - /firmas-service/entityStatusLog/*
+            - name: validate-access-resource
+              patterns:
+                - /firmas-service/validateAccess/*
+            - name: account-signature-service
+              patterns:
+                - /firmas-service/accountSignature/*
+            - name: enterprise-account-service
+              patterns:
+                - /firmas-service/enterpriseAccount/*
+            - name: signature-migrator-service
+              patterns:
+                - /firmas-service/signatureMigrator/*
+            - name: account-view-service
+              patterns:
+                - /firmas-service/accountView/*
+            - name: signature-view-service
+              patterns:
+                - /firmas-service/signatureView/*
+            - name: sign-person-service
+              patterns:
+                - /firmas-service/signPerson/*
+      policy-enforcer-config:
+        paths:
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+            path: /api/example/*
+          - methods:
+              - method: POST
+                scopes:
+                  - view
+            path: /firmas-service/accountView/page
+          - methods:
+              - method: POST
+                scopes:
+                  - view
+            path: /firmas-service/parameters/page
+          - methods:
+              - method: POST
+                scopes:
+                  - view
+            path: /firmas-service/cardScan/page
+          - methods:
+              - method: POST
+                scopes:
+                  - view
+            path: /firmas-service/deviceScanner/page
+          - methods:
+              - method: POST
+                scopes:
+                  - view
+            path: /firmas-service/profile/page
+          - methods:
+              - method: POST
+                scopes:
+                  - view
+            path: /firmas-service/signatureView/getSigns/page
+          - methods:
+              - method: POST
+                scopes:
+                  - view
+            path: /firmas-service/signatureClass/page
+          - methods:
+              - method: POST
+                scopes:
+                  - view
+            path: /firmas-service/scanner/page
+          - methods:
+              - method: POST
+                scopes:
+                  - view
+            path: /firmas-service/scanType/page
+          - methods:
+              - method: POST
+                scopes:
+                  - view
+            path: /firmas-service/signatureType/page
+          - methods:
+              - method: POST
+                scopes:
+                  - view
+            path: /firmas-service/groupAccount/page
+          - methods:
+              - method: POST
+                scopes:
+                  - view
+            path: /firmas-service/signature/consulted
+          - methods:
+              - method: POST
+                scopes:
+                  - view
+            path: /firmas-service/signature/summaryAud
+          - methods:
+              - method: POST
+                scopes:
+                  - view
+            path: /firmas-service/signature/AudByRevtype
+          - methods:
+              - method: POST
+                scopes:
+                  - view
+            path: /firmas-service/signature/AudByRev
+          - methods:
+              - method: POST
+                scopes:
+                  - view
+            path: /firmas-service/ocrEquivalence/page
+          - methods:
+              - method: POST
+                scopes:
+                  - view
+            path: /firmas-service/signature/AudByAccount
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /firmas-service/scanType/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /firmas-service/signatureType/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /firmas-service/profile/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /firmas-service/signatureClass/*
+          - methods:
+            - method: GET
+              scopes:
+                - view
+            - method: POST
+              scopes:
+                - create
+            - method: PUT
+              scopes:
+                - update
+            - method: DELETE
+              scopes:
+                - delete
+            path: /firmas-service/cardScan/*
+          - methods:
+            - method: GET
+              scopes:
+                - view
+            - method: POST
+              scopes:
+                - create
+            - method: PUT
+              scopes:
+                - update
+            - method: DELETE
+              scopes:
+                - delete
+            path: /firmas-service/cardScanDetail/*
+          - methods:
+            - method: GET
+              scopes:
+                - view
+            - method: POST
+              scopes:
+                - create
+            - method: PUT
+              scopes:
+                - update
+            - method: DELETE
+              scopes:
+                - delete
+            path: /firmas-service/scanner/*
+          - methods:
+            - method: GET
+              scopes:
+                - view
+            - method: POST
+              scopes:
+                - create
+            - method: PUT
+              scopes:
+                - update
+            - method: DELETE
+              scopes:
+                - delete
+            path: /firmas-service/deviceScanner/*
+          - methods:
+            - method: GET
+              scopes:
+                - view
+            - method: POST
+              scopes:
+                - create
+            - method: PUT
+              scopes:
+                - update
+            - method: DELETE
+              scopes:
+                - delete
+            path: /firmas-service/rangeProfile/*
+          - methods:
+            - method: GET
+              scopes:
+                - view
+            - method: POST
+              scopes:
+                - create
+            - method: PUT
+              scopes:
+                - update
+            - method: DELETE
+              scopes:
+                - delete
+            path: /firmas-service/ocrEquivalence/*
+          - methods:
+              - method: POST
+                scopes:
+                  - create
+            path: /firmas-service/cardSave/*
+          - methods:
+            - method: GET
+              scopes:
+                - view
+            - method: POST
+              scopes:
+                - create
+            - method: PUT
+              scopes:
+                - update
+            - method: DELETE
+              scopes:
+                - delete
+            path: /firmas-service/account/*
+          - methods:
+            - method: GET
+              scopes:
+                - view
+            - method: POST
+              scopes:
+                - create
+            - method: PUT
+              scopes:
+                - update
+            - method: DELETE
+              scopes:
+                - delete
+            path: /firmas-service/customer/*
+          - methods:
+            - method: GET
+              scopes:
+                - view
+            - method: POST
+              scopes:
+                - create
+            - method: PUT
+              scopes:
+                - update
+            - method: DELETE
+              scopes:
+                - delete
+            path: /firmas-service/customerComment/*
+          - methods:
+              - method: POST
+                scopes:
+                  - view
+            path: /firmas-service/signature/getSingsToActivate/page
+          - methods:
+            - method: GET
+              scopes:
+                - view
+            - method: POST
+              scopes:
+                - create
+            - method: PUT
+              scopes:
+                - update
+            - method: DELETE
+              scopes:
+                - delete
+            path: /firmas-service/signature/*
+          - methods:
+            - method: GET
+              scopes:
+                - view
+            - method: POST
+              scopes:
+                - create
+            - method: PUT
+              scopes:
+                - update
+            - method: DELETE
+              scopes:
+                - delete
+            path: /firmas-service/groupAccount/*
+          - methods:
+            - method: GET
+              scopes:
+                - view
+            - method: POST
+              scopes:
+                - create
+            - method: PUT
+              scopes:
+                - update
+            - method: DELETE
+              scopes:
+                - delete
+            path: /firmas-service/rangeAccount/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /firmas-service/listSignatures/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /firmas-service/parameters/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /firmas-service/personIdentification/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /firmas-service/availableStatus/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /firmas-service/entityStatusLogView/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /firmas-service/entityStatusLog/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /firmas-service/validateAccess/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /firmas-service/accountSignature/*
+          - methods:
+              - method: POST
+                scopes:
+                  - view
+            path: /firmas-service/enterpriseAccount/page
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /firmas-service/enterpriseAccount/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /firmas-service/signatureMigrator/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /firmas-service/accountView/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /firmas-service/signatureView/*
+          - methods:
+              - method: POST
+                scopes:
+                  - view
+            path: /firmas-service/signPerson/getSigPerson/page
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /firmas-service/signPerson/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+            path: /actuator/**
+            enforcementMode: DISABLED
+  {{- end }}
+  {{- end }}
