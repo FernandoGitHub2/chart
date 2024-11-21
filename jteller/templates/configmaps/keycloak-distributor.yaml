@@ -20,6 +20,10 @@ data:
     #      minimum-idle: ${db.minimum-idle:1}
     #      maximum-pool-size: ${db.maximum-pool-size:1}
     #      default-schema: distributor
+    app:
+      actuator:
+        read-query: "select count(*) from JTELLERV7.IS_ALIVE_CONTROL"
+        write-query: "insert into JTELLERV7.IS_ALIVE_CONTROL(CONTROL_DATE) VALUES (SYSDATE)"
     spring:
       application:
         name: distributor-service
