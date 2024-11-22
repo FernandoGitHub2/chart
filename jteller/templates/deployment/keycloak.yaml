@@ -56,7 +56,7 @@ spec:
             secretKeyRef:
               name: general-secret
               key: keycloakPassword
-        image: {{ .Values.services.keycloak.image }}:{{ .Values.services.keycloak.tag }}
+        image: {{ .Values.services.keycloak.registry | default .Values.services.registry}}{{.Values.services.keycloak.image}}:{{ .Values.services.keycloak.tag }}
         imagePullPolicy: Always
         name: {{ .Release.Name}}-keycloak
         args:

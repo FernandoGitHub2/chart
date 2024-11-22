@@ -99,7 +99,8 @@ services:
     nodePort: 30005
     pvcName: pvc-minio
   keycloak:
-    image: quay.io/keycloak/keycloak
+#    registry: quay.io/keycloak/
+    image: keycloak
     tag: 23.0.0
     port: 8080
     typeService: N  # C - ClusterIp, N - NodePort, L - LoadBalancer
