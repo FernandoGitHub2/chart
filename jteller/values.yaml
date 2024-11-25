@@ -97,7 +97,7 @@ executionMode: 1 # 0 - arquitectura, 1 - database, 2 - jteller
 verifyDevice: 0
 actuator: 0
 notRequireverify: 2
-liquibaseEnable: false
+liquibaseEnable: true
 liquibaseContext: mysql,prod
 liquibaseInit: true
 enableSura: 0
