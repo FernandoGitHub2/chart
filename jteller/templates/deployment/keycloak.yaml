@@ -28,8 +28,10 @@ spec:
           value: {{ .Values.environment.backend.timeZone }}
         - name: KEYCLOAK_FEATURES
           value: "scripts"
+        {{- if .Values.liquibaseInit }}
         - name: KEYCLOAK_IMPORT
           value: "/opt/keycloak/data/import/realm.json"
+        {{- end }}
         - name: KC_HOSTNAME_STRICT_HTTPS
           value: "{{ .Values.services.keycloak.hostname }}"
         - name: KC_PROXY
