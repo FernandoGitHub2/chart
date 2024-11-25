@@ -122,7 +122,7 @@ services:
     typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
   firmas:
     image: firmas-service-kube
-    tag: v7.6.0.c
+    tag: v7.6.0.f.a
     port: 2114
     typeService: C  # C - ClusterIp, N - NodePort, L - LoadBalancer
     memoryLimit: 1200Mi
