@@ -1513,6 +1513,6 @@ data:
 kind: ConfigMap
 metadata:
   name: keycloak-catalog
-{{/*  namespace: {{.Values.namespace}}*/}}
+  namespace: {{ .Values.namespace }}
 
   {{- end }}

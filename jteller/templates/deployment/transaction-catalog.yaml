@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{.Release.Name}}-transaction-catalog
-{{/*  namespace: {{ .Values.namespace }}*/}}
+  namespace: {{ .Values.namespace }}
 spec:
   {{- if hasKey .Values.services.transactionCatalog "replicas" }}
   replicas:  {{ .Values.services.transactionCatalog.replicas }}

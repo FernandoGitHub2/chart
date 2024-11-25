@@ -6,7 +6,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}-resource
-{{/*  namespace: {{ .Values.namespace }}*/}}
+  namespace: {{ .Values.namespace }}
 spec:
   {{- if hasKey .Values.services.resource "replicas" }}
   replicas:  {{ .Values.services.resource.replicas }}

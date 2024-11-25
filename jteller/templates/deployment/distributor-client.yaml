@@ -4,7 +4,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}-distributor-client
-{{/*  namespace: {{ .Values.namespace }}*/}}
+  namespace: {{ .Values.namespace }}
 spec:
   replicas: {{ .Values.services.distributorClient.replicas | default .Values.replicas }}
   selector:

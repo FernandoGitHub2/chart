@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: firmas-front
-{{/*  namespace: {{.Values.namespace}}*/}}
+  namespace: {{ .Values.namespace }}
 spec:
   ports:
   - port: {{.Values.services.firmasView.port}}

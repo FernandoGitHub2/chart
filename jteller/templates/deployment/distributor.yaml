@@ -4,7 +4,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{.Release.Name}}-distributor
-{{/*  namespace: {{.Values.namespace}}*/}}
+  namespace: {{ .Values.namespace }}
 spec:
   {{- if hasKey .Values.services.distributor "replicas" }}
   replicas:  {{ .Values.services.distributor.replicas }}

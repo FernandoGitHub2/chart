@@ -5,7 +5,7 @@ metadata:
   labels:
     app: {{.Release.Name}}-security
   name: {{.Release.Name}}-security
-{{/*  namespace: {{.Values.namespace }}*/}}
+  namespace: {{.Values.namespace }}
 spec:
   {{- if hasKey .Values.services.security "replicas" }}
   replicas:  {{ .Values.services.security.replicas }}
