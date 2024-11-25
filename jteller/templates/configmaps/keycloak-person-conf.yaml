@@ -34,7 +34,7 @@ data:
       liquibase:
         change-log: classpath:changelog/db.changelog-master.xml
         contexts: prod, develop, oracle
-        enabled: true
+        enabled: {{.Values.liquibaseEnable}}
     #  profiles:
     #    include: 'keycloak'
     management:

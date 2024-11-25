@@ -32,7 +32,7 @@ data:
       liquibase:
         change-log: classpath:changelog/db.changelog-master.xml
         contexts: oracle,develop
-        enabled: true
+        enabled: {{.Values.liquibaseEnable}}
       main:
         allow-bean-definition-overriding: true
       profiles:

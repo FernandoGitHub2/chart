@@ -51,7 +51,7 @@ data:
         locale: es
         locale-resolver: fixed
       liquibase:
-        enabled: ${migration.enabled:false}
+        enabled: {{.Values.liquibaseEnable}}
         change-log: changelog/db.changelog-master.xml
         contexts: ${migration.context:mysql,develop}
     #    liquibase-schema: DISTRIBUTOR

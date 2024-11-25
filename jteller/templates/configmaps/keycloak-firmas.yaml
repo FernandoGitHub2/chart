@@ -37,7 +37,7 @@ data:
       main:
         allow-bean-definition-overriding: true
       liquibase:
-        enabled: true
+        enabled: {{.Values.liquibaseEnable}}
         change-log: changelog/db.changelog-master.xml
         contexts: mysql, prod
       mvc:
