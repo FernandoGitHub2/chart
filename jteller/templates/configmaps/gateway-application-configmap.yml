@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: gateway-application.yml
-  namespace: {{ if .Values.namespace }}{{ .Values.namespace }}{{ end }}
+{{/*  namespace: {{ if .Values.namespace }}{{ .Values.namespace }}{{ end }}*/}}
 data:
   application.yml: |
     micronaut:

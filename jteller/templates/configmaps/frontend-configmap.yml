@@ -3,7 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: frontend-configmap
-  namespace: {{ .Values.namespace }}
+{{/*  namespace: {{ .Values.namespace }}*/}}
 data:
   keycloak.json: |
     {

@@ -4,7 +4,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}-firmas
-  namespace: {{ .Values.namespace }}
+{{/*  namespace: {{ .Values.namespace }}*/}}
 spec:
   {{- if hasKey .Values.services.firmas "replicas" }}
   replicas:  {{ .Values.services.firmas.replicas }}

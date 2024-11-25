@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{.Release.Name}}-minio
-  namespace: {{.Values.namespace}}
+{{/*  namespace: {{.Values.namespace}}*/}}
 spec:
   progressDeadlineSeconds: 600
   {{- if hasKey .Values.services.minio "replicas" }}

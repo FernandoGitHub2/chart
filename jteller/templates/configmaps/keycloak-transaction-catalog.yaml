@@ -1032,6 +1032,6 @@ data:
 kind: ConfigMap
 metadata:
   name: keycloak-transaction-catalog
-  namespace: {{.Values.namespace}}
+{{/*  namespace: {{.Values.namespace}}*/}}
 
   {{- end }}

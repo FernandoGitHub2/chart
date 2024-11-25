@@ -4,7 +4,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: distributor-application
-  namespace: {{.Values.namespace}}
+{{/*  namespace: {{.Values.namespace}}*/}}
 data:
   distributor-application.yml: |
     server:

@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{.Release.Name}}-binnacle-fix
-  namespace: {{.Values.namespace}}
+{{/*  namespace: {{.Values.namespace}}*/}}
 spec:
   {{- if hasKey .Values.services.binnacleFix "replicas" }}
   replicas:  {{ .Values.services.binnacleFix.replicas }}

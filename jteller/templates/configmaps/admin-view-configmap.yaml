@@ -3,7 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: admin-view-configmap
-  namespace: {{ .Values.namespace }}
+{{/*  namespace: {{ .Values.namespace }}*/}}
 data:
   config.json: |
     {

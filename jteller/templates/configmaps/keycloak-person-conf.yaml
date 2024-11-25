@@ -3,7 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: person-conf-application
-  namespace: {{.Values.namespace}}
+{{/*  namespace: {{.Values.namespace}}*/}}
 data:
   person-conf-application.yml: |
     spring:

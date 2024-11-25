@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{.Release.Name}}-firmas-front
-  namespace: {{ .Values.namespace }}
+{{/*  namespace: {{ .Values.namespace }}*/}}
 spec:
   {{- if hasKey .Values.services.firmasView "replicas" }}
   replicas:  {{ .Values.services.firmasView.replicas }}

@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name}}-hermes
-  namespace: {{ .Values.namespace }}
+{{/*  namespace: {{ .Values.namespace }}*/}}
 spec:
   {{- if hasKey .Values.services.minio "replicas" }}
   replicas:  {{ .Values.services.minio.replicas }}
