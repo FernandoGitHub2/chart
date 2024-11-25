@@ -1,4 +1,4 @@
-{{- if eq (int .Values.executionMode) 2 }}
+{{- if ne (int .Values.executionMode) 0 }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
