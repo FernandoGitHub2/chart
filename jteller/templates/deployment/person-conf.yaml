@@ -23,11 +23,13 @@ spec:
       containers:
         - env:
             - name: JAVA_OPTS
-              value: '-XX:MaxRAMPercentage=75.0 -XX:MinRAMPercentage=50.0 -Dspring.config.import=optional:configmap:/config/application.yml '
+              value: '-XX:MaxRAMPercentage=75.0 -XX:MinRAMPercentage=50.0'
             - name: server.port
               value: "{{ .Values.services.personConf.port }}"
             - name: spring.datasource.url
               value: "{{ .Values.environment.database.url }}{{if eq .Values.environment.database.type "mysql"}}{{.Values.environment.database.personConfUsername | b64dec }}?useUnicode=true{{end}}"
+            - name: SPRING_CONFIG_LOCATION
+              value: /config/application.yml
             {{- if eq .Values.environment.database.type "oracle" }}
             - name: spring.datasource.driver-class-name
               value: "oracle.jdbc.OracleDriver"
