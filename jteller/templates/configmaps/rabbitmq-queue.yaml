@@ -4,18 +4,15 @@ metadata:
   name: rabbitmq-queue
   namespace: {{.Values.namespace}}
 data:
-  definitions.json: |
-    {
-      "vhosts": [
-      {
-        "name": "/"
-      }
-    ],
-      "queues": [
-        {
-          "name": "{{.Values.environment.backend.rabbitmq.queue}}",
-          "vhost": "/",
-          "durable": true
-        }
-      ]
-    }
+  create.sh: |
+    #!/bin/sh
+
+    # Wait for RabbitMQ to be ready
+    while ! curl -u {{.Values.environment.backend.rabbitmq.username |  b64dec}}:{{.Values.environment.backend.rabbitmq.password |  b64dec}} -sf http://localhost:15672/api/aliveness-test/%2f; do
+      echo "waiting for rabbitmq"
+      sleep 2
+    done
+
+    # Create the queue
+    curl -u {{.Values.environment.backend.rabbitmq.username |  b64dec}}:{{.Values.environment.backend.rabbitmq.password |  b64dec}} -XPUT -H 'content-type:application/json' -d '{"auto_delete":false,"durable":true}' http://localhost:15672/api/queues/%2f/{{.Values.environment.backend.rabbitmq.queue}}
+

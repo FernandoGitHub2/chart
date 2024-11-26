@@ -17,8 +17,6 @@ spec:
     spec:
       containers:
       - env:
-{{/*          - name: RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS*/}}
-{{/*            value: "-rabbitmq_management load_definitions /etc/rabbitmq/definitions.json"*/}}
           - name: RABBITMQ_DEFAULT_USER
             valueFrom:
               secretKeyRef:
@@ -32,25 +30,26 @@ spec:
         image: {{.Values.services.registry}}{{.Values.services.rabbitmq.image}}:{{.Values.services.rabbitmq.tag}}
         imagePullPolicy: IfNotPresent
         name: {{ .Release.Name }}-rabbitmq
+        lifecycle:
+          postStart:
+            exec:
+              command: ["/bin/sh", "-c", "/etc/scripts/create-queue.sh"]
         ports:
         - containerPort: 15672
         - containerPort: 5672
         volumeMounts:
         - name: rabbitmq-data
           mountPath: /var/lib/rabbitmq
-{{/*        - name: config-volume*/}}
-{{/*          mountPath: /etc/rabbitmq/definitions.json*/}}
-{{/*          subPath: definitions.json*/}}
+        - name: script-volume
+          mountPath: /etc/scripts
+          readOnly: true
       volumes:
       - name: rabbitmq-data
         persistentVolumeClaim:
           claimName: pvc-rabbitmq
-{{/*      - name: config-volume*/}}
-{{/*        configMap:*/}}
-{{/*          name: rabbitmq-queue*/}}
-{{/*          items:*/}}
-{{/*          - key: definitions.json*/}}
-{{/*            path: definitions.json*/}}
+      - name: script-volume
+        configMap:
+          name: rabbitmq-queue
       {{- if hasKey .Values.services "secretRegistry"}}
       imagePullSecrets:
       - name: {{.Values.services.secretRegistry}}
