@@ -3,7 +3,7 @@ environment:
     url: jdbc:mysql://172.16.10.101:3306/
     type: mysql
     audScheme: logdat
-    showSql: true
+    showSql: false
     sqlBasicBinder: INFO
     formatSql: false
   keycloak:
