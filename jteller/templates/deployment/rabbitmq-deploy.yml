@@ -30,26 +30,16 @@ spec:
         image: {{.Values.services.registry}}{{.Values.services.rabbitmq.image}}:{{.Values.services.rabbitmq.tag}}
         imagePullPolicy: IfNotPresent
         name: {{ .Release.Name }}-rabbitmq
-        lifecycle:
-          postStart:
-            exec:
-              command: ["/bin/sh", "-c", "/etc/scripts/create-queue.sh"]
         ports:
         - containerPort: 15672
         - containerPort: 5672
         volumeMounts:
         - name: rabbitmq-data
           mountPath: /var/lib/rabbitmq
-        - name: script-volume
-          mountPath: /etc/scripts
-          readOnly: true
       volumes:
       - name: rabbitmq-data
         persistentVolumeClaim:
           claimName: pvc-rabbitmq
-      - name: script-volume
-        configMap:
-          name: rabbitmq-queue
       {{- if hasKey .Values.services "secretRegistry"}}
       imagePullSecrets:
       - name: {{.Values.services.secretRegistry}}
