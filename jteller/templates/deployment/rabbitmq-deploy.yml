@@ -17,8 +17,8 @@ spec:
     spec:
       containers:
       - env:
-          - name: RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS
-            value: "-rabbitmq_management load_definitions /etc/rabbitmq/definitions.json"
+{{/*          - name: RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS*/}}
+{{/*            value: "-rabbitmq_management load_definitions /etc/rabbitmq/definitions.json"*/}}
           - name: RABBITMQ_DEFAULT_USER
             valueFrom:
               secretKeyRef:
@@ -38,19 +38,19 @@ spec:
         volumeMounts:
         - name: rabbitmq-data
           mountPath: /var/lib/rabbitmq
-        - name: config-volume
-          mountPath: /etc/rabbitmq/definitions.json
-          subPath: definitions.json
+{{/*        - name: config-volume*/}}
+{{/*          mountPath: /etc/rabbitmq/definitions.json*/}}
+{{/*          subPath: definitions.json*/}}
       volumes:
       - name: rabbitmq-data
         persistentVolumeClaim:
           claimName: pvc-rabbitmq
-      - name: config-volume
-        configMap:
-          name: rabbitmq-queue
-          items:
-          - key: definitions.json
-            path: definitions.json
+{{/*      - name: config-volume*/}}
+{{/*        configMap:*/}}
+{{/*          name: rabbitmq-queue*/}}
+{{/*          items:*/}}
+{{/*          - key: definitions.json*/}}
+{{/*            path: definitions.json*/}}
       {{- if hasKey .Values.services "secretRegistry"}}
       imagePullSecrets:
       - name: {{.Values.services.secretRegistry}}
