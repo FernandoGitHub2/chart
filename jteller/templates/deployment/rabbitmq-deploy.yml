@@ -36,29 +36,6 @@ spec:
         volumeMounts:
         - name: rabbitmq-data
           mountPath: /var/lib/rabbitmq
-      initContainers:
-      - name: create-queue
-        image: appropriate/curl
-        imagePullPolicy: Always
-        command:
-          - sh
-          - '-c'
-          - |
-            echo "Waiting for RabbitMQ to be up and running..."
-            retries=0
-            max_retries=30
-            until $(curl --output /dev/null --silent --head --fail http://localhost:15672); do
-              retries=$((retries + 1))
-              if [ "$retries" -gt "$max_retries" ]; then
-                echo "Max retries reached, exiting."
-                exit 1
-              fi
-              echo "Waiting for RabbitMQ..."
-              sleep 5
-            done
-
-            echo "RabbitMQ is up! Creating queue..."
-            curl -i -u admin:Byte2024 -H "content-type:application/json" -XPUT -d '{"durable":true}' http://localhost:15672/api/queues/%2f/journal-process-queue
       volumes:
       - name: rabbitmq-data
         persistentVolumeClaim:
