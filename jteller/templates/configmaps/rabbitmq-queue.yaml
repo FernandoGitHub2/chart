@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rabbitmq-queue
+  namespace: {{.Values.namespace}}
+data:
+  definitions.json: |
+    {
+      "queues": [
+        {
+          "name": "{{.Values.environment.backend.rabbitmq.queue}}",
+          "vhost": "/",
+          "durable": true
+        }
+      ]
+    }
