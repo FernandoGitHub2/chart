@@ -107,7 +107,11 @@ spec:
           value: "{{ .Values.environment.database.sqlBasicBinder }}"
         - name: spring.liquibase.enable
           value: "{{ .Values.liquibaseEnable }}"
+        - name: migration.enabled
+          value: "{{ .Values.liquibaseEnable }}"
         - name: spring.liquibase.contexts
+          value: "{{ .Values.liquibaseContext }}"
+        - name: migration.context
           value: "{{ .Values.liquibaseContext }}"
         ports:
         - containerPort: {{ .Values.services.distributorClient.port }}
