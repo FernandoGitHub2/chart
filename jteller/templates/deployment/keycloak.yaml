@@ -28,7 +28,7 @@ spec:
           value: {{ .Values.environment.backend.timeZone }}
         - name: KEYCLOAK_FEATURES
           value: "scripts"
-        {{- if .Values.liquibaseInit }}
+        {{- if and (.Values.liquibaseInit) (eq (int .Values.executionMode) 0) }}
         - name: KEYCLOAK_IMPORT
           value: "/opt/keycloak/data/import/realm.json"
         {{- end }}
