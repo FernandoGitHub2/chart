@@ -27,8 +27,6 @@ spec:
               secretKeyRef:
                 key: rabbitPassword
                 name: general-secret
-          - name: RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS
-            value: "-rabbitmq_management load_definitions \"/etc/rabbitmq/definitions.json\""
         image: {{.Values.services.registry}}{{.Values.services.rabbitmq.image}}:{{.Values.services.rabbitmq.tag}}
         imagePullPolicy: IfNotPresent
         name: {{ .Release.Name }}-rabbitmq
@@ -38,16 +36,25 @@ spec:
         volumeMounts:
         - name: rabbitmq-data
           mountPath: /var/lib/rabbitmq
-        - name: rabbitmq-queue-vol
-          mountPath: /etc/rabbitmq/definitions.json
-          subPath: definitions.json
+      initContainers:
+            - name: create-queue
+              image: appropriate/curl
+              command:
+              - sh
+              - -c
+              - |
+                echo "Waiting for RabbitMQ to be up and running..."
+                until $(curl --output /dev/null --silent --head --fail http://localhost:15672); do
+                  echo "Waiting for RabbitMQ..."
+                  sleep 5
+                done
+                echo "RabbitMQ is up! Creating queue..."
+                curl -i -u {{.Values.environment.backend.rabbitmq.username | b64dec}}:{{.Values.environment.backend.rabbitmq.password | b64dec}} -H "content-type:application/json" -XPUT -d '{"durable":true}' http://localhost:15672/api/queues/%2f/{{.Values.environment.backend.rabbitmq.queue}}
+
       volumes:
       - name: rabbitmq-data
         persistentVolumeClaim:
           claimName: pvc-rabbitmq
-      - name: rabbitmq-queue-vol
-        configMap:
-          name: rabbitmq-queue
       {{- if hasKey .Values.services "secretRegistry"}}
       imagePullSecrets:
       - name: {{.Values.services.secretRegistry}}
