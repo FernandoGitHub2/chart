@@ -37,20 +37,23 @@ spec:
         - name: rabbitmq-data
           mountPath: /var/lib/rabbitmq
       initContainers:
-            - name: create-queue
-              image: appropriate/curl
-              command:
-              - sh
-              - -c
-              - |
-                echo "Waiting for RabbitMQ to be up and running..."
-                until $(curl --output /dev/null --silent --head --fail http://localhost:15672); do
-                  echo "Waiting for RabbitMQ..."
-                  sleep 5
-                done
-                echo "RabbitMQ is up! Creating queue..."
-                curl -i -u {{.Values.environment.backend.rabbitmq.username | b64dec}}:{{.Values.environment.backend.rabbitmq.password | b64dec}} -H "content-type:application/json" -XPUT -d '{"durable":true}' http://localhost:15672/api/queues/%2f/{{.Values.environment.backend.rabbitmq.queue}}
+      - command:
+          - sh
+          - '-c'
+          - |
+            echo "Waiting for RabbitMQ to be up and running..."
 
+            until $(curl --output /dev/null --silent --head --fail http://$(hostname -f):15672); do
+              echo "Waiting for RabbitMQ..."
+              sleep 5
+            done
+
+            echo "RabbitMQ is up! Creating queue..."
+
+            curl -i -u admin:Byte2024 -H "content-type:application/json" -XPUT -d '{"durable":true}' http://$(hostname -f):15672/api/queues/%2f/journal-process-queue
+        image: appropriate/curl
+        imagePullPolicy: Always
+        name: create-queue
       volumes:
       - name: rabbitmq-data
         persistentVolumeClaim:
