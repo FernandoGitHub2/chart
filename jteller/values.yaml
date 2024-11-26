@@ -80,17 +80,7 @@ environment:
       resendOpensearch: 21600000
   frontend:
     aceptedUrls:
-     - http://172.16.21.10:30001
-     - https://keycloak.bytesw.cloud:30000 
-     - https://bytesw.cloud:30000
-     - http://172.16.10.105:30009
-     - https://keycloak.bytesw.cloud:30010
-     - https://galaxia.bytesw.com:30010
-     - http://telepay.bytesw.com:8989
-     - https://jteller-sura.mocklab.io
-     - http://telepay.bytesw.com:8787
-     - https://j1z3y.mocklab.io
-     - http://172.16.21.10:30000
+     - http://172.16.10.101:30010
 replicas: 1
 namespace: jteller
 executionMode: 1 # 0 - arquitectura, 1 - database, 2 - jteller
