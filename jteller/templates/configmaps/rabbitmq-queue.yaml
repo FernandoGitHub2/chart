@@ -7,10 +7,10 @@ data:
   definitions.json: |
     {
       "vhosts": [
-        {
-          "name": "/"
-        }
-      ],
+      {
+        "name": "/"
+      }
+    ],
       "queues": [
         {
           "name": "{{.Values.environment.backend.rabbitmq.queue}}",
@@ -19,5 +19,3 @@ data:
         }
       ]
     }
-
-
