@@ -93,7 +93,7 @@ environment:
      - http://172.16.21.10:30000
 replicas: 1
 namespace: jteller
-executionMode: 2 # 0 - arquitectura, 1 - database, 2 - jteller
+executionMode: 1 # 0 - arquitectura, 1 - database, 2 - jteller
 verifyDevice: 0
 actuator: 0
 notRequireverify: 2
