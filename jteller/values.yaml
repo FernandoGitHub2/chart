@@ -15,19 +15,19 @@ environment:
       - admin
     jtellerSpec:
       resource: specs-configuration
-      secret: v1AxwtnTDlJyChtI9LGXIRIFbur7IRzq
+      secret: 9W8PcEf7uhvCkmvuexjCLgND4EToXzKC
     jtellerOv: 
       resource: jt-backend
-      secret: FLsQFKJFsSBgXgkNs8cKRXJojpU0cQYc
+      secret: 4Cu0UyWMkUk2Qop26dgVpT23fvG7cZT4
     distributor:
       resource: distributor
-      secret: CgGxmvJnjwhFH0W3GBdYjPdcBfAkDRiQ
+      secret: AxatoMMyMvSpX6voSdmARN4Gql0FYp5o
     signature:
       resource: firmas-be
-      secret: L7rQTxQyuX8wCXoXX2v9e6pyewH8wrAA
+      secret: m0Hd3XtKVpHxRcLOGHVgC51OH7VFhmQ2
     configuration:
       resource: configuration-service
-      secret: 7tkKSBzwZp4MAb18UY2BWXQhgGW6HVcm
+      secret: AHWdclMePbiqj2VNZOCcQb9zIJH6GOU1
     realmInHeader: jteller
   backend:
     resolver: fixed
@@ -83,7 +83,7 @@ environment:
      - http://172.16.10.101:30010
 replicas: 1
 namespace: jteller
-executionMode: 0 # 0 - arquitectura, 1 - database, 2 - jteller
+executionMode: 1 # 0 - arquitectura, 1 - database, 2 - jteller
 verifyDevice: 0
 actuator: 0
 notRequireverify: 2
