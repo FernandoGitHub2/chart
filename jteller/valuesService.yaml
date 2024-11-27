@@ -4,7 +4,7 @@ services:
   registry: 277232507401.dkr.ecr.us-west-2.amazonaws.com/jteller/
   catalog:
     image: catalog-service-kube
-    tag: v7.6.b.a
+    tag: v7.6.b.b
     port: 2102
     memoryLimit: 512Mi
     replicas: 1  # Opcional si no se define se usa el general
