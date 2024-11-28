@@ -708,7 +708,7 @@ data:
               - method: GET
                 scopes:
                   - view
-            path: /actuator/**
+            path: /firmas-service/actuator/**
             enforcementMode: DISABLED
   {{- end }}
   {{- end }}
