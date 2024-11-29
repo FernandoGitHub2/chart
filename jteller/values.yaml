@@ -359,7 +359,7 @@ services:
     typeService: C
     memoryLimit: 1200Mi
     actuator:
-      url: /firmas-service/actuator
+      url: /actuator
   distributorView:
     image: distributor-view-kube
     tag: dev.1.1.25.f
