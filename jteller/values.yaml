@@ -372,7 +372,7 @@ services:
     typeService: C
     memoryLimit: 512Mi
     actuator:
-      url: /distributor-service/actuator
+      url: /actuator
   distributorClient:
     image: distributor-client-service-kube
     tag: v7.6.0.a
