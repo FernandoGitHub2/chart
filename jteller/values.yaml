@@ -367,7 +367,7 @@ services:
     typeService: C
   distributor:
     image: distributor-service-kube
-    tag: v7.6.h
+    tag: v7.6.i.a
     port: 8080
     typeService: C
     memoryLimit: 512Mi
