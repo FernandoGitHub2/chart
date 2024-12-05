@@ -55,7 +55,6 @@ environment:
     resolver: fixed
     timeZone: America/Guatemala
     locale: es
-    personInterface: 0
     personUrl: http://person-data-service:8080
     commonUrl: http://common-service:8080
     catalogUrl: http://catalog:2102
@@ -232,7 +231,6 @@ camposTabla:
       value: true
     rejectedWhen: null
 services:
-  actuatorDelay: 250
   secretRegistry: aws-registry
   registry: 277232507401.dkr.ecr.us-west-2.amazonaws.com/jteller/
   catalog:
@@ -246,7 +244,7 @@ services:
       url: /actuator
   transactionCatalog:
     image: transaction-catalog-service-kube
-    tag: v7.6.o
+    tag: v7.6.p
     port: 2103
     typeService: C
     memoryLimit: 512Mi
@@ -254,7 +252,7 @@ services:
       url: /actuator
   transactionEngine:
     image: transaction-engine-service-kube
-    tag: v7.6.l
+    tag: v7.6.m
     port: 2107
     typeService: C
     memoryLimit: 700Mi
