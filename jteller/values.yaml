@@ -247,7 +247,7 @@ services:
     tag: v7.6.p
     port: 2103
     typeService: C
-    memoryLimit: 512Mi
+    memoryLimit: 712Mi
     actuator:
       url: /actuator
   transactionEngine:
@@ -282,7 +282,7 @@ services:
     tag: v7.6.h.1
     port: 1119
     typeService: C
-    memoryLimit: 512Mi
+    memoryLimit: 712Mi
     actuator:
       url: /v1/actuator
   resource:
