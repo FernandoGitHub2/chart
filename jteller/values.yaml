@@ -269,12 +269,12 @@ services:
       url: /v1/actuator
   specsView:
     image: jt-frontend-kube-dev
-    tag: dev.1.0.27.e
+    tag: dev.1.0.30
     typeService: C
     port: 8080
   operationView:
     image: jt-operation-view-kube-dev
-    tag: dev.1.0.84.177.w
+    tag: dev.1.0.84.180
     typeService: C
     port: 8080
   security:
@@ -347,7 +347,7 @@ services:
       url: /v1/actuator
   firmasView:
     image: firmas-front-kube
-    tag: dev.1.1.12.17.7
+    tag: dev.1.1.13
     port: 8080
     typeService: C
   firmas:
