@@ -264,7 +264,7 @@ services:
     tag: v7.6.e
     port: 2107
     typeService: C
-    memoryLimit: 1300Mi
+    memoryLimit: 1400Mi
     actuator:
       url: /v1/actuator
   specsView:
