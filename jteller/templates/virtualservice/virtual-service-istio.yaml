@@ -1,440 +1,440 @@
-{{/*apiVersion: networking.istio.io/v1beta1*/}}
-{{/*kind: VirtualService*/}}
-{{/*metadata:*/}}
-{{/*  name: virtual-service-istio*/}}
-{{/*  namespace: {{.Values.namespace}}*/}}
-{{/*spec:*/}}
-{{/*  hosts:*/}}
-{{/*    - "{{.Values.istio.sslHost}}"*/}}
-{{/*  gateways:*/}}
-{{/*    - gateway-istio*/}}
-{{/*  http:*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /operation-view*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: operation-view*/}}
-{{/*            port:*/}}
-{{/*              number: 8080*/}}
-{{/*      rewrite:*/}}
-{{/*        uri: " "*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /specs-view*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: specs-view*/}}
-{{/*            port:*/}}
-{{/*              number: 8080*/}}
-{{/*      rewrite:*/}}
-{{/*        uri: " "*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /specs-view-v8*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: specs-view-v8*/}}
-{{/*            port:*/}}
-{{/*              number: 8080*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /wom-views*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: wom-views*/}}
-{{/*            port:*/}}
-{{/*              number: 8080*/}}
-{{/*      rewrite:*/}}
-{{/*        uri: " "*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /bantrab-views*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: bantrab-views*/}}
-{{/*            port:*/}}
-{{/*              number: 8080*/}}
-{{/*      rewrite:*/}}
-{{/*        uri: " "*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /api/authorization-service*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: authorization-be*/}}
-{{/*            port:*/}}
-{{/*              number: 2108*/}}
-{{/*      rewrite:*/}}
-{{/*        uri: " "*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /api/bantrab-service*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: bantrab*/}}
-{{/*            port:*/}}
-{{/*              number: 2113*/}}
-{{/*      rewrite:*/}}
-{{/*        uri: " "*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /api/catalog-service*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: catalog*/}}
-{{/*            port:*/}}
-{{/*              number: 2102*/}}
-{{/*      rewrite:*/}}
-{{/*        uri: " "*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /api/definitions-service*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: definitions*/}}
-{{/*            port:*/}}
-{{/*              number: 2101*/}}
-{{/*      rewrite:*/}}
-{{/*        uri: " "*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /api/hermes*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: hermes*/}}
-{{/*            port:*/}}
-{{/*              number: 1120*/}}
-{{/*      rewrite:*/}}
-{{/*        uri: " "*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /api/integration-service*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: integration*/}}
-{{/*            port:*/}}
-{{/*              number: 2112*/}}
-{{/*      rewrite:*/}}
-{{/*        uri: " "*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /integrator*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: integrator*/}}
-{{/*            port:*/}}
-{{/*              number: 9091*/}}
-{{/*      rewrite:*/}}
-{{/*        uri: " "*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /auth*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: keycloak*/}}
-{{/*            port:*/}}
-{{/*              number: 8080*/}}
-{{/*      rewrite:*/}}
-{{/*        uri: " "*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /api/provide-transaction-catalogs-service*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: provide-transaction-catalog*/}}
-{{/*            port:*/}}
-{{/*              number: 2109*/}}
-{{/*      rewrite:*/}}
-{{/*        uri: " "*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /api/resource-service*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: resource*/}}
-{{/*            port:*/}}
-{{/*              number: 2110*/}}
-{{/*      rewrite:*/}}
-{{/*        uri: " "*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /api/security-service*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: security*/}}
-{{/*            port:*/}}
-{{/*              number: 1119*/}}
-{{/*      rewrite:*/}}
-{{/*        uri: " "*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /api/signature-service*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: signature*/}}
-{{/*            port:*/}}
-{{/*              number: 2106*/}}
-{{/*      rewrite:*/}}
-{{/*        uri: " "*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /api/sura-service*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: sura*/}}
-{{/*            port:*/}}
-{{/*              number: 2111*/}}
-{{/*      rewrite:*/}}
-{{/*        uri: " "*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /api/transaction-catalog-service*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: transaction-catalog*/}}
-{{/*            port:*/}}
-{{/*              number: 2103*/}}
-{{/*      rewrite:*/}}
-{{/*        uri: " "*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /api/transaction-engine-service*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: transaction-engine*/}}
-{{/*            port:*/}}
-{{/*              number: 2107*/}}
-{{/*      rewrite:*/}}
-{{/*        uri: " "*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /firmas-service*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: firmas*/}}
-{{/*            port:*/}}
-{{/*              number: 2114*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /service/common*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: common-service*/}}
-{{/*            port:*/}}
-{{/*              number: 8080*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /service/person-data*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: person-data-service*/}}
-{{/*            port:*/}}
-{{/*              number: 8080*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /service/person-conf*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: person-conf-service*/}}
-{{/*            port:*/}}
-{{/*              number: 8080*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /export-service*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: export*/}}
-{{/*            port:*/}}
-{{/*              number: 8080*/}}
-{{/*      rewrite:*/}}
-{{/*        uri: " "*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /firmas*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: firmas-front*/}}
-{{/*            port:*/}}
-{{/*              number: 8080*/}}
-{{/*      rewrite:*/}}
-{{/*        uri: " "*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /api/operation-management-service*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: operation-management*/}}
-{{/*            port:*/}}
-{{/*              number: 2107*/}}
-{{/*      rewrite:*/}}
-{{/*        uri: " "*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /provide-signature*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: provide-signature*/}}
-{{/*            port:*/}}
-{{/*              number: 8080*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /distributor-service*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: distributor*/}}
-{{/*            port:*/}}
-{{/*              number: 8080*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /distributor-client-service*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: distributor-client*/}}
-{{/*            port:*/}}
-{{/*              number: 8080*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /coreBankResponse*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: corebank-jsing*/}}
-{{/*            port:*/}}
-{{/*              number: 8080*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /distributor*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: distributor-view*/}}
-{{/*            port:*/}}
-{{/*              number: 8080*/}}
-{{/*      rewrite:*/}}
-{{/*        uri: " "*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /service/integrator*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: integrador-jteller*/}}
-{{/*            port:*/}}
-{{/*              number: 8080*/}}
-{{/*      rewrite:*/}}
-{{/*        uri: " "*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /service/extensiones*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: extensiones*/}}
-{{/*            port:*/}}
-{{/*              number: 8080*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /aml-fe*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: aml-fe*/}}
-{{/*            port:*/}}
-{{/*              number: 8080*/}}
-{{/*      rewrite:*/}}
-{{/*        uri: " "*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /api/integrator*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: integrator-wom*/}}
-{{/*            port:*/}}
-{{/*              number: 8080*/}}
-{{/*      rewrite:*/}}
-{{/*        uri: " "*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /api/wom-service*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: wom*/}}
-{{/*            port:*/}}
-{{/*              number: 8080*/}}
-{{/*      rewrite:*/}}
-{{/*        uri: " "*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /service/logdat*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: logdat-jteller*/}}
-{{/*            port:*/}}
-{{/*              number: 8080*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /service/reconstruc-log*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: binnacle-fix*/}}
-{{/*            port:*/}}
-{{/*              number: 8080*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /transaction-manager*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: transaction-manager*/}}
-{{/*            port:*/}}
-{{/*              number: 8080*/}}
-{{/*      rewrite:*/}}
-{{/*        uri: " "*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /service/is-alive-service*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: is-alive-config.is-alive.svc.cluster.local*/}}
-{{/*            port:*/}}
-{{/*              number: 8080*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /service/batch-monitor*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: is-alive-batch-monitor.is-alive.svc.cluster.local*/}}
-{{/*            port:*/}}
-{{/*              number: 8080*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /service/security*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: security*/}}
-{{/*            port:*/}}
-{{/*              number: 1119*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /service/is-alive-monitor-service*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: is-alive-monitor-service.is-alive.svc.cluster.local*/}}
-{{/*            port:*/}}
-{{/*              number: 8080*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: /is-alive*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: is-alive-frontend.is-alive.svc.cluster.local*/}}
-{{/*            port:*/}}
-{{/*              number: 8080*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: "/"*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: keycloak*/}}
-{{/*            port:*/}}
-{{/*              number: 8080*/}}
-{{/*          headers:*/}}
-{{/*            request:*/}}
-{{/*              set:*/}}
-{{/*                Host: "keycloak.bytesw.cloud:30010"*/}}
-{{/*                X-Forwarded-Host: "keycloak.bytesw.cloud:30010"*/}}
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: virtual-service-istio
+  namespace: {{.Values.namespace}}
+spec:
+  hosts:
+    - "{{.Values.istio.sslHost}}"
+  gateways:
+    - gateway-istio
+  http:
+    - match:
+        - uri:
+            prefix: /operation-view
+      route:
+        - destination:
+            host: operation-view
+            port:
+              number: 8080
+      rewrite:
+        uri: " "
+    - match:
+        - uri:
+            prefix: /specs-view
+      route:
+        - destination:
+            host: specs-view
+            port:
+              number: 8080
+      rewrite:
+        uri: " "
+    - match:
+        - uri:
+            prefix: /specs-view-v8
+      route:
+        - destination:
+            host: specs-view-v8
+            port:
+              number: 8080
+    - match:
+        - uri:
+            prefix: /wom-views
+      route:
+        - destination:
+            host: wom-views
+            port:
+              number: 8080
+      rewrite:
+        uri: " "
+    - match:
+        - uri:
+            prefix: /bantrab-views
+      route:
+        - destination:
+            host: bantrab-views
+            port:
+              number: 8080
+      rewrite:
+        uri: " "
+    - match:
+        - uri:
+            prefix: /api/authorization-service
+      route:
+        - destination:
+            host: authorization-be
+            port:
+              number: 2108
+      rewrite:
+        uri: " "
+    - match:
+        - uri:
+            prefix: /api/bantrab-service
+      route:
+        - destination:
+            host: bantrab
+            port:
+              number: 2113
+      rewrite:
+        uri: " "
+    - match:
+        - uri:
+            prefix: /api/catalog-service
+      route:
+        - destination:
+            host: catalog
+            port:
+              number: 2102
+      rewrite:
+        uri: " "
+    - match:
+        - uri:
+            prefix: /api/definitions-service
+      route:
+        - destination:
+            host: definitions
+            port:
+              number: 2101
+      rewrite:
+        uri: " "
+    - match:
+        - uri:
+            prefix: /api/hermes
+      route:
+        - destination:
+            host: hermes
+            port:
+              number: 1120
+      rewrite:
+        uri: " "
+    - match:
+        - uri:
+            prefix: /api/integration-service
+      route:
+        - destination:
+            host: integration
+            port:
+              number: 2112
+      rewrite:
+        uri: " "
+    - match:
+        - uri:
+            prefix: /integrator
+      route:
+        - destination:
+            host: integrator
+            port:
+              number: 9091
+      rewrite:
+        uri: " "
+    - match:
+        - uri:
+            prefix: /auth
+      route:
+        - destination:
+            host: keycloak
+            port:
+              number: 8080
+      rewrite:
+        uri: " "
+    - match:
+        - uri:
+            prefix: /api/provide-transaction-catalogs-service
+      route:
+        - destination:
+            host: provide-transaction-catalog
+            port:
+              number: 2109
+      rewrite:
+        uri: " "
+    - match:
+        - uri:
+            prefix: /api/resource-service
+      route:
+        - destination:
+            host: resource
+            port:
+              number: 2110
+      rewrite:
+        uri: " "
+    - match:
+        - uri:
+            prefix: /api/security-service
+      route:
+        - destination:
+            host: security
+            port:
+              number: 1119
+      rewrite:
+        uri: " "
+    - match:
+        - uri:
+            prefix: /api/signature-service
+      route:
+        - destination:
+            host: signature
+            port:
+              number: 2106
+      rewrite:
+        uri: " "
+    - match:
+        - uri:
+            prefix: /api/sura-service
+      route:
+        - destination:
+            host: sura
+            port:
+              number: 2111
+      rewrite:
+        uri: " "
+    - match:
+        - uri:
+            prefix: /api/transaction-catalog-service
+      route:
+        - destination:
+            host: transaction-catalog
+            port:
+              number: 2103
+      rewrite:
+        uri: " "
+    - match:
+        - uri:
+            prefix: /api/transaction-engine-service
+      route:
+        - destination:
+            host: transaction-engine
+            port:
+              number: 2107
+      rewrite:
+        uri: " "
+    - match:
+        - uri:
+            prefix: /firmas-service
+      route:
+        - destination:
+            host: firmas
+            port:
+              number: 2114
+    - match:
+        - uri:
+            prefix: /service/common
+      route:
+        - destination:
+            host: common-service
+            port:
+              number: 8080
+    - match:
+        - uri:
+            prefix: /service/person-data
+      route:
+        - destination:
+            host: person-data-service
+            port:
+              number: 8080
+    - match:
+        - uri:
+            prefix: /service/person-conf
+      route:
+        - destination:
+            host: person-conf-service
+            port:
+              number: 8080
+    - match:
+        - uri:
+            prefix: /export-service
+      route:
+        - destination:
+            host: export
+            port:
+              number: 8080
+      rewrite:
+        uri: " "
+    - match:
+        - uri:
+            prefix: /firmas
+      route:
+        - destination:
+            host: firmas-front
+            port:
+              number: 8080
+      rewrite:
+        uri: " "
+    - match:
+        - uri:
+            prefix: /api/operation-management-service
+      route:
+        - destination:
+            host: operation-management
+            port:
+              number: 2107
+      rewrite:
+        uri: " "
+    - match:
+        - uri:
+            prefix: /provide-signature
+      route:
+        - destination:
+            host: provide-signature
+            port:
+              number: 8080
+    - match:
+        - uri:
+            prefix: /distributor-service
+      route:
+        - destination:
+            host: distributor
+            port:
+              number: 8080
+    - match:
+        - uri:
+            prefix: /distributor-client-service
+      route:
+        - destination:
+            host: distributor-client
+            port:
+              number: 8080
+    - match:
+        - uri:
+            prefix: /coreBankResponse
+      route:
+        - destination:
+            host: corebank-jsing
+            port:
+              number: 8080
+    - match:
+        - uri:
+            prefix: /distributor
+      route:
+        - destination:
+            host: distributor-view
+            port:
+              number: 8080
+      rewrite:
+        uri: " "
+    - match:
+        - uri:
+            prefix: /service/integrator
+      route:
+        - destination:
+            host: integrador-jteller
+            port:
+              number: 8080
+      rewrite:
+        uri: " "
+    - match:
+        - uri:
+            prefix: /service/extensiones
+      route:
+        - destination:
+            host: extensiones
+            port:
+              number: 8080
+    - match:
+        - uri:
+            prefix: /aml-fe
+      route:
+        - destination:
+            host: aml-fe
+            port:
+              number: 8080
+      rewrite:
+        uri: " "
+    - match:
+        - uri:
+            prefix: /api/integrator
+      route:
+        - destination:
+            host: integrator-wom
+            port:
+              number: 8080
+      rewrite:
+        uri: " "
+    - match:
+        - uri:
+            prefix: /api/wom-service
+      route:
+        - destination:
+            host: wom
+            port:
+              number: 8080
+      rewrite:
+        uri: " "
+    - match:
+        - uri:
+            prefix: /service/logdat
+      route:
+        - destination:
+            host: logdat-jteller
+            port:
+              number: 8080
+    - match:
+        - uri:
+            prefix: /service/reconstruc-log
+      route:
+        - destination:
+            host: binnacle-fix
+            port:
+              number: 8080
+    - match:
+        - uri:
+            prefix: /transaction-manager
+      route:
+        - destination:
+            host: transaction-manager
+            port:
+              number: 8080
+      rewrite:
+        uri: " "
+    - match:
+        - uri:
+            prefix: /service/is-alive-service
+      route:
+        - destination:
+            host: is-alive-config.is-alive.svc.cluster.local
+            port:
+              number: 8080
+    - match:
+        - uri:
+            prefix: /service/batch-monitor
+      route:
+        - destination:
+            host: is-alive-batch-monitor.is-alive.svc.cluster.local
+            port:
+              number: 8080
+    - match:
+        - uri:
+            prefix: /service/security
+      route:
+        - destination:
+            host: security
+            port:
+              number: 1119
+    - match:
+        - uri:
+            prefix: /service/is-alive-monitor-service
+      route:
+        - destination:
+            host: is-alive-monitor-service.is-alive.svc.cluster.local
+            port:
+              number: 8080
+    - match:
+        - uri:
+            prefix: /is-alive
+      route:
+        - destination:
+            host: is-alive-frontend.is-alive.svc.cluster.local
+            port:
+              number: 8080
+    - match:
+        - uri:
+            prefix: "/"
+      route:
+        - destination:
+            host: keycloak
+            port:
+              number: 8080
+          headers:
+            request:
+              set:
+                Host: "keycloak.bytesw.cloud:30010"
+                X-Forwarded-Host: "keycloak.bytesw.cloud:30010"
