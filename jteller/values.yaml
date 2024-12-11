@@ -131,6 +131,21 @@ liquibaseInit: true
 enableSura: 0
 distributor: 3 # 0 - desabilitado, 1 - core , 2 - cliente , 3 - ambos
 signature: 1 # 0 - desabilitado, 1 - centralizado , 2 - distribuidos
+istio:
+  enable: true
+  ssl: enable
+  sslSecretName: my-tls-secret
+  sslHost: keycloak.bytesw.cloud
+istio-base:
+  defaultRevision: default
+  namespace: istio-system
+istiod:
+  namespace: istio-system
+  telemetry:
+    enabled: true
+istio-ingressgateway:
+  namespace: istio-system
+
 camposTabla:
   tabla-101: |
     nameTable: tabla-101
@@ -279,7 +294,7 @@ services:
     port: 8080
   security:
     image: security-service-kube
-    tag: v7.6.h.1
+    tag: v7.6.i.f
     port: 1119
     typeService: C
     memoryLimit: 712Mi

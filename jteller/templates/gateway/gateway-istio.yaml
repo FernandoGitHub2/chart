@@ -1,0 +1,24 @@
+{{/*apiVersion: networking.istio.io/v1beta1*/}}
+{{/*kind: Gateway*/}}
+{{/*metadata:*/}}
+{{/*  name: gateway-istio*/}}
+{{/*  namespace: {{.Values.namespace}}*/}}
+{{/*spec:*/}}
+{{/*  selector:*/}}
+{{/*    istio: ingressgateway*/}}
+{{/*  servers:*/}}
+{{/*  - hosts:*/}}
+{{/*    - {{.Values.istio.sslHost}}*/}}
+{{/*    port:*/}}
+{{/*      name: https*/}}
+{{/*      number: 443*/}}
+{{/*      protocol: HTTPS*/}}
+{{/*    tls:*/}}
+{{/*      credentialName: {{.Values.istio.sslSecretName}}*/}}
+{{/*      mode: SIMPLE*/}}
+{{/*  - hosts:*/}}
+{{/*    - {{.Values.istio.sslHost}}*/}}
+{{/*    port:*/}}
+{{/*      name: http*/}}
+{{/*      number: 8080*/}}
+{{/*      protocol: HTTP*/}}
