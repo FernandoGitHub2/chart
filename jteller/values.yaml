@@ -136,14 +136,14 @@ istio:
   ssl: enable
   sslSecretName: my-tls-secret
   sslHost: keycloak.bytesw.cloud
-istio-base:
+base:
   defaultRevision: default
   namespace: istio-system
 istiod:
   namespace: istio-system
   telemetry:
     enabled: true
-istio-ingressgateway:
+gateway:
   namespace: istio-system
 
 camposTabla:
