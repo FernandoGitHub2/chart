@@ -5,7 +5,7 @@ metadata:
   namespace: {{.Values.namespace}}
 spec:
   hosts:
-    - "{{.Values.istio.sslHost}}"
+    - "{{.Values.istio.ssl.host}}"
   gateways:
     - gateway-istio
   http:

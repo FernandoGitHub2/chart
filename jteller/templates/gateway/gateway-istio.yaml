@@ -8,16 +8,16 @@ spec:
     istio: ingressgateway
   servers:
   - hosts:
-    - {{.Values.istio.sslHost}}
+    - {{.Values.istio.ssl.host}}
     port:
       name: https
       number: 443
       protocol: HTTPS
     tls:
-      credentialName: {{.Values.istio.sslSecretName}}
+      credentialName: {{.Values.istio.ssl.secretName}}
       mode: SIMPLE
   - hosts:
-    - {{.Values.istio.sslHost}}
+    - {{.Values.istio.ssl.host}}
     port:
       name: http
       number: 8080
