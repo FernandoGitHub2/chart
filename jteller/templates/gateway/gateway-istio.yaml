@@ -17,7 +17,7 @@ spec:
       credentialName: {{.Values.istio.ssl.secretName}}
       mode: SIMPLE
   - hosts:
-    - {{.Values.istio.ssl.host}}
+    - *
     port:
       name: http
       number: 80
