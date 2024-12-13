@@ -136,7 +136,7 @@ istio:
   ssl:
     enable: true
     secretName: my-tls-secret
-    host: keycloak.bytesw.cloud
+    host: jteller.bytesw.cloud
 
 camposTabla:
   tabla-101: |
