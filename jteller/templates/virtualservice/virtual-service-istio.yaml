@@ -436,5 +436,5 @@ spec:
           headers:
             request:
               set:
-                Host: "keycloak.bytesw.cloud:30010"
+                Host: "{{.Values.istio.ssl.host}}:30010"
                 X-Forwarded-Host: "keycloak.bytesw.cloud:30010"
