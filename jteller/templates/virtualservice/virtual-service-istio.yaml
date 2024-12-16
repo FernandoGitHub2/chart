@@ -6,7 +6,6 @@ metadata:
 spec:
   hosts:
     - "*"
-    - "{{.Values.istio.ssl.host}}"
   gateways:
     - gateway-istio
   http:
