@@ -14,7 +14,7 @@ spec:
         number: 80
         protocol: HTTP
     - hosts:
-        - {{.Values.istio.ssl.host}}
+        - "{{.Values.istio.ssl.host}}"
       port:
         name: https
         number: 443

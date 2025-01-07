@@ -137,6 +137,7 @@ istio:
     enable: true
     secretName: my-tls-secret
     host: jteller.bytesw.cloud
+    port: 31697
 
 camposTabla:
   tabla-101: |
@@ -318,7 +319,7 @@ services:
       url: /actuator
   logdat:
     image: logdat-jteller-service-kube
-    tag: v7.6.b
+    tag: v7.6.d
     port: 8080
     typeService: C
     memoryLimit: 512Mi
