@@ -28,7 +28,7 @@ environment:
     securityPassword: c2VjdXJpdHk=
   keycloak:
     securityOpt: 2
-    url: http://172.16.10.101:30012
+    url: https://keycloak.bytesw.cloud:31697
     realm: jteller
     roles:
       - user

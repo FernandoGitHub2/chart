@@ -15,6 +15,7 @@ spec:
         protocol: HTTP
     - hosts:
         - "{{.Values.istio.ssl.host}}"
+        - "{{.Values.keycloak.url}}"
       port:
         name: https
         number: 443
