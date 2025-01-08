@@ -14,8 +14,7 @@ spec:
         number: 80
         protocol: HTTP
     - hosts:
-        - "{{.Values.istio.ssl.host}}"
-        - "{{ regexFind "https?://([^:/]+)" .Values.environment.keycloak.url}}"
+        - "*"
       port:
         name: https
         number: 443
