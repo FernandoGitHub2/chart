@@ -17,6 +17,8 @@ spec:
             host: operation-view
             port:
               number: 8080
+      rewrite:
+        uri: /
     - match:
         - uri:
             prefix: /specs-view
@@ -25,6 +27,8 @@ spec:
             host: specs-view
             port:
               number: 8080
+      rewrite:
+        uri: " "
     - match:
         - uri:
             prefix: /specs-view-v8
@@ -432,5 +436,5 @@ spec:
           headers:
             request:
               set:
-                Host: "{{.Values.istio.ssl.host}}:{{.Values.istio.ssl.port}}"
-                X-Forwarded-Host: "{{.Values.istio.ssl.host}}:{{.Values.istio.ssl.port}}"
+                Host: "{{.Values.keycloak.url}}"
+                X-Forwarded-Host: "{{.Values.keycloak.url}}"
