@@ -427,7 +427,7 @@ spec:
               number: 8080
     - match:
         - uri:
-            prefix: "/"
+            prefix: "/auth"
       route:
         - destination:
             host: keycloak
