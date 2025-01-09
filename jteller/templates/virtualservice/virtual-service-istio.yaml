@@ -17,6 +17,8 @@ spec:
             host: operation-view
             port:
               number: 8080
+      rewrite:
+        uri: /
     - match:
         - uri:
             prefix: /specs-view
@@ -25,6 +27,8 @@ spec:
             host: specs-view
             port:
               number: 8080
+      rewrite:
+        uri: /
     - match:
         - uri:
             prefix: /specs-view-v8
@@ -42,7 +46,7 @@ spec:
             port:
               number: 8080
       rewrite:
-        uri: " "
+        uri: /
     - match:
         - uri:
             prefix: /bantrab-views
@@ -52,7 +56,7 @@ spec:
             port:
               number: 8080
       rewrite:
-        uri: " "
+        uri: /
     - match:
         - uri:
             prefix: /api/authorization-service
@@ -62,7 +66,7 @@ spec:
             port:
               number: 2108
       rewrite:
-        uri: " "
+        uri: /
     - match:
         - uri:
             prefix: /api/bantrab-service
@@ -72,7 +76,7 @@ spec:
             port:
               number: 2113
       rewrite:
-        uri: " "
+        uri: /
     - match:
         - uri:
             prefix: /api/catalog-service
@@ -82,7 +86,7 @@ spec:
             port:
               number: 2102
       rewrite:
-        uri: " "
+        uri: /
     - match:
         - uri:
             prefix: /api/definitions-service
@@ -92,7 +96,7 @@ spec:
             port:
               number: 2101
       rewrite:
-        uri: " "
+        uri: /
     - match:
         - uri:
             prefix: /api/hermes
@@ -102,7 +106,7 @@ spec:
             port:
               number: 1120
       rewrite:
-        uri: " "
+        uri: /
     - match:
         - uri:
             prefix: /api/integration-service
@@ -112,7 +116,7 @@ spec:
             port:
               number: 2112
       rewrite:
-        uri: " "
+        uri: /
     - match:
         - uri:
             prefix: /integrator
@@ -122,7 +126,7 @@ spec:
             port:
               number: 9091
       rewrite:
-        uri: " "
+        uri: /
     - match:
         - uri:
             prefix: /auth
@@ -132,7 +136,7 @@ spec:
             port:
               number: 8080
       rewrite:
-        uri: " "
+        uri: /
     - match:
         - uri:
             prefix: /api/provide-transaction-catalogs-service
@@ -142,7 +146,7 @@ spec:
             port:
               number: 2109
       rewrite:
-        uri: " "
+        uri: /
     - match:
         - uri:
             prefix: /api/resource-service
@@ -152,7 +156,7 @@ spec:
             port:
               number: 2110
       rewrite:
-        uri: " "
+        uri: /
     - match:
         - uri:
             prefix: /api/security-service
@@ -162,7 +166,7 @@ spec:
             port:
               number: 1119
       rewrite:
-        uri: " "
+        uri: /
     - match:
         - uri:
             prefix: /api/signature-service
@@ -172,7 +176,7 @@ spec:
             port:
               number: 2106
       rewrite:
-        uri: " "
+        uri: /
     - match:
         - uri:
             prefix: /api/sura-service
@@ -182,7 +186,7 @@ spec:
             port:
               number: 2111
       rewrite:
-        uri: " "
+        uri: /
     - match:
         - uri:
             prefix: /api/transaction-catalog-service
@@ -192,7 +196,7 @@ spec:
             port:
               number: 2103
       rewrite:
-        uri: " "
+        uri: /
     - match:
         - uri:
             prefix: /api/transaction-engine-service
@@ -202,7 +206,7 @@ spec:
             port:
               number: 2107
       rewrite:
-        uri: " "
+        uri: /
     - match:
         - uri:
             prefix: /firmas-service
@@ -244,7 +248,7 @@ spec:
             port:
               number: 8080
       rewrite:
-        uri: " "
+        uri: /
     - match:
         - uri:
             prefix: /firmas
@@ -254,7 +258,7 @@ spec:
             port:
               number: 8080
       rewrite:
-        uri: " "
+        uri: /
     - match:
         - uri:
             prefix: /api/operation-management-service
@@ -264,7 +268,7 @@ spec:
             port:
               number: 2107
       rewrite:
-        uri: " "
+        uri: /
     - match:
         - uri:
             prefix: /provide-signature
@@ -306,7 +310,7 @@ spec:
             port:
               number: 8080
       rewrite:
-        uri: " "
+        uri: /
     - match:
         - uri:
             prefix: /service/integrator
@@ -316,7 +320,7 @@ spec:
             port:
               number: 8080
       rewrite:
-        uri: " "
+        uri: /
     - match:
         - uri:
             prefix: /service/extensiones
@@ -334,7 +338,7 @@ spec:
             port:
               number: 8080
       rewrite:
-        uri: " "
+        uri: /
     - match:
         - uri:
             prefix: /api/integrator
@@ -344,7 +348,7 @@ spec:
             port:
               number: 8080
       rewrite:
-        uri: " "
+        uri: /
     - match:
         - uri:
             prefix: /api/wom-service
@@ -354,7 +358,7 @@ spec:
             port:
               number: 8080
       rewrite:
-        uri: " "
+        uri: /
     - match:
         - uri:
             prefix: /service/logdat
@@ -380,7 +384,7 @@ spec:
             port:
               number: 8080
       rewrite:
-        uri: " "
+        uri: /
     - match:
         - uri:
             prefix: /service/is-alive-service
