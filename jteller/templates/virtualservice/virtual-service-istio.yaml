@@ -431,6 +431,8 @@ spec:
               number: 8080
           headers:
             request:
+{{- $urlParts := split .Values.environment.keycloak.url "//" -}}
+              ##{{ $urlParts}}
               set:
-                Host: "{{ (index (split .Values.environment.keycloak.url "//") 1) }}"
-                X-Forwarded-Host: "{{ (index (split .Values.environment.keycloak.url "//") 1) }}"
+                Host: "{{.Values.environment.keycloak.url }}"
+                X-Forwarded-Host: "{{.Values.environment.keycloak.url}}"
