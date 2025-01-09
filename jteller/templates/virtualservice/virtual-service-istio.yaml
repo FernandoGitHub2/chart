@@ -413,9 +413,10 @@ spec:
             host: is-alive-monitor-service.is-alive.svc.cluster.local
             port:
               number: 8080
+              {{- $urlParts := split .Values.environment.keycloak.url "//" -}}
     - match:
         - uri:
-            prefix: /is-alive
+            prefix: {{ $urlParts}}/is-alive
       route:
         - destination:
             host: is-alive-frontend.is-alive.svc.cluster.local
@@ -431,8 +432,6 @@ spec:
               number: 8080
           headers:
             request:
-{{- $urlParts := split .Values.environment.keycloak.url "//" -}}
-              ##{{ $urlParts}}
               set:
                 Host: "{{.Values.environment.keycloak.url }}"
                 X-Forwarded-Host: "{{.Values.environment.keycloak.url}}"
