@@ -1,7 +1,7 @@
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: virtual-service-istio
+  name: virtual-service-jteller-istio
   namespace: {{.Values.namespace}}
 spec:
   hosts:
@@ -28,7 +28,7 @@ spec:
             port:
               number: 8080
       rewrite:
-        uri: " "
+        uri: /
     - match:
         - uri:
             prefix: /specs-view-v8
