@@ -416,7 +416,7 @@ spec:
               {{- $urlParts := split .Values.environment.keycloak.url "//" -}}
     - match:
         - uri:
-            prefix: {{ $urlParts}}/is-alive
+            prefix: {{index $urlParts 0}}/is-alive
       route:
         - destination:
             host: is-alive-frontend.is-alive.svc.cluster.local
