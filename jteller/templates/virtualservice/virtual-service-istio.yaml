@@ -413,10 +413,9 @@ spec:
             host: is-alive-monitor-service.is-alive.svc.cluster.local
             port:
               number: 8080
-              {{- $urlParts := split .Values.environment.keycloak.url "//" -}}
     - match:
         - uri:
-            prefix: {{index $urlParts 0}}/is-alive
+            prefix: /is-alive
       route:
         - destination:
             host: is-alive-frontend.is-alive.svc.cluster.local
