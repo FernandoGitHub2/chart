@@ -438,3 +438,5 @@ spec:
               set:
                 Host: "{{.Values.environment.keycloak.url}}"
                 X-Forwarded-Host: "{{.Values.environment.keycloak.url}}"
+      rewrite:
+        uri: /
