@@ -432,5 +432,5 @@ spec:
           headers:
             request:
               set:
-                Host: "{{.Values.environment.keycloak.url}}"
-                X-Forwarded-Host: "{{.Values.environment.keycloak.url}}"
+                Host: "{{(index (.Values.environment.keycloak.url "//" ) 1)}}"
+                X-Forwarded-Host: "{{(index (.Values.environment.keycloak.url "//" ) 1)}}"
