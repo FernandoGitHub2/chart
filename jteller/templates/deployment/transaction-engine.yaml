@@ -251,6 +251,13 @@ spec:
       imagePullSecrets:
       - name: {{.Values.services.secretRegistry}}
       {{- end }}
+      {{- if .Values.istio.ssl.develop }}
+      hostAliases:
+        - ip: {{.Values.istio.ssl.ip}}
+          hostnames:
+            - {{.Values.istio.ssl.appHost}}
+            - {{.Values.istio.ssl.keycloakHost}}
+      {{- end }}
       volumes:
       {{- if hasKey .Values "camposTabla"}}
       - configMap:

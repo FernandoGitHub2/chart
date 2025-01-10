@@ -136,8 +136,11 @@ istio:
   ssl:
     enable: true
     secretName: my-tls-secret
-    host: jteller.bytesw.cloud
+    appHost: jteller.bytesw.cloud
+    keycloakHost: keycloak.bytesw.cloud
     port: 31697
+    develop: true
+    ip: 172.16.10.101
 
 camposTabla:
   tabla-101: |
