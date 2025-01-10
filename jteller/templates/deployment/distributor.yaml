@@ -172,6 +172,13 @@ spec:
       - name: {{.Values.services.secretRegistry}}
       {{- end }}
       restartPolicy: Always
+      {{- if .Values.istio.ssl.develop }}
+      hostAliases:
+        - ip: {{.Values.istio.ssl.ip}}
+          hostnames:
+            - {{.Values.istio.ssl.appHost}}
+            - {{.Values.istio.ssl.keycloakHost}}
+      {{- end }}
       volumes:
       - configMap:
           defaultMode: 420
