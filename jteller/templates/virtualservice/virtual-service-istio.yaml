@@ -206,9 +206,7 @@ spec:
             port:
               number: 2107
       rewrite:
-        uriRegexRewrite:
-        pattern: "/api/transaction-engine-service(/.*|$)"
-        substitution: "/$1"
+        uri: "/"
     - match:
         - uri:
             prefix: /firmas-service
