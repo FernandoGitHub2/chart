@@ -1,4 +1,4 @@
-{{- if and (eq (int .Values.executionMode) 2) (not default false .Values.istio.enable) }}
+{{- if and (eq (int .Values.executionMode) 2) (not .Values.istio.enable | default true) }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
