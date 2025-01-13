@@ -1,3 +1,4 @@
+{{- if .Values.istio.enable }}
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -438,3 +439,5 @@ spec:
               set:
                 Host: "{{ regexReplaceAll `^https?://` .Values.environment.keycloak.url `` }}"
                 X-Forwarded-Host: "{{ regexReplaceAll `^https?://` .Values.environment.keycloak.url `` }}"
+
+  {{- end }}

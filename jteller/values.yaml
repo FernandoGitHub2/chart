@@ -132,7 +132,7 @@ enableSura: 0
 distributor: 3 # 0 - desabilitado, 1 - core , 2 - cliente , 3 - ambos
 signature: 1 # 0 - desabilitado, 1 - centralizado , 2 - distribuidos
 istio:
-  enable: true
+  enable: false
   ssl:
     enable: true
     secretName: my-tls-secret
