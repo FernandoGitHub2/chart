@@ -32,16 +32,16 @@ spec:
             - name: spring.datasource.driver-class-name
               value: "oracle.jdbc.OracleDriver"
             - name: spring.jpa.database-platform
-              value: "org.hibernate.dialect.Oracle12cDialect"
+              value: "org.hibernate.dialect.OracleDialect"
             - name: spring.jpa.properties.hibernate.dialect
-              value: "org.hibernate.dialect.Oracle12cDialect"
+              value: "org.hibernate.dialect.OracleDialect"
             {{- else if eq .Values.environment.database.type "mysql" }}
             - name: spring.datasource.driver-class-name
               value: "com.mysql.cj.jdbc.Driver"
             - name: spring.jpa.database-platform
-              value: "org.hibernate.dialect.MySQL5InnoDBDialect"
+              value: "org.hibernate.dialect.MySQLDialect"
             - name: spring.jpa.properties.hibernate.dialect
-              value: "org.hibernate.dialect.MySQL5InnoDBDialect"
+              value: "org.hibernate.dialect.MySQLDialect"
             {{- end }}
             - name: keycloak.config.number
               value: "{{ .Values.environment.keycloak.securityOpt }}"
