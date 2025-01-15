@@ -129,6 +129,14 @@ spec:
               value: {{.Values.environment.backend.isAlive.read}}
             - name: app.actuator.write-query
               value: {{.Values.environment.backend.isAlive.write}}
+            - name: keycloak.realm
+              value: {{.Values.environment.keycloak.realm}}
+            - name: keycloak.resource
+              value: {{.Values.environment.keycloak.jtellerOv.resource}}
+            - name: keycloak.auth-server-url
+              value: {{.Values.environment.keycloak.url}}
+            - name: keycloak.credentials.secret
+              value: {{.Values.environment.keycloak.jtellerOv.secret}}
           image: {{.Values.services.registry}}{{.Values.services.security.image}}:{{.Values.services.security.tag }}
           imagePullPolicy: IfNotPresent
           {{- if and (hasKey .Values.services.security "actuator") (eq (int .Values.actuator) 1) }}
