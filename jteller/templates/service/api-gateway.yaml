@@ -1,4 +1,4 @@
-{{- if and (eq (int .Values.executionMode) 2) (not .Values.istio.enable | default true) }}
+{{- if and (eq (int .Values.executionMode) 2) (not .Values.istio.enable | default false) }}
 apiVersion: v1
 kind: Service
 metadata:
