@@ -45,8 +45,8 @@ spec:
             - name: spring.jpa.properties.hibernate.dialect
               value: "org.hibernate.dialect.MySQLDialect"
             {{- end }}
-            - name: keycloak.config.number
-              value: "{{ .Values.environment.keycloak.securityOpt }}"
+{{/*            - name: keycloak.config.number*/}}
+{{/*              value: "{{ .Values.environment.keycloak.securityOpt }}"*/}}
             - name: keycloak.auth-server-url
               value: {{ .Values.environment.keycloak.url }}
             - name: keycloak.realm
