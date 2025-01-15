@@ -246,7 +246,7 @@ services:
   registry: 277232507401.dkr.ecr.us-west-2.amazonaws.com/jteller/
   catalog:
     image: catalog-service-kube
-    tag: v7.6.c
+    tag: v7.6.d
     port: 2102
     memoryLimit: 512Mi
     replicas: 1
@@ -255,7 +255,7 @@ services:
       url: /actuator
   transactionCatalog:
     image: transaction-catalog-service-kube
-    tag: v7.6.p
+    tag: v7.6.q.h
     port: 2103
     typeService: C
     memoryLimit: 712Mi
@@ -263,7 +263,7 @@ services:
       url: /actuator
   transactionEngine:
     image: transaction-engine-service-kube
-    tag: v7.6.m.1
+    tag: v7.6.n.c
     port: 2107
     typeService: C
     memoryLimit: 700Mi
@@ -272,7 +272,7 @@ services:
       delay: 200
   management:
     image: operation-management-service-kube
-    tag: v7.6.e
+    tag: v7.6.g
     port: 2107
     typeService: C
     memoryLimit: 1400Mi
@@ -285,12 +285,12 @@ services:
     port: 8080
   operationView:
     image: jt-operation-view-kube-dev
-    tag: dev.1.0.84.180
+    tag: dev.1.0.84.181
     typeService: C
     port: 8080
   security:
     image: security-service-kube
-    tag: v7.6.i.f
+    tag: v7.6.i.e.17
     port: 1119
     typeService: C
     memoryLimit: 712Mi
@@ -306,7 +306,7 @@ services:
       url: /v1/actuator
   personData:
     image: person-data-service
-    tag: jtv7.6.0.a
+    tag: jtv7.6.b
     port: 8080
     typeService: C
     memoryLimit: 512Mi
@@ -350,7 +350,7 @@ services:
     hostname: false
   hermes:
     image: hermes-kube
-    tag: v7.6.b
+    tag: v7.6.c.d
     port: 1120
     typeService: C
     memoryLimit: 512Mi
@@ -358,12 +358,12 @@ services:
       url: /v1/actuator
   firmasView:
     image: firmas-front-kube
-    tag: dev.1.1.13
+    tag: dev.1.1.13.2
     port: 8080
     typeService: C
   firmas:
     image: firmas-service-kube
-    tag: v7.6.H
+    tag: v7.6.i
     port: 2114
     typeService: C
     memoryLimit: 1200Mi
