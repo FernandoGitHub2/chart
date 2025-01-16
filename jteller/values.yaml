@@ -290,7 +290,7 @@ services:
     port: 8080
   security:
     image: security-service-kube
-    tag: v7.6.i.e.17
+    tag: v7.6.j
     port: 1119
     typeService: C
     memoryLimit: 712Mi
