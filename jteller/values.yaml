@@ -248,7 +248,7 @@ services:
     image: catalog-service-kube
     tag: v7.6.d
     port: 2102
-    memoryLimit: 512Mi
+    memoryLimit: 750Mi
     replicas: 1
     typeService: C
     actuator:
