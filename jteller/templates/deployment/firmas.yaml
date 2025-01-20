@@ -96,6 +96,8 @@ spec:
               value: {{ .Values.environment.database.audScheme }}
             - name: logging.level.org.hibernate.type.descriptor.sql.BasicBinder
               value: {{ .Values.environment.database.sqlBasicBinder }}
+            - name: logging.level.org.hibernate.orm.jdbc.bind
+              value: {{ .Values.environment.database.sqlBasicBinder }}
             - name: spring.jpa.properties.hibernate.format_sql
               value: "{{ .Values.environment.database.formatSql }}"
             - name: spring.jpa.show-sql
