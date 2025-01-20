@@ -4,7 +4,7 @@ environment:
     type: mysql
     audScheme: logdat
     showSql: false
-    sqlBasicBinder: INFO
+    sqlBasicBinder: TRACE
     formatSql: false
     jtellerUsername: anRlbGxlcnY3
     jtellerPassword: anRlbGxlcnY3
