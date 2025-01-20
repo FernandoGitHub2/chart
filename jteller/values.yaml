@@ -3,9 +3,9 @@ environment:
     url: jdbc:mysql://172.16.10.101:3306/
     type: mysql
     audScheme: logdat
-    showSql: false
+    showSql: true
     sqlBasicBinder: TRACE
-    formatSql: false
+    formatSql: true
     jtellerUsername: anRlbGxlcnY3
     jtellerPassword: anRlbGxlcnY3
     distributorUsername: ZGlzdHJpYnV0b3I=
