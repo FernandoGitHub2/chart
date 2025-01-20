@@ -242,6 +242,7 @@ camposTabla:
       value: true
     rejectedWhen: null
 services:
+  actuatorDelay: 120
   secretRegistry: aws-registry
   registry: 277232507401.dkr.ecr.us-west-2.amazonaws.com/jteller/
   catalog:
