@@ -34,8 +34,23 @@ spec:
               value: "true"
             - name: spring.jpa.properties.org.hibernate.envers.default_schema
               value: {{.Values.environment.database.audScheme}}
-            - name: db.url
-              value: {{.Values.environment.database.url}}
+            - name: spring.datasource.url
+              value: "{{ .Values.environment.database.url }}{{if eq .Values.environment.database.type "mysql"}}{{.Values.environment.database.isAliveUsername | b64dec}}?useUnicode=true{{end}}"
+            {{- if eq .Values.environment.database.type "oracle" }}
+            - name: spring.datasource.driver-class-name
+              value: "oracle.jdbc.OracleDriver"
+            - name: spring.jpa.database-platform
+              value: "org.hibernate.dialect.Oracle12cDialect"
+            - name: spring.jpa.properties.hibernate.dialect
+              value: "org.hibernate.dialect.Oracle12cDialect"
+            {{- else if eq .Values.environment.database.type "mysql" }}
+            - name: spring.datasource.driver-class-name
+              value: "com.mysql.cj.jdbc.Driver"
+            - name: spring.jpa.database-platform
+              value: "org.hibernate.dialect.MySQL5InnoDBDialect"
+            - name: spring.jpa.properties.hibernate.dialect
+              value: "org.hibernate.dialect.MySQL5InnoDBDialect"
+            {{- end }}
             - name: db.username
               valueFrom:
                 secretKeyRef:
