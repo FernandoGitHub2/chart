@@ -1,0 +1,29 @@
+{{- if and (.Values.isAlive.enable | default false) (eq (int .Values.executionMode) 2) }}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: is-alive-config
+    service: is-alive-config
+  name: is-alive-config
+  namespace: is-alive
+spec:
+  ports:
+    - name: http
+      {{- if  hasKey .Values.services.isAliveConfig "nodePort"}}
+      nodePort: {{.Values.services.isAliveConfig.nodePort}}
+      {{- end }}
+      port: {{.Values.services.isAliveConfig.port}}
+      protocol: TCP
+      targetPort: {{.Values.services.isAliveConfig.port}}
+  selector:
+    app: is-alive-config
+  sessionAffinity: None
+  {{- if eq (toString (.Values.services.isAliveConfig.typeService)) "C"}}
+  type: ClusterIP
+  {{- else if eq (toString (.Values.services.isAliveConfig.typeService)) "L"}}
+  type: LoadBalancer
+  {{- else }}
+  type: NodePort
+  {{- end }}
+  {{- end }}

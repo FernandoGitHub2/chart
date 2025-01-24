@@ -1,0 +1,98 @@
+{{- if and (.Values.isAlive.enable | default false) (eq (int .Values.executionMode) 2) }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: is-alive-batch-monitor
+  namespace: is-alive
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: is-alive-batch-monitor
+      version: v1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: is-alive-batch-monitor
+        version: v1
+    spec:
+      containers:
+        - env:
+            - name: spring.jpa.show-sql
+              value: {{.Values.environment.database.showSql}}
+            - name: spring.jpa.properties.hibernate.format_sql
+              value: {{.Values.environment.database.formatSql}}
+            - name: logging.level.org.hibernate.type.descriptor.sql.BasicBinder
+              value: {{.Values.environment.database.sqlBasicBinder}}
+            - name: db.url
+              valueFrom:
+                configMapKeyRef:
+                  key: db-url
+                  name: env-values
+            - name: db.username
+              valueFrom:
+                secretKeyRef:
+                  key: isAliveUsername
+                  name: general-secret
+            - name: db.password
+              valueFrom:
+                secretKeyRef:
+                  key: isAlivePassword
+                  name: general-secret
+            - name: keycloak-realm
+              value: {{.Values.environment.keycloak.realm}}
+            - name: keycloak-url
+              value: {{.Values.environment.keycloak.url}}
+            - name: admin-keycloak-url
+              value: {{.Values.environment.keycloak.url}}
+            - name: keycloak-secret
+              value: {{.Values.environment.keycloak.isAlive.secret}}
+            - name: JAVA_OPTS
+              value: -Xms300m -Xmx800m
+          image: {{.Values.services.registryIsAlive | default .Values.services.registry}}{{.Values.services.isAliveBatch.image}}:{{.Values.services.isAliveBatch.tag}}
+          imagePullPolicy: IfNotPresent
+          name: is-alive-batch-monitor
+          ports:
+            - containerPort: {{.Values.services.isAliveBatch.port}}
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 400m
+              memory: 1000Mi
+            requests:
+              cpu: 200m
+              memory: 400Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /config
+              name: config-volume
+            - mountPath: /keycloak
+              name: keycloak-config-volume
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+        - name: {{.Values.services.secretRegistry}}
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: is-alive-batch-monitor
+      serviceAccountName: is-alive-batch-monitor
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - configMap:
+            defaultMode: 420
+            items:
+              - key: application-is-alive-batch-monitor.yml
+                path: application.yml
+            name: is-alive-batch-monitor
+          name: config-volume
+        - configMap:
+            defaultMode: 420
+            items:
+              - key: keycloak.json
+                path: keycloak.json
+            name: security-keycloak-config
+          name: keycloak-config-volume
+  {{- end }}

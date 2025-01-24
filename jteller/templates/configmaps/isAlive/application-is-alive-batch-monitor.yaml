@@ -1,0 +1,107 @@
+{{- if and (.Values.isAlive.enable | default false) (eq (int .Values.executionMode) 2) }}
+apiVersion: v1
+data:
+  application-is-alive-batch-monitor.yml: |
+    app:
+      execution:
+        config-reload-interval-in-minutes: 1
+        validate-rules-interval-in-minutes: 2
+      k8s:
+        clusterURL: ${k8s.clusterURL:https://CBF42290ABE41A43CAA6D66D3E89084D.yl4.ca-central-1.eks.amazonaws.com}
+        clusterName: ${k8s.clusterName:is-alive}
+        region: ${k8s.region:ca-central-1}
+        configType: ${k8s.configType:CLUSTER}
+        configPath: ${k8s.configPath:NOT-SET}
+        token: ${k8s.token:NOT-SET}
+      prometheus:
+        url: http://172.16.10.105:30400/api/v1/query
+    server:
+      port: 8080
+    spring:
+      batch:
+        initialize-schema: always
+        job:
+          enabled: false
+      application:
+        name: is-alive-batch-monitor
+      datasource:
+        database-type: oracle
+        url: ${db.url}
+        driverClassName: oracle.jdbc.OracleDriver
+        username: ${db.username}
+        password: ${db.password}
+        minimum-idle: ${db.minimum-idle:1}
+        maximum-pool-size: ${db.maximum-pool-size:1}
+        default-schema: IS_ALIVE
+      jpa:
+        open-in-view: true
+        hibernate:
+          ddl-auto: none
+          naming:
+            physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        database-platform: org.hibernate.dialect.Oracle12cDialect
+        show-sql: false
+        properties:
+          hibernate.temp.use_jdbc_metadata_defaults: false
+          org.hibernate.envers.do_not_audit_optimistic_locking_field: false
+          org.hibernate.envers.store_data_at_delete: true
+      main:
+        allow-bean-definition-overriding: true
+      profiles:
+        include: 'keycloak'
+      zipkin:
+        enabled: false
+        baseUrl: http://localhost:9411
+      sleuth:
+        web:
+          enabled: false
+    logging:
+      level:
+        root: INFO
+        com.bytesw: DEBUG
+        org.keycloak: DEBUG
+    byte:
+      is-alive:
+        url: http://is-alive-monitor-service:8080/service/is-alive-monitor-service/monitor/update-status
+      multi-company:
+        enabled: false
+      license:
+        config:
+          url: ENC(n2FJIonX9VFEm9ddmaAC3IQQ1uQYPbG/QLLAnMZo9/z9mE+JXXaj0YEocbbdZbGNr7fa4SH63wUNurN67uGYQMu+hqHNVtXxg2a2kMK5M4X8QHF0p80fxXvHgMgGej+d01dAXmOTWuXfohPsDY8T/Q==)
+          keycloakURL: ENC(bSvGH+vBTiF19Ki15Vpi4gV0SGvqrk/Ijr8HIaciWsWfXfJHSr3WwWNvKBVTZRMzQvwQC5fFyxo=)
+          keycloakRealm: ENC(CjSoYqnFJLGcZD18KIFqaw==)
+          keycloakClientId: ENC(3dGnxKaHjQz7kNEWl2qwJfPoLusPCsNyS+4ohr83Zys=)
+          username: ENC(dJKu9CFbtZHdPDDtEmuLLA==)
+          password: ENC(dJKu9CFbtZHdPDDtEmuLLA==)
+          clientSecret: ENC(NDHNygfjL5G/UENdwCp7hYf+iXS+t76eyQWG8f6cgjLNzN6Cv7cEHsTAtK0YnGA7)
+      keycloak:
+        server-url: ${admin-keycloak-url:https://keycloak.bytesw.cloud:30000/}
+        admin-keycloak-realm: ${admin-keycloak-realm:JTeller}
+        admin-user: admin
+        admin-password: admin
+        admin-client-id: admin-cli
+        configuration: /keycloak/keycloak.json
+        username: avelasco
+        password: Avelasco
+      resource:
+        config:
+          enabled: true
+      batch:
+        jobName: MonitorJob
+      execution-number: 10
+      swagger:
+        api:
+          enabled: ${swagger.enabled:true}
+          title: standard service
+          description: Documentation of the standar service API's
+          terms-of-service-url: http://www.bytesw.com
+          license: Byte
+          license-url: http://www.bytesw.com
+          version: 1.0.0
+          paths:
+    #        - /service/claims-config-service/category
+kind: ConfigMap
+metadata:
+  name: is-alive-batch-monitor
+  namespace: {{.Values.isAlive.namespace}}
+  {{- end }}

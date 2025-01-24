@@ -1,0 +1,51 @@
+{{- if and (.Values.isAlive.enable | default false) (eq (int .Values.executionMode) 2) }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: is-alive-frontend
+  namespace: is-alive
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: is-alive-frontend
+      version: v1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: is-alive-frontend
+        version: v1
+    spec:
+      containers:
+        - image: {{.Values.services.registryIsAlive | default .Values.services.registry}}{{.Values.services.isAliveView.image}}:{{.Values.services.isAliveView.tag}}
+          imagePullPolicy: IfNotPresent
+          name: is-alive-frontend
+          ports:
+            - containerPort: {{.Values.services.isAliveView.port}}
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 200m
+              memory: 300Mi
+            requests:
+              cpu: 100m
+              memory: 200Mi
+          volumeMounts:
+            - mountPath: /usr/share/nginx/html/is-alive/assets/config
+              name: config-volume
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+        - name: aws-registry
+      restartPolicy: Always
+      serviceAccount: is-alive-frontend
+      serviceAccountName: is-alive-frontend
+      volumes:
+        - configMap:
+            items:
+              - key: config.json
+                path: config.json
+            name: keycloak-frontend-config
+          name: config-volume
+  {{- end }}

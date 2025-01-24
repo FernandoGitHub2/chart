@@ -1,0 +1,29 @@
+{{- if and (.Values.isAlive.enable | default false) (eq (int .Values.executionMode) 2) }}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: is-alive-batch-monitor
+    service: is-alive-batch-monitor
+  name: is-alive-batch-monitor
+  namespace: is-alive
+spec:
+  ports:
+    - name: http
+      {{- if  hasKey .Values.services.isAliveBatch "nodePort"}}
+      nodePort: {{.Values.services.isAliveBatch.nodePort}}
+      {{- end }}
+      port: {{.Values.services.isAliveBatch.port}}
+      protocol: TCP
+      targetPort: {{.Values.services.isAliveBatch.port}}
+  selector:
+    app: is-alive-batch-monitor
+  sessionAffinity: None
+  {{- if eq (toString (.Values.services.isAliveBatch.typeService)) "C"}}
+  type: ClusterIP
+  {{- else if eq (toString (.Values.services.isAliveBatch.typeService)) "L"}}
+  type: LoadBalancer
+  {{- else }}
+  type: NodePort
+  {{- end }}
+{{- end }}

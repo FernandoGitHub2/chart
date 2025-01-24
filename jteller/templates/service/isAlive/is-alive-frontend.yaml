@@ -1,0 +1,29 @@
+{{- if and (.Values.isAlive.enable | default false) (eq (int .Values.executionMode) 2) }}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: is-alive-frontend
+    service: is-alive-frontend
+  name: is-alive-frontend
+  namespace: is-alive
+spec:
+  ports:
+    - name: http
+      {{- if  hasKey .Values.services.isAliveView "nodePort"}}
+      nodePort: {{.Values.services.isAliveView.nodePort}}
+      {{- end }}
+      port: {{.Values.services.isAliveView.port}}
+      protocol: TCP
+      targetPort: {{.Values.services.isAliveView.port}}
+  selector:
+    app: is-alive-frontend
+  sessionAffinity: None
+  {{- if eq (toString (.Values.services.isAliveView.typeService)) "C"}}
+  type: ClusterIP
+  {{- else if eq (toString (.Values.services.isAliveView.typeService)) "L"}}
+  type: LoadBalancer
+  {{- else }}
+  type: NodePort
+  {{- end }}
+  {{- end }}

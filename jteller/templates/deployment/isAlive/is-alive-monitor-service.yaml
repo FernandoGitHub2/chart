@@ -1,0 +1,89 @@
+{{- if and (.Values.isAlive.enable | default false) (eq (int .Values.executionMode) 2) }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: is-alive-monitor-service
+  namespace: is-alive
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: is-alive-monitor-service
+      version: v1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/rewriteAppHTTPProbers: "false"
+      labels:
+        app: is-alive-monitor-service
+        version: v1
+    spec:
+      containers:
+        - env:
+            - name: db.url
+              valueFrom:
+                configMapKeyRef:
+                  key: db-url
+                  name: env-values
+            - name: db.username
+              valueFrom:
+                secretKeyRef:
+                  key: isAliveUsername
+                  name: general-secret
+            - name: db.password
+              valueFrom:
+                secretKeyRef:
+                  key: isAlivePassword
+                  name: general-secret
+            - name: keycloak-realm
+              value: {{.Values.environment.keycloak.realm}}
+            - name: keycloak-url
+              value: {{.Values.environment.keycloak.url}}
+            - name: admin-keycloak-url
+              value: {{.Values.environment.keycloak.url}}
+            - name: keycloak-secret
+              value: {{.Values.environment.keycloak.isAlive.secret}}
+            - name: JAVA_OPTS
+              value: -Xms300m -Xmx800m
+          image: {{.Values.services.registryIsAlive | default .Values.services.registry}}{{.Values.services.isAliveMonitor.image}}:{{.Values.services.isAliveMonitor.tag}}
+          imagePullPolicy: IfNotPresent
+          name: is-alive-monitor-service
+          ports:
+            - containerPort: {{.Values.services.isAliveMonitor.port}}
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 400m
+              memory: 1000Mi
+            requests:
+              cpu: 200m
+              memory: 400Mi
+          volumeMounts:
+            - mountPath: /config
+              name: config-volume
+            - mountPath: /keycloak
+              name: keycloak-config-volume
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+        - name: {{.Values.services.secretRegistry}}
+      restartPolicy: Always
+      serviceAccount: is-alive-monitor-service
+      serviceAccountName: is-alive-monitor-service
+      volumes:
+        - configMap:
+            items:
+              - key: application-is-alive-monitor-service.yml
+                path: application.yml
+            name: is-alive-monitor-service-config
+          name: config-volume
+        - configMap:
+            items:
+              - key: keycloak.json
+                path: keycloak.json
+            name: security-keycloak-config
+          name: keycloak-config-volume
+  {{- end }}

@@ -1,0 +1,16 @@
+{{- if and (.Values.isAlive.enable | default false) (eq (int .Values.executionMode) 2) }}
+apiVersion: v1
+data:
+  config.json: |
+    {
+      "keycloak": {
+        "url": "{{.Values.environment.keycloak.url}}",
+        "realm": "{{.Values.environment.keycloak.realm}}",
+        "clientId": "is-alive-frontend"
+      }
+    }
+kind: ConfigMap
+metadata:
+  name: keycloak-frontend-config
+  namespace: {{.Values.isAlive.namespace}}
+  {{- end }}

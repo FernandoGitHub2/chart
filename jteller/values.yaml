@@ -26,6 +26,8 @@ environment:
     keycloakPassword: a2V5Y2xvYWs=
     securityUsername: c2VjdXJpdHk=
     securityPassword: c2VjdXJpdHk=
+    isAliveUsername: aXNfYWxpdmU=
+    isAlivePassword: aXNfYWxpdmU=
   keycloak:
     securityOpt: 2
     url: https://keycloak.bytesw.cloud:31697
@@ -48,6 +50,9 @@ environment:
     configuration:
       resource: configuration-service
       secret: AHWdclMePbiqj2VNZOCcQb9zIJH6GOU1
+    isAlive:
+      resource: is-alive-backend
+      secret: l6z2UuOZkTwsBLXZeqkWVBRsOrVadhPd
     realmInHeader: jteller
     adminUser: YWRtaW4=
     adminPassword: YWRtaW4=
@@ -141,6 +146,9 @@ istio:
     port: 31697
     develop: true
     ip: 172.16.10.101
+isAlive:
+  enable: false
+  namespace: is-alive
 
 camposTabla:
   tabla-101: |
@@ -245,6 +253,7 @@ services:
   actuatorDelay: 120
   secretRegistry: aws-registry
   registry: 277232507401.dkr.ecr.us-west-2.amazonaws.com/jteller/
+  registryIsAlive: 277232507401.dkr.ecr.us-west-2.amazonaws.com/is-alive/
   catalog:
     image: catalog-service-kube
     tag: v7.6.d
@@ -423,3 +432,23 @@ services:
     port: 8080
     typeService: N
     nodePort: 30042
+  isAliveConfig:
+    image: is-alive-config
+    tag: dev.0.0.5
+    port: 8080
+    typeService: C
+  isAliveView:
+    image: is-alive-frontend
+    tag: dev.0.0.35
+    port: 80
+    typeService: C
+  isAliveBatch:
+    image: is-alive-batch-monitor
+    tag: dev.0.0.29
+    port: 8080
+    typeService: C
+  isAliveMonitor:
+    image: is-alive-monitor-service
+    tag: dev.0.0.5
+    port: 8080
+    typeService: C

@@ -1,0 +1,96 @@
+{{- if and (.Values.isAlive.enable | default false) (eq (int .Values.executionMode) 2) }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: is-alive-config
+  namespace: is-alive
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: is-alive-config
+      version: v1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/rewriteAppHTTPProbers: "false"
+      labels:
+        app: is-alive-config
+        version: v1
+    spec:
+      containers:
+        - env:
+            - name: spring.jpa.show-sql
+              value: {{.Values.environment.database.showSql}}
+            - name: spring.jpa.properties.hibernate.format_sql
+              value: {{.Values.environment.database.formatSql}}
+            - name: logging.level.org.hibernate.type.descriptor.sql.BasicBinder
+              value: {{.Values.environment.database.sqlBasicBinder}}
+            - name: spring.jpa.properties.org.hibernate.envers.do_not_audit_optimistic_locking_field
+              value: "false"
+            - name: spring.jpa.properties.org.hibernate.envers.store_data_at_delete
+              value: "true"
+            - name: spring.jpa.properties.org.hibernate.envers.default_schema
+              value: {{.Values.environment.database.audScheme}}
+            - name: db.url
+              value: {{.Values.environment.database.url}}
+            - name: db.username
+              valueFrom:
+                secretKeyRef:
+                  key: isAliveUsername
+                  name: general-secret
+            - name: db.password
+              valueFrom:
+                secretKeyRef:
+                  key: isAlivePassword
+                  name: general-secret
+            - name: keycloak-realm
+              value: {{.Values.environment.keycloak.realm}}
+            - name: keycloak-url
+              value: {{.Values.environment.keycloak.url}}
+            - name: admin-keycloak-url
+              value: {{.Values.environment.keycloak.url}}
+            - name: keycloak-secret
+              value: {{.Values.environment.keycloak.isAlive.secret}}
+            - name: JAVA_OPTS
+              value: -Xms300m -Xmx800m
+          image: {{.Values.services.registryIsAlive | default .Values.services.registry}}{{.Values.services.isAliveConfig.image}}:{{.Values.services.isAliveConfig.tag}}
+          imagePullPolicy: IfNotPresent
+          name: is-alive-config
+          ports:
+            - containerPort: {{.Values.services.isAliveConfig.port}}
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 400m
+              memory: 1000Mi
+            requests:
+              cpu: 200m
+              memory: 400Mi
+          volumeMounts:
+            - mountPath: /config
+              name: config-volume
+            - mountPath: /keycloak
+              name: keycloak-config-volume
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+        - name: {{.Values.services.secretRegistry}}
+      restartPolicy: Always
+      serviceAccount: is-alive-config
+      serviceAccountName: is-alive-config
+      volumes:
+        - configMap:
+            items:
+              - key: application-is-alive-service.yml
+                path: application.yml
+            name: is-alive-service-config
+          name: config-volume
+        - configMap:
+            items:
+              - key: keycloak.json
+                path: keycloak.json
+            name: security-keycloak-config
+          name: keycloak-config-volume
+  {{- end }}

@@ -1,0 +1,99 @@
+{{- if and (.Values.isAlive.enable | default false) (eq (int .Values.executionMode) 2) }}
+apiVersion: v1
+data:
+  application-is-alive-service.yml: |
+    server:
+      port: 8080
+    spring:
+      application:
+        name: is-alive-backend-service
+      jpa:
+        open-in-view: true
+        hibernate:
+          ddl-auto: none
+          naming:
+            physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        database-platform: org.hibernate.dialect.Oracle12cDialect
+        show-sql: true
+        properties:
+          hibernate.temp.use_jdbc_metadata_defaults: false
+          org.hibernate.envers.do_not_audit_optimistic_locking_field: false
+          org.hibernate.envers.store_data_at_delete: true
+      datasource:
+        database-type: oracle
+        url: ${db.url}
+        driverClassName: oracle.jdbc.OracleDriver
+        username: ${db.username}
+        password: ${db.password}
+        minimum-idle: ${db.minimum-idle:1}
+        maximum-pool-size: ${db.maximum-pool-size:1}
+        default-schema: IS_ALIVE
+      main:
+        allow-bean-definition-overriding: true
+      profiles:
+        include: 'keycloak'
+    logging:
+      level:
+        root: INFO
+        com.bytesw: INFO
+        org.keycloak: DEBUG
+    byte:
+      license:
+        config:
+          url: ENC(7pkgvjZ3Xo5hH642uYHFZTZj0lzFdrWTpqeKooqREBc49Yb8qLjUlCZoU/woDjuOY2qKhlK16HLePzxzclbbY1oYjBj4clHjeZ1QnnwvQtbwVZ1hYOzLaLnKQW2yuq26Jln8zz9dBY1ui2SQKvIfZg==)
+          keycloakURL: ENC(92wVUA/Wc8TRnvBp5KRmi8Oyuq13q5FaRWrCONIkNuQihiWe6e4KxeAxBd2vAZxo)
+          keycloakRealm: ENC(ESJO3wt5PZhxcONht7vMlQ==)
+          keycloakClientId: ENC(qUcajOnDoi94QrNqCdVN1Y+zpxZ9kgyasT7dyBJUkCk=)
+          username: avelasco
+          password: Avelasco
+          clientSecret: ENC(qgaiFGhJlVfqEKTlYoLbzt77R5ljym1inn7uHH7KmKqVGUPcPprXKcCVRW8brbn6)
+      multi-company:
+        enabled: false
+      agreementStatusChange:
+        queue: bcom.agreementStatusChange.queue
+        enabled: true
+      commissionPlanStatusChange:
+        queue: bcom.comissionPlanStatusChange.queue
+        enabled: true
+      keycloak:
+        server-url: ${admin-keycloak-url:https://keycloak.bytesw.cloud:30000/}
+        admin-keycloak-realm: ${admin-keycloak-realm:JTeller}
+        admin-user: admin
+        admin-password: admin
+        admin-client-id: admin-cli
+        configuration: /keycloak/keycloak.json
+        username: avelasco
+        password: Avelasco
+      resource:
+        config:
+          enabled: true
+      swagger:
+        api:
+          enabled: ${swagger.enabled:true}
+          title: bcom service
+          description: Documentation of the bcom service API's
+          terms-of-service-url: http://www.bytesw.com
+          license: Byte
+          license-url: http://www.bytesw.com
+          version: 1.0.0
+          paths:
+            - /service/claims-config-service/category
+            - /service/claims-config-service/claim-type
+            - /service/claims-config-service/claim-field
+            - /service/claims-config-service/format-section
+            - /service/claims-config-service/format-version
+            - /service/claims-config-service/rejection-reason
+            - /service/claims-config-service/claim-field-item
+      security-service-url: http://localhost:9180/service/security
+      authz-service-url: http://localhost:9980
+    management:
+      endpoints:
+        web:
+          exposure:
+            include: health,info,metrics,prometheus,beans
+          base-path: /service/is-alive-service/actuator
+kind: ConfigMap
+metadata:
+  name: is-alive-service-config
+  namespace: {{.Values.isAlive.namespace}}
+  {{- end }}

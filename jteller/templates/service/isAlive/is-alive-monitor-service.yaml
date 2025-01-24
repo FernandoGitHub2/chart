@@ -1,0 +1,29 @@
+{{- if and (.Values.isAlive.enable | default false) (eq (int .Values.executionMode) 2) }}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: is-alive-monitor-service
+    service: is-alive-monitor-service
+  name: is-alive-monitor-service
+  namespace: is-alive
+spec:
+  ports:
+    - name: http
+      {{- if  hasKey .Values.services.isAliveMonitor "nodePort"}}
+      nodePort: {{.Values.services.isAliveMonitor.nodePort}}
+      {{- end }}
+      port: {{.Values.services.isAliveMonitor.port}}
+      protocol: TCP
+      targetPort: {{.Values.services.isAliveMonitor.port}}
+  selector:
+    app: is-alive-monitor-service
+  sessionAffinity: None
+  {{- if eq (toString (.Values.services.isAliveMonitor.typeService)) "C"}}
+  type: ClusterIP
+  {{- else if eq (toString (.Values.services.isAliveMonitor.typeService)) "L"}}
+  type: LoadBalancer
+  {{- else }}
+  type: NodePort
+  {{- end }}
+  {{- end }}
