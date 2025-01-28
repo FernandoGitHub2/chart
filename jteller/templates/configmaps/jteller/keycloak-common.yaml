@@ -38,6 +38,8 @@ data:
       profiles:
         include: 'keycloak'
     config:
+      isAlive:
+        enable: 0
       vistasService: http://vistas-service:8080
     management:
       endpoints:
