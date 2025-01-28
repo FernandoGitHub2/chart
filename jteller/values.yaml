@@ -295,7 +295,7 @@ services:
     port: 8080
   operationView:
     image: jt-operation-view-kube-dev
-    tag: dev.1.0.84.181
+    tag: dev.1.0.84.182
     typeService: C
     port: 8080
   security:
@@ -408,7 +408,7 @@ services:
     memoryLimit: 256Mi
   common:
     image: common-service-kube
-    tag: jtv7.6.0.a
+    tag: jtv7.6.b
     port: 8080
     typeService: C
     memoryLimit: 750Mi

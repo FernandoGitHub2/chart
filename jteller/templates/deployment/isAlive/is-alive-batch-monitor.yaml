@@ -21,11 +21,11 @@ spec:
       containers:
         - env:
             - name: spring.jpa.show-sql
-              value: {{.Values.environment.database.showSql}}
+              value: "{{.Values.environment.database.showSql}}"
             - name: spring.jpa.properties.hibernate.format_sql
-              value: {{.Values.environment.database.formatSql}}
+              value: "{{.Values.environment.database.formatSql}}"
             - name: logging.level.org.hibernate.type.descriptor.sql.BasicBinder
-              value: {{.Values.environment.database.sqlBasicBinder}}
+              value: "{{.Values.environment.database.sqlBasicBinder}}"
             - name: spring.datasource.url
               value: "{{ .Values.environment.database.url }}{{if eq .Values.environment.database.type "mysql"}}{{.Values.environment.database.isAliveUsername | b64dec}}?useUnicode=true{{end}}"
             {{- if eq .Values.environment.database.type "oracle" }}
