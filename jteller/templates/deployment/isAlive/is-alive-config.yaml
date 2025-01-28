@@ -23,11 +23,11 @@ spec:
       containers:
         - env:
             - name: spring.jpa.show-sql
-              value: {{.Values.environment.database.showSql}}
+              value: "{{.Values.environment.database.showSql}}"
             - name: spring.jpa.properties.hibernate.format_sql
-              value: {{.Values.environment.database.formatSql}}
+              value: "{{.Values.environment.database.formatSql}}"
             - name: logging.level.org.hibernate.type.descriptor.sql.BasicBinder
-              value: {{.Values.environment.database.sqlBasicBinder}}
+              value: "{{.Values.environment.database.sqlBasicBinder}}"
             - name: spring.jpa.properties.org.hibernate.envers.do_not_audit_optimistic_locking_field
               value: "false"
             - name: spring.jpa.properties.org.hibernate.envers.store_data_at_delete
