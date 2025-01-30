@@ -115,6 +115,13 @@ environment:
       passcore: QXZlbGFzY28=
       userClient: YXZlbGFzY28=
       passClient: QXZlbGFzY28=
+    signature:
+      corebankClient: http://corebank-jsing:8080/coreBankResponse/getBycodigoCliente
+      corebankSignatures: http://corebank-jsing:8080/coreBankResponse/getCoreBankResponse
+      signatureCore: http://provide-signature:8080/provide-signature-service/provideAccountData/
+      entityStatusAccountId: 2
+      entityStatusSignatureId: 5
+      deleteUsedCard: 0
   frontend:
     aceptedUrls:
       - http://172.16.10.101:30010

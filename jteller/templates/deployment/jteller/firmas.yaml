@@ -122,6 +122,18 @@ spec:
               value: "{{ .Values.liquibaseEnable }}"
             - name: spring.liquibase.contexts
               value: "{{ .Values.liquibaseContext }}{{- if .Values.liquibaseInit }},init{{- end }}"
+            - name: config.signatureCore
+              value: {{ .Values.environment.backend.signature.signatureCore }}
+            - name: config.coreBankClient
+              value: {{ .Values.environment.backend.signature.corebankClient }}
+            - name: config.coreBank
+              value: {{ .Values.environment.backend.signature.corebankSignatures }}
+            - name: config.entityStatusAccountId
+              value: {{ .Values.environment.backend.signature.entityStatusAccountId }}
+            - name: config.entityStatusSignatureId
+              value: {{ .Values.environment.backend.signature.entityStatusSignatureId }}
+            - name: config.deleteUserCard
+              value: {{ .Values.environment.backend.signature.deleteUserCard }}
             image: {{.Values.services.registry }}{{.Values.services.firmas.image}}:{{.Values.services.firmas.tag }}
             imagePullPolicy: IfNotPresent
             {{- if and (hasKey .Values.services.firmas "actuator") (eq (int .Values.actuator) 1) }}
