@@ -6,13 +6,17 @@ metadata:
   namespace: {{ .Values.namespace }}
 data:
   common-application.yml: |
+    app:
+    actuator:
+      read-query: "select count(*) from jtellerv7.IS_ALIVE_CONTROL"
+      write-query: "insert into jtellerv7.IS_ALIVE_CONTROL(CONTROL_DATE) VALUES (NOW())"
     spring:
       application:
         name: common
       datasource:
         database-type: oracle
-        url: ${db.local.host:jdbc:oracle:thin:@//172.16.10.135:1521/orclpdb1}
-        driverClassName: oracle.jdbc.OracleDriver
+        url: ${db.local.host:jdbc:mysql://172.16.10.101:3306/jsigcommon?useUnicode=true}
+        driverClassName: com.mysql.cj.jdbc.Driver
         username: ${db.local.user:jsigcommon}
         password: ${db.local.password:jsigcommon}
         minimum-idle: ${db.minimum-idle:1}
@@ -27,16 +31,15 @@ data:
             hibernate:
               envers:
                 default_schema: logdat
+                default_catalog: logdat
                 do_not_audit_optimistic_locking_field: false
                 store_data_at_delete: true
       liquibase:
         change-log: classpath:changelog/db.changelog-master.xml
-        contexts: oracle,develop
-        enabled: {{.Values.liquibaseEnable}}
+        contexts: mysql,prod
+        enabled: true
       main:
         allow-bean-definition-overriding: true
-      profiles:
-        include: 'keycloak'
     config:
       isAlive:
         enable: 0
@@ -45,573 +48,635 @@ data:
       endpoints:
         web:
           exposure:
-            include: health,info
+            include: health,info,metrics,prometheus
       health:
         probes:
           enabled: true
       endpoint:
         health:
           show-details: always
-    keycloak:
-      realm: JTeller
-      resource: configuration-service
-      ssl-required: external
-      auth-server-url: https://keycloak.bytesw.cloud:30000
-      bearer-only: true
-      credentials:
-        secret: 3b329590-55a9-4580-9696-e2196fd7d325
-      securityConstraints:
-        - authRoles:
-            {{- range  $index, $role := .Values.environment.keycloak.roles}}
-            - {{$role}}
-            {{- end }}
-          securityCollections:
-            - name: currencies-service
-              patterns:
-                - /service/common/currencies/*
-            - name: countries-service
-              patterns:
-                - /service/common/countries/*
-            - name: frecuencies-service
-              patterns:
-                - /service/common/frequencies/*
-            - name: frecuencies-view-service
-              patterns:
-                - /service/common/frequencies_view/*
-            - name: institutions-service
-              patterns:
-                - /service/common/institutions/*
-            - name: motive-types-service
-              patterns:
-                - /service/common/motive_types/*
-            - name: motives-service
-              patterns:
-                - /service/common/motives/*
-            - name: entities-status-service
-              patterns:
-                - /service/common/entityStatus/*
-            - name: entities-transitions-service
-              patterns:
-                - /service/common/entityTransitions/*
-            - name: system-entities-service
-              patterns:
-                - /service/common/systemEntities/*
-            - name: economics-activities-service
-              patterns:
-                - /service/common/economicActivity/*
-            - name: geographicals-divisions-1-service
-              patterns:
-                - /service/common/geographical_division_1/*
-            - name: geographicals-divisions-2-service
-              patterns:
-                - /service/common/geographical_division_2/*
-            - name: geographicals-divisions-3-service
-              patterns:
-                - /service/common/geographical_division_3/*
-            - name: geographicals-divisions-4-service
-              patterns:
-                - /service/common/geographical_division_4/*
-            - name: reports-columns-service
-              patterns:
-                - /service/common/reportColumns/*
-            - name: reports-service
-              patterns:
-                - /service/common/reports/*
-            - name: reports-filters-service
-              patterns:
-                - /service/common/reportFilters/*
-            - name: reports-groups-service
-              patterns:
-                - /service/common/reportGroups/*
-            - name: system-entity-status-logs-service
-              patterns:
-                - /service/common/system_entity_status_log/*
-            - name: parameters-service
-              patterns:
-                - /service/common/parameters/*
-            - name: entity-trasition-with-names-service
-              patterns:
-                - /service/common/entity_transition_with_names_view/*
-            - name: fund-source-service
-              patterns:
-                - /service/common/fund_source/*
-            - name: fund-destiny-service
-              patterns:
-                - /service/common/fund_destiny/*
-            - name: entity-status-log-view-service
-              patterns:
-                - /service/common/entityStatusLogView/*
-      policy-enforcer-config:
-        paths:
-          - methods:
-              - method: GET
-            path: /actuator/*
-            enforcementMode: DISABLED
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/common/currencies/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/common/currencies/*
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/common/countries/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/common/countries/*
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/common/frequencies/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/common/frequencies/*
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/common/frequencies_view/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/common/frequencies_view/*
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/common/institutions/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/common/institutions/*
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/common/motive_types/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/common/motive_types/*
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/common/motives/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/common/motives/*
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/common/entityStatus/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/common/entityStatus/*
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/common/entityTransitions/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/common/entityTransitions/*
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/common/systemEntities/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/common/systemEntities/*
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/common/economicActivity/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/common/economicActivity/*
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/common/geographical_division_1/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/common/geographical_division_1/*
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/common/geographical_division_2/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/common/geographical_division_2/*
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/common/geographical_division_3/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/common/geographical_division_3/*
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/common/geographical_division_4/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/common/geographical_division_4/*
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/common/reportColumns/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/common/reportColumns/*
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/common/reports/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/common/reports/*
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/common/reportFilters/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/common/reportFilters/*
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/common/reportGroups/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/common/reportGroups/*
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/common/system_entity_status_log/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/common/system_entity_status_log/*
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/common/entity_transition_with_names_view/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/common/entity_transition_with_names_view/*
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/common/entityStatusLogView/*
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/common/parameters/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/common/parameters/*
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/common/fund_source/*
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/common/fund_destiny/*
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-            path: /actuator/health/**
-            enforcementMode: DISABLED
+      keycloak:
+        realm: JTeller
+        resource: configuration-service
+        ssl-required: external
+        auth-server-url: https://keycloak.bytesw.cloud:30000
+        bearer-only: true
+        credentials:
+          secret: 3b329590-55a9-4580-9696-e2196fd7d325
+        securityConstraints:
+            - authRoles:
+              {{- range  $index, $role := .Values.environment.keycloak.roles}}
+                - {{$role}}
+              {{- end }}
+              securityCollections:
+                -   name: currencies-service
+                    patterns:
+                      - /service/common/currencies/*
+                -   name: countries-service
+                    patterns:
+                      - /service/common/countries/*
+                -   name: frecuencies-service
+                    patterns:
+                      - /service/common/frequencies/*
+                -   name: frecuencies-view-service
+                    patterns:
+                      - /service/common/frequencies_view/*
+                -   name: institutions-service
+                    patterns:
+                      - /service/common/institutions/*
+                -   name: motive-types-service
+                    patterns:
+                      - /service/common/motive_types/*
+                -   name: motives-service
+                    patterns:
+                      - /service/common/motives/*
+                -   name: entities-status-service
+                    patterns:
+                      - /service/common/entityStatus/*
+                -   name: entities-transitions-service
+                    patterns:
+                      - /service/common/entityTransitions/*
+                -   name: system-entities-service
+                    patterns:
+                      - /service/common/systemEntities/*
+                -   name: economics-activities-service
+                    patterns:
+                      - /service/common/economicActivity/*
+                -   name: geographicals-divisions-1-service
+                    patterns:
+                      - /service/common/geographical_division_1/*
+                -   name: geographicals-divisions-2-service
+                    patterns:
+                      - /service/common/geographical_division_2/*
+                -   name: geographicals-divisions-3-service
+                    patterns:
+                      - /service/common/geographical_division_3/*
+                -   name: geographicals-divisions-4-service
+                    patterns:
+                      - /service/common/geographical_division_4/*
+                -   name: reports-columns-service
+                    patterns:
+                      - /service/common/reportColumns/*
+                -   name: reports-service
+                    patterns:
+                      - /service/common/reports/*
+                -   name: reports-filters-service
+                    patterns:
+                      - /service/common/reportFilters/*
+                -   name: reports-groups-service
+                    patterns:
+                      - /service/common/reportGroups/*
+                -   name: system-entity-status-logs-service
+                    patterns:
+                      - /service/common/system_entity_status_log/*
+                -   name: parameters-service
+                    patterns:
+                      - /service/common/parameters/*
+                -   name: entity-trasition-with-names-service
+                    patterns:
+                      - /service/common/entity_transition_with_names_view/*
+                -   name: fund-source-service
+                    patterns:
+                      - /service/common/fund_source/*
+                -   name: fund-destiny-service
+                    patterns:
+                      - /service/common/fund_destiny/*
+                -   name: entity-status-log-view-service
+                    patterns:
+                      - /service/common/entityStatusLogView/*
+                - name: available-status-view-service
+                  patterns:
+                    - /service/common/availableStatus/*
+                -   name: document-entity-service
+                    patterns:
+                      - /service/common/document-entity/*
+                -   name: document-property-entity-service
+                    patterns:
+                      - /service/common/document-property-entity/*
+        policy-enforcer-config:
+          paths:
+            -   methods:
+                  -   method: GET
+                path: /actuator/*
+                enforcementMode: DISABLED
+            -   methods:
+                  -   method: POST
+                      scopes:
+                        - view
+                path: /service/common/currencies/page
+            -   methods:
+                  -   method: GET
+                      scopes:
+                        - view
+                  -   method: DELETE
+                      scopes:
+                        - delete
+                  -   method: POST
+                      scopes:
+                        - create
+                  -   method: PUT
+                      scopes:
+                        - update
+                path: /service/common/currencies/*
+            -   methods:
+                  -   method: POST
+                      scopes:
+                        - view
+                path: /service/common/countries/page
+            -   methods:
+                  -   method: GET
+                      scopes:
+                        - view
+                  -   method: DELETE
+                      scopes:
+                        - delete
+                  -   method: POST
+                      scopes:
+                        - create
+                  -   method: PUT
+                      scopes:
+                        - update
+                path: /service/common/countries/*
+            -   methods:
+                  -   method: POST
+                      scopes:
+                        - view
+                path: /service/common/frequencies/page
+            -   methods:
+                  -   method: GET
+                      scopes:
+                        - view
+                  -   method: DELETE
+                      scopes:
+                        - delete
+                  -   method: POST
+                      scopes:
+                        - create
+                  -   method: PUT
+                      scopes:
+                        - update
+                path: /service/common/frequencies/*
+            -   methods:
+                  -   method: POST
+                      scopes:
+                        - view
+                path: /service/common/frequencies_view/page
+            -   methods:
+                  -   method: GET
+                      scopes:
+                        - view
+                  -   method: DELETE
+                      scopes:
+                        - delete
+                  -   method: POST
+                      scopes:
+                        - create
+                  -   method: PUT
+                      scopes:
+                        - update
+                path: /service/common/frequencies_view/*
+            -   methods:
+                  -   method: POST
+                      scopes:
+                        - view
+                path: /service/common/institutions/page
+            -   methods:
+                  -   method: GET
+                      scopes:
+                        - view
+                  -   method: DELETE
+                      scopes:
+                        - delete
+                  -   method: POST
+                      scopes:
+                        - create
+                  -   method: PUT
+                      scopes:
+                        - update
+                path: /service/common/institutions/*
+            -   methods:
+                  -   method: POST
+                      scopes:
+                        - view
+                path: /service/common/motive_types/page
+            -   methods:
+                  -   method: GET
+                      scopes:
+                        - view
+                  -   method: DELETE
+                      scopes:
+                        - delete
+                  -   method: POST
+                      scopes:
+                        - create
+                  -   method: PUT
+                      scopes:
+                        - update
+                path: /service/common/motive_types/*
+            -   methods:
+                  -   method: POST
+                      scopes:
+                        - view
+                path: /service/common/motives/page
+            -   methods:
+                  -   method: GET
+                      scopes:
+                        - view
+                  -   method: DELETE
+                      scopes:
+                        - delete
+                  -   method: POST
+                      scopes:
+                        - create
+                  -   method: PUT
+                      scopes:
+                        - update
+                path: /service/common/motives/*
+            -   methods:
+                  -   method: POST
+                      scopes:
+                        - view
+                path: /service/common/entityStatus/page
+            -   methods:
+                  -   method: GET
+                      scopes:
+                        - view
+                  -   method: DELETE
+                      scopes:
+                        - delete
+                  -   method: POST
+                      scopes:
+                        - create
+                  -   method: PUT
+                      scopes:
+                        - update
+                path: /service/common/entityStatus/*
+            -   methods:
+                  -   method: POST
+                      scopes:
+                        - view
+                path: /service/common/entityTransitions/page
+            -   methods:
+                  -   method: GET
+                      scopes:
+                        - view
+                  -   method: DELETE
+                      scopes:
+                        - delete
+                  -   method: POST
+                      scopes:
+                        - create
+                  -   method: PUT
+                      scopes:
+                        - update
+                path: /service/common/entityTransitions/*
+            -   methods:
+                  -   method: POST
+                      scopes:
+                        - view
+                path: /service/common/systemEntities/page
+            -   methods:
+                  -   method: GET
+                      scopes:
+                        - view
+                  -   method: DELETE
+                      scopes:
+                        - delete
+                  -   method: POST
+                      scopes:
+                        - create
+                  -   method: PUT
+                      scopes:
+                        - update
+                path: /service/common/systemEntities/*
+            -   methods:
+                  -   method: POST
+                      scopes:
+                        - view
+                path: /service/common/economicActivity/page
+            -   methods:
+                  -   method: GET
+                      scopes:
+                        - view
+                  -   method: DELETE
+                      scopes:
+                        - delete
+                  -   method: POST
+                      scopes:
+                        - create
+                  -   method: PUT
+                      scopes:
+                        - update
+                path: /service/common/economicActivity/*
+            -   methods:
+                  -   method: POST
+                      scopes:
+                        - view
+                path: /service/common/geographical_division_1/page
+            -   methods:
+                  -   method: GET
+                      scopes:
+                        - view
+                  -   method: DELETE
+                      scopes:
+                        - delete
+                  -   method: POST
+                      scopes:
+                        - create
+                  -   method: PUT
+                      scopes:
+                        - update
+                path: /service/common/geographical_division_1/*
+            -   methods:
+                  -   method: POST
+                      scopes:
+                        - view
+                path: /service/common/geographical_division_2/page
+            -   methods:
+                  -   method: GET
+                      scopes:
+                        - view
+                  -   method: DELETE
+                      scopes:
+                        - delete
+                  -   method: POST
+                      scopes:
+                        - create
+                  -   method: PUT
+                      scopes:
+                        - update
+                path: /service/common/geographical_division_2/*
+            -   methods:
+                  -   method: POST
+                      scopes:
+                        - view
+                path: /service/common/geographical_division_3/page
+            -   methods:
+                  -   method: GET
+                      scopes:
+                        - view
+                  -   method: DELETE
+                      scopes:
+                        - delete
+                  -   method: POST
+                      scopes:
+                        - create
+                  -   method: PUT
+                      scopes:
+                        - update
+                path: /service/common/geographical_division_3/*
+            -   methods:
+                  -   method: POST
+                      scopes:
+                        - view
+                path: /service/common/geographical_division_4/page
+            -   methods:
+                  -   method: GET
+                      scopes:
+                        - view
+                  -   method: DELETE
+                      scopes:
+                        - delete
+                  -   method: POST
+                      scopes:
+                        - create
+                  -   method: PUT
+                      scopes:
+                        - update
+                path: /service/common/geographical_division_4/*
+            -   methods:
+                  -   method: POST
+                      scopes:
+                        - view
+                path: /service/common/reportColumns/page
+            -   methods:
+                  -   method: GET
+                      scopes:
+                        - view
+                  -   method: DELETE
+                      scopes:
+                        - delete
+                  -   method: POST
+                      scopes:
+                        - create
+                  -   method: PUT
+                      scopes:
+                        - update
+                path: /service/common/reportColumns/*
+            -   methods:
+                  -   method: POST
+                      scopes:
+                        - view
+                path: /service/common/reports/page
+            -   methods:
+                  -   method: GET
+                      scopes:
+                        - view
+                  -   method: DELETE
+                      scopes:
+                        - delete
+                  -   method: POST
+                      scopes:
+                        - create
+                  -   method: PUT
+                      scopes:
+                        - update
+                path: /service/common/reports/*
+            -   methods:
+                  -   method: POST
+                      scopes:
+                        - view
+                path: /service/common/reportFilters/page
+            -   methods:
+                  -   method: GET
+                      scopes:
+                        - view
+                  -   method: DELETE
+                      scopes:
+                        - delete
+                  -   method: POST
+                      scopes:
+                        - create
+                  -   method: PUT
+                      scopes:
+                        - update
+                path: /service/common/reportFilters/*
+            -   methods:
+                  -   method: POST
+                      scopes:
+                        - view
+                path: /service/common/reportGroups/page
+            -   methods:
+                  -   method: GET
+                      scopes:
+                        - view
+                  -   method: DELETE
+                      scopes:
+                        - delete
+                  -   method: POST
+                      scopes:
+                        - create
+                  -   method: PUT
+                      scopes:
+                        - update
+                path: /service/common/reportGroups/*
+            -   methods:
+                  -   method: POST
+                      scopes:
+                        - view
+                path: /service/common/system_entity_status_log/page
+            -   methods:
+                  -   method: GET
+                      scopes:
+                        - view
+                  -   method: DELETE
+                      scopes:
+                        - delete
+                  -   method: POST
+                      scopes:
+                        - create
+                  -   method: PUT
+                      scopes:
+                        - update
+                path: /service/common/system_entity_status_log/*
+            -   methods:
+                  -   method: POST
+                      scopes:
+                        - view
+                path: /service/common/entity_transition_with_names_view/page
+            -   methods:
+                  -   method: GET
+                      scopes:
+                        - view
+                  -   method: DELETE
+                      scopes:
+                        - delete
+                  -   method: POST
+                      scopes:
+                        - create
+                  -   method: PUT
+                      scopes:
+                        - update
+                path: /service/common/entity_transition_with_names_view/*
+            -   methods:
+                  -   method: GET
+                      scopes:
+                        - view
+                  -   method: DELETE
+                      scopes:
+                        - delete
+                  -   method: POST
+                      scopes:
+                        - create
+                  -   method: PUT
+                      scopes:
+                        - update
+                path: /service/common/entityStatusLogView/*
+            -   methods:
+                  -   method: POST
+                      scopes:
+                        - view
+                path: /service/common/parameters/page
+            -   methods:
+                  -   method: GET
+                      scopes:
+                        - view
+                  -   method: DELETE
+                      scopes:
+                        - delete
+                  -   method: POST
+                      scopes:
+                        - create
+                  -   method: PUT
+                      scopes:
+                        - update
+                path: /service/common/parameters/*
+            -   methods:
+                  -   method: POST
+                      scopes:
+                        - view
+                path: /service/common/document-entity/page
+            -   methods:
+                  -   method: GET
+                      scopes:
+                        - view
+                  -   method: DELETE
+                      scopes:
+                        - delete
+                  -   method: POST
+                      scopes:
+                        - create
+                  -   method: PUT
+                      scopes:
+                        - update
+                path: /service/common/fund_source/*
+            -   methods:
+                  -   method: GET
+                      scopes:
+                        - view
+                  -   method: DELETE
+                      scopes:
+                        - delete
+                  -   method: POST
+                      scopes:
+                        - create
+                  -   method: PUT
+                      scopes:
+                        - update
+                path: /service/common/document-entity/*
+            -   methods:
+                  -   method: POST
+                      scopes:
+                        - view
+                path: /service/common/document-property-entity/page
+            -   methods:
+                  -   method: GET
+                      scopes:
+                        - view
+                  -   method: DELETE
+                      scopes:
+                        - delete
+                  -   method: POST
+                      scopes:
+                        - create
+                  -   method: PUT
+                      scopes:
+                        - update
+                path: /service/common/fund_destiny/*
+            - methods:
+                - method: GET
+                  scopes:
+                    - view
+              path: /actuator/health/**
+              enforcementMode: DISABLED
+            - methods:
+                - method: GET
+                  scopes:
+                    - view
+                - method: DELETE
+                  scopes:
+                    - delete
+                - method: POST
+                  scopes:
+                    - create
+                - method: PUT
+                  scopes:
+                    - update
+              path: /service/common/availableStatus/*
+            - methods:
+                - method: GET
+                  scopes:
+                    - view
+                - method: DELETE
+                  scopes:
+                    - delete
+                - method: POST
+                  scopes:
+                    - create
+                - method: PUT
+                  scopes:
+                    - update
+              path: /service/common/document-property-entity/*
+
 
     {{- end }}
