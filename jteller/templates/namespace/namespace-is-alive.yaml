@@ -5,8 +5,8 @@ metadata:
     {{- if .Values.istio.enable | default false}}
     istio-injection: enabled
     {{- end }}
-    kubernetes.io/metadata.name: {{.Values.namespace}}
-  name: {{.Values.namespace}}
+    kubernetes.io/metadata.name: {{.Values.isAlive.namespace}}
+  name: {{.Values.isAlive.namespace}}
 spec:
   finalizers:
     - kubernetes

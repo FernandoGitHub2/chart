@@ -1,6 +1,6 @@
-{{- if eq (int .Values.executionMode) 3 }}
-{{- $username := .Values.services.mongo.username | b64dec}}
-{{- $password := .Values.services.mongo.password | b64dec }}
+{{- if eq (int .Values.executionMode) 2 }}
+{{- $username := .Values.environment.mongo.username | b64dec}}
+{{- $password := .Values.environment.mongo.password | b64dec }}
 {{- $port := .Values.services.mongo.port }}
 apiVersion: apps/v1
 kind: Deployment
@@ -44,8 +44,8 @@ spec:
             secretKeyRef:
               name: general-secret
               key: minioPassword
-{{/*        - name: spring.data.mongodb.uri*/}}
-{{/*          value: "mongodb://{{ $username }}:{{ $password }}@mongo:{{ $port }}"*/}}
+        - name: spring.data.mongodb.uri
+          value: "mongodb://{{ $username }}:{{ $password }}@mongo:{{ $port }}"
         - name: logging.level.org.hibernate.type.descriptor.sql.BasicBinder
           value: "{{ .Values.environment.database.sqlBasicBinder }}"
         - name: spring.jpa.properties.hibernate.format_sql
