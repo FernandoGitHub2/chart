@@ -154,7 +154,7 @@ istio:
     develop: true
     ip: 172.16.10.101
 isAlive:
-  enable: true
+  enable: false
   namespace: is-alive
 
 camposTabla:
