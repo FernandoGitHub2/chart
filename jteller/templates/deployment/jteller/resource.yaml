@@ -65,27 +65,27 @@ spec:
         volumeMounts:
         - mountPath: /keycloak/
           name: keycloak-be-vol
-          {{- if and (hasKey .Values.services.resource "actuator") (eq (int .Values.actuator) 1) }}
-        livenessProbe:
-          initialDelaySeconds: {{ .Values.services.resource.actuator.delay | default .Values.services.actuatorDelay}}
-          failureThreshold: 3
-          httpGet:
-            path: {{.Values.services.resource.actuator.url }}/health
-            port: {{ .Values.services.resource.port }}
-            scheme: HTTP
-          periodSeconds: 5
-          successThreshold: 1
-          timeoutSeconds: 1
-        readinessProbe:
-          failureThreshold: 3
-          httpGet:
-            path: {{ .Values.services.resource.actuator.url }}/health/readiness
-            port: {{ .Values.services.resource.port }}
-            scheme: HTTP
-          periodSeconds: 10
-          successThreshold: 3
-          timeoutSeconds: 1
-          {{- end }}
+{{/*          {{- if and (hasKey .Values.services.resource "actuator") (eq (int .Values.actuator) 1) }}*/}}
+{{/*        livenessProbe:*/}}
+{{/*          initialDelaySeconds: {{ .Values.services.resource.actuator.delay | default .Values.services.actuatorDelay}}*/}}
+{{/*          failureThreshold: 3*/}}
+{{/*          httpGet:*/}}
+{{/*            path: {{.Values.services.resource.actuator.url }}/health*/}}
+{{/*            port: {{ .Values.services.resource.port }}*/}}
+{{/*            scheme: HTTP*/}}
+{{/*          periodSeconds: 5*/}}
+{{/*          successThreshold: 1*/}}
+{{/*          timeoutSeconds: 1*/}}
+{{/*        readinessProbe:*/}}
+{{/*          failureThreshold: 3*/}}
+{{/*          httpGet:*/}}
+{{/*            path: {{ .Values.services.resource.actuator.url }}/health/readiness*/}}
+{{/*            port: {{ .Values.services.resource.port }}*/}}
+{{/*            scheme: HTTP*/}}
+{{/*          periodSeconds: 10*/}}
+{{/*          successThreshold: 3*/}}
+{{/*          timeoutSeconds: 1*/}}
+{{/*          {{- end }}*/}}
       dnsPolicy: ClusterFirst
       {{- if hasKey .Values.services "secretRegistry"}}
       imagePullSecrets:
