@@ -1,6 +1,7 @@
+{{- if and (.Values.isAlive.enable | default false) (eq (int .Values.executionMode) 2) }}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: is-alive-batch-monitor
   namespace: {{.Values.isAlive.namespace}}
-
+  {{- end }}
