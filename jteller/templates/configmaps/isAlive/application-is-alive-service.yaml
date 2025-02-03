@@ -1,4 +1,4 @@
-{{- if and (.Values.isAlive.enable | default false) (eq (int .Values.executionMode) 2) }}
+{{- if and (.Values.environment.backend.isAlive.enable | default false) (eq (int .Values.executionMode) 2) }}
 apiVersion: v1
 data:
   application-is-alive-service.yml: |
@@ -95,5 +95,5 @@ data:
 kind: ConfigMap
 metadata:
   name: is-alive-service-config
-  namespace: {{.Values.isAlive.namespace}}
+  namespace: {{.Values.environment.backend.isAlive.namespace}}
   {{- end }}

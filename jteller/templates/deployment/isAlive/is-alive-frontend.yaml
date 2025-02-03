@@ -1,4 +1,4 @@
-{{- if and (.Values.isAlive.enable | default false) (eq (int .Values.executionMode) 2) }}
+{{- if and (.Values.environment.backend.isAlive.enable | default false) (eq (int .Values.executionMode) 2) }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:

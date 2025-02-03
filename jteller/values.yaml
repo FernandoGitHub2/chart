@@ -71,6 +71,8 @@ environment:
     mailResetPass: 0
     validUserMove: 0
     isAlive:
+      enable: false
+      namespace: is-alive
       read: select count(*) from jtellerv7.IS_ALIVE_CONTROL
       write: insert into jtellerv7.IS_ALIVE_CONTROL(CONTROL_DATE) VALUES (now())
     mail:
@@ -153,10 +155,6 @@ istio:
     port: 31697
     develop: true
     ip: 172.16.10.101
-isAlive:
-  enable: false
-  namespace: is-alive
-
 camposTabla:
   tabla-101: |
     nameTable: tabla-101
