@@ -30,7 +30,7 @@ environment:
     isAlivePassword: aXNfYWxpdmU=
   keycloak:
     securityOpt: 2
-    url: https://keycloak.bytesw.cloud:32014
+    url: https://keycloak.bytesw.cloud:32008
     realm: jteller
     roles:
       - user
@@ -278,7 +278,7 @@ services:
       url: /actuator
   transactionEngine:
     image: transaction-engine-service-kube
-    tag: v7.6.n.c
+    tag: v7.6.n.f.s
     port: 2107
     typeService: C
     memoryLimit: 700Mi
@@ -305,7 +305,7 @@ services:
     port: 8080
   security:
     image: security-service-kube
-    tag: v7.6.j
+    tag: v7.6.j.4
     port: 1119
     typeService: C
     memoryLimit: 712Mi
@@ -378,7 +378,7 @@ services:
     typeService: C
   firmas:
     image: firmas-service-kube
-    tag: v7.6.i
+    tag: v7.6.j.c
     port: 2114
     typeService: C
     memoryLimit: 1200Mi
@@ -391,7 +391,7 @@ services:
     typeService: C
   distributor:
     image: distributor-service-kube
-    tag: v7.6.i.a
+    tag: v7.6.i.c
     port: 8080
     typeService: C
     memoryLimit: 512Mi
@@ -413,7 +413,7 @@ services:
     memoryLimit: 256Mi
   common:
     image: common-service-kube
-    tag: jtv7.6.b
+    tag: jtv7.6.c
     port: 8080
     typeService: C
     memoryLimit: 750Mi
