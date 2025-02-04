@@ -101,16 +101,17 @@ data:
       multi-company:
         enabled: false
     management:
+      endpoints:
+        web:
+          exposure:
+            include: health,metrics,prometheus
+          base-path: /distributor-service/actuator/
       health:
         probes:
           enabled: true
-        mail:
-          enabled: false
       endpoint:
         health:
           show-details: always
-      server:
-        port: 8080
     keycloak:
       realm: ${keycloak.realmName:JTeller}
       resource: ${keycloak.client:distributor-service}
