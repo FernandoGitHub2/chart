@@ -30,7 +30,7 @@ environment:
     isAlivePassword: aXNfYWxpdmU=
   keycloak:
     securityOpt: 2
-    url: https://keycloak.bytesw.cloud:31697
+    url: https://keycloak.bytesw.cloud:32014
     realm: jteller
     roles:
       - user
