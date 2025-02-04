@@ -418,7 +418,7 @@ services:
     typeService: C
     memoryLimit: 750Mi
     actuator:
-      url: /actuator
+      url: /service/common/actuator
   gateway:
     image: api-gateway-kube
     tag: v.2023-05-30.1
