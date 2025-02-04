@@ -65,6 +65,10 @@ spec:
                 secretKeyRef:
                   name: general-secret
                   key: keycloakAdminPassword
+            - name: config.keycloak.url
+              value: {{.Values.environment.keycloak.url}}
+            - name: config.keycloak.realm
+              value: {{.Values.environment.keycloak.realm}}
             - name: config.personInterface
               value: "{{ .Values.environment.backend.personInterface }}"
             - name: config.mailResetPass
