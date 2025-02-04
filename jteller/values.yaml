@@ -310,7 +310,7 @@ services:
     typeService: C
     memoryLimit: 712Mi
     actuator:
-      url: /v1/actuator
+      url: /actuator
   resource:
     image: resource-service-kube
     tag: dev.1.0.12.c
