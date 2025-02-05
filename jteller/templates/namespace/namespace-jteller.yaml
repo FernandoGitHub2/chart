@@ -1,4 +1,4 @@
-{{- if eq (int .Values.executionMode) 0 }}
+{{/*{{- if eq (int .Values.executionMode) 0 }}*/}}
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -11,4 +11,4 @@ metadata:
 spec:
   finalizers:
     - kubernetes
-  {{- end }}
+{{/*  {{- end }}*/}}
