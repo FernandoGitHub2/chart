@@ -1,7 +1,7 @@
 environment:
   database:
-    url: jdbc:mysql://172.16.10.101:3306/
-    type: mysql
+    url: jdbc:oracle:thin:@//172.16.10.101:1521/xe
+    type: oracle
     audScheme: logdat
     showSql: true
     sqlBasicBinder: TRACE
