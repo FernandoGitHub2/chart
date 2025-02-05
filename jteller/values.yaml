@@ -152,7 +152,6 @@ istio:
     secretName: my-tls-secret
     appHost: jteller.bytesw.cloud
     keycloakHost: keycloak.bytesw.cloud
-    port: 31697
     develop: true
     ip: 172.16.10.101
 camposTabla:
@@ -337,7 +336,7 @@ services:
       url: /actuator
   logdat:
     image: logdat-jteller-service-kube
-    tag: v7.6.d
+    tag: v7.6.e
     port: 8080
     typeService: C
     memoryLimit: 512Mi
