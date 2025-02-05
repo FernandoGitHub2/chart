@@ -299,7 +299,7 @@ services:
     port: 8080
   operationView:
     image: jt-operation-view-kube-dev
-    tag: dev.1.0.84.182
+    tag: dev.1.0.84.184
     typeService: C
     port: 8080
   security:
