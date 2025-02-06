@@ -190,7 +190,7 @@ spec:
             - name: spring.rabbitmq.queue
               value: {{ .Values.environment.backend.rabbitmq.queue }}
             - name: spring.liquibase.enable
-              value: "{{ .Values.liquibaseEnable }}"
+              value: {{ .Values.liquibaseEnable }}
             - name: spring.liquibase.contexts
               value: "{{ .Values.liquibaseContext }}{{- if .Values.liquibaseInit }},init{{- end }},offline"
             - name: app.actuator.read-query
