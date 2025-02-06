@@ -60,6 +60,7 @@ environment:
     resolver: fixed
     timeZone: America/Guatemala
     locale: es
+    personInterface: false
     personUrl: http://person-data-service:8080
     commonUrl: http://common-service:8080
     catalogUrl: http://catalog:2102
@@ -299,7 +300,7 @@ services:
     port: 8080
   operationView:
     image: jt-operation-view-kube-dev
-    tag: dev.1.0.84.184
+    tag: dev.1.0.84.184.1
     typeService: C
     port: 8080
   security:

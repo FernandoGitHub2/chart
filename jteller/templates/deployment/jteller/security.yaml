@@ -70,7 +70,7 @@ spec:
             - name: config.keycloak.realm
               value: {{.Values.environment.keycloak.realm}}
             - name: config.personInterface
-              value: "{{ .Values.environment.backend.personInterface }}"
+              value: "{{ .Values.environment.backend.personInterface | default false}}"
             - name: config.mailResetPass
               value: "{{ .Values.environment.backend.mailResetPass }}"
             - name: config.validUserMove

@@ -72,7 +72,7 @@ spec:
             - name: config.distEnable
               value: "{{- if eq (int .Values.distributor) 1 }}1{{- else }}0{{- end}}"
             - name: config.personInterface
-              value: "{{ .Values.environment.backend.personInterface }}"
+              value: "{{ .Values.environment.backend.personInterface | default false}}"
             - name: config.savePersonURL
               value: {{ .Values.environment.backend.personUrl }}/service/person-data/person/savePerson
             - name: config.updatePersonURL
