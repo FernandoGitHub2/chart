@@ -32,14 +32,6 @@ spec:
         uri: /
     - match:
         - uri:
-            prefix: /specs-view-v8
-      route:
-        - destination:
-            host: specs-view-v8
-            port:
-              number: 8080
-    - match:
-        - uri:
             prefix: /wom-views
       route:
         - destination:
