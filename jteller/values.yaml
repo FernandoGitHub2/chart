@@ -60,7 +60,6 @@ environment:
     resolver: fixed
     timeZone: America/Guatemala
     locale: es
-    personInterface: true
     personUrl: http://person-data-service:8080
     commonUrl: http://common-service:8080
     catalogUrl: http://catalog:2102
@@ -75,7 +74,7 @@ environment:
       enable: false
       namespace: is-alive
       read: select count(*) from jtellerv7.IS_ALIVE_CONTROL
-      write: insert into jtellerv7.IS_ALIVE_CONTROL(CONTROL_DATE) VALUES (now())
+      write: insert into jtellerv7.IS_ALIVE_CONTROL(CONTROL_DATE) VALUES (SYSDATE)
     mail:
       host: smtp.gmail.com
       port: 587
