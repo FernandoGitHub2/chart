@@ -1,14 +1,14 @@
-{{- if and (.Values.environment.backend.isAlive.enable | default false) (eq (int .Values.executionMode) 2) }}
-apiVersion: v1
-kind: Namespace
-metadata:
-  labels:
-    {{- if .Values.istio.enable | default false}}
-    istio-injection: enabled
-    {{- end }}
-    kubernetes.io/metadata.name: {{.Values.environment.backend.isAlive.namespace}}
-  name: {{.Values.environment.backend.isAlive.namespace}}
-spec:
-  finalizers:
-    - kubernetes
-  {{- end }}
+{{/*{{- if and (.Values.environment.backend.isAlive.enable | default false) (eq (int .Values.executionMode) 2) }}*/}}
+{{/*apiVersion: v1*/}}
+{{/*kind: Namespace*/}}
+{{/*metadata:*/}}
+{{/*  labels:*/}}
+{{/*    {{- if .Values.istio.enable | default false}}*/}}
+{{/*    istio-injection: enabled*/}}
+{{/*    {{- end }}*/}}
+{{/*    kubernetes.io/metadata.name: {{.Values.environment.backend.isAlive.namespace}}*/}}
+{{/*  name: {{.Values.environment.backend.isAlive.namespace}}*/}}
+{{/*spec:*/}}
+{{/*  finalizers:*/}}
+{{/*    - kubernetes*/}}
+{{/*  {{- end }}*/}}
