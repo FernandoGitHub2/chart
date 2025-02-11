@@ -123,8 +123,6 @@ spec:
               value: {{.Values.environment.backend.isAlive.read}}
             - name: app.actuator.write-query
               value: {{.Values.environment.backend.isAlive.write}}
-            - name: app.actuator.write-query
-              value: {{.Values.environment.backend.isAlive.write}}
             - name: spring.security.oauth2.resourceserver.jwt.issuer-uri
               value: {{.Values.environment.keycloak.url}}/realms/{{.Values.environment.keycloak.realm}}
           image: {{.Values.services.registry }}{{.Values.services.hermes.image}}:{{.Values.services.hermes.tag }}
