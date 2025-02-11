@@ -270,7 +270,7 @@ services:
       url: /actuator
   transactionCatalog:
     image: transaction-catalog-service-kube
-    tag: v7.6.q.h
+    tag: v7.6.q.k
     port: 2103
     typeService: C
     memoryLimit: 712Mi
