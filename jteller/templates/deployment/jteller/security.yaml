@@ -120,7 +120,7 @@ spec:
             - name: spring.liquibase.enable
               value: "{{ .Values.liquibaseEnable }}"
             - name: spring.liquibase.contexts
-              value: "{{ .Values.liquibaseContext }}"
+              value: "{{ .Values.liquibaseContext }}{{- if .Values.liquibaseInit }},init{{- end }}"
             - name: spring.mail.password
               valueFrom:
                 secretKeyRef:
