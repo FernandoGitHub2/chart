@@ -43,7 +43,7 @@ spec:
             - name: spring.jpa.database-platform
               value: "org.hibernate.dialect.MySQLDialect"
             - name: spring.jpa.properties.hibernate.dialect
-              value: "org.hibernate.dialect.MySQLLegacyDialect"
+              value: "org.hibernate.dialect.MySQLDialect"
             {{- end }}
 {{/*            - name: keycloak.config.number*/}}
 {{/*              value: "{{ .Values.environment.keycloak.securityOpt }}"*/}}
