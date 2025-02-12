@@ -21,7 +21,7 @@ data:
       application:
         name: transaction-catalog-service
       datasource:
-        url: ${db.local.host:jdbc:oracle:thin:@//172.16.21.10:1521:xe}
+        url: ${db.local.host:jdbc:oracle:thin:@//172.16.10.135:1521/orclpdb1}
         username: ${db.local.user:jtellerv7}
         password: ${db.local.password:jtellerv7}
         driver-class-name: oracle.jdbc.OracleDriver
@@ -41,7 +41,7 @@ data:
           org:
             hibernate:
               envers:
-                default_schema: jtellerv7
+                default_schema: logdat
                 do_not_audit_optimistic_locking_field: false
                 store_data_at_delete: true
         jackson:
@@ -286,6 +286,9 @@ data:
             - name: validations_end_day_detail-resource
               patterns:
                 - /v1/validationsEndDayDetail/*
+            - name: changes-attributes-by-condition-resource
+              patterns:
+                - /v1/changeAttributesByCondition/*
       policy-enforcer-config:
         paths:
           - methods:
@@ -1021,6 +1024,20 @@ data:
                 scopes:
                   - delete
             path: /v1/validationsEndDayDetail/*
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/changeAttributesByCondition/*
           - methods:
               - method: GET
                 scopes:
