@@ -278,7 +278,7 @@ services:
       url: /actuator
   transactionEngine:
     image: transaction-engine-service-kube
-    tag: v7.6.n.f.t.5
+    tag: v7.6.n.f.t.7
     port: 2107
     typeService: C
     memoryLimit: 700Mi
@@ -305,7 +305,7 @@ services:
     port: 8080
   security:
     image: security-service-kube
-    tag: v7.6.j.4
+    tag: v7.6.j.k
     port: 1119
     typeService: C
     memoryLimit: 712Mi
