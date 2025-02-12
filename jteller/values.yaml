@@ -261,7 +261,7 @@ services:
   registryIsAlive: 277232507401.dkr.ecr.us-west-2.amazonaws.com/is-alive/
   catalog:
     image: catalog-service-kube
-    tag: v7.6.d
+    tag: v7.6.f
     port: 2102
     memoryLimit: 750Mi
     replicas: 1
@@ -270,7 +270,7 @@ services:
       url: /actuator
   transactionCatalog:
     image: transaction-catalog-service-kube
-    tag: v7.6.q.k
+    tag: v7.6.q.l.a
     port: 2103
     typeService: C
     memoryLimit: 712Mi
