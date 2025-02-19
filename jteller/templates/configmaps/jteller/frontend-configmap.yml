@@ -19,8 +19,8 @@ data:
                  "realmInHeader": "{{.Values.environment.keycloak.realmInHeader}}",
                  "haveDistributor": {{- if eq (int .Values.distributor) 1 }} true{{- else }} false{{- end}},
                  "personInterface": {{ .Values.environment.backend.personInterface | default false}},
-                 "firmasInterface": false,
-                 "language": "es",
+                 "firmasInterface": {{- if eq (int .Values.signature) 1 }} true{{- else }} false{{- end}},
+                 "language":"{{.Values.environment.backend.locale}}",
                  "hasGranularSecurity": true
                  }
     }

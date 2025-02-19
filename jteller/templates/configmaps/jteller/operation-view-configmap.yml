@@ -18,11 +18,11 @@ data:
                  "disableAtHashCheck": true,
                  "realmInHeader": "{{.Values.environment.keycloak.realmInHeader}}",
                  "idleTime": "6",
-                 "deviceControl":false,
+                 "deviceControl":{{- if eq (int .Values.verifyDevice) 1 }} true{{- else }} false{{- end}},
                  "timeHttp":"90000",
                  "selectBranches":true,
                  "theme":"jteller",
-                 "language":"es",
+                 "language":"{{.Values.environment.backend.locale}}",
                  "localeSettings":{
                    "includeThousandsSeparator": true,
                    "thousandsSeparatorSymbol": "{{.Values.environment.backend.numberFormat.thousandsSeparatorSymbol}}",
