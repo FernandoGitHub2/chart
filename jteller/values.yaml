@@ -316,7 +316,7 @@ services:
     tag: v7.6
     port: 2110
     typeService: C
-    memoryLimit: 256Mi
+    memoryLimit: 400Mi
     actuator:
       url: /v1/actuator
   personData:
