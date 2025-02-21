@@ -1,0 +1,31 @@
+{{- if eq (int .Values.executionMode) 2 }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: transaction-manager
+  namespace: {{.Values.namespace}}
+spec:
+  ports:
+    - port: {{.Values.services.transactionManager.port}}
+      protocol: TCP
+      targetPort: {{.Values.services.transactionManager.port}}
+    {{- if  hasKey .Values.services.transactionManager "nodePort"}}
+      nodePort: {{.Values.services.transactionManager.nodePort}}
+    {{- end }}
+  selector:
+    app: {{.Release.Name}}-specs-view
+  sessionAffinity: None
+  {{- if eq (toString (.Values.services.transactionManager.typeService)) "C"}}
+  type: ClusterIP
+  {{- else if eq (toString (.Values.services.transactionManager.typeService)) "L"}}
+  type: LoadBalancer
+  {{- else }}
+  type: NodePort
+  {{- end }}
+  selector:
+    app: {{.Release.Name}}-transaction-manager
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
+  {{- end }}

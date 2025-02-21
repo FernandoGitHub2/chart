@@ -1,0 +1,55 @@
+{{- if eq (int .Values.executionMode) 2 }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{.Release.Name}}-transaction-manager
+  name: {{.Release.Name}}-transaction-manager
+  namespace: {{.Values.namespace}}
+spec:
+  {{- if hasKey .Values.services.transactionManager "replicas" }}
+  replicas:  {{ .Values.services.transactionManager.replicas }}
+  {{- else }}
+  replicas: {{.Values.replicas}}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{.Release.Name}}-transaction-manager
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{.Release.Name}}-transaction-manager
+    spec:
+      containers:
+        - image: {{.Values.services.registry}}{{.Values.services.transactionManager.image}}:{{.Values.services.transactionManager.tag }}
+          imagePullPolicy: Always
+          name: transaction-manager
+          ports:
+            - containerPort: {{ .Values.services.transactionManager.port }}
+              protocol: TCP
+          resources:
+            limits:
+              memory: {{.Values.services.specsView.memoryLimit | default "256Mi" }}
+            requests:
+              memory: {{.Values.services.specsView.memoryLimit | default "256Mi" }}
+          volumeMounts:
+            - mountPath: /app/assets/config
+              name: keycloak-transaction-manager-vol
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+        - name: aws-registry
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - configMap:
+            defaultMode: 420
+            items:
+              - key: config.json
+                path: config.json
+            name: transaction-manager-configmap
+          name: keycloak-transaction-manager-vol
+  {{- end }}

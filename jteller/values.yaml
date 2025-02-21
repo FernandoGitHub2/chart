@@ -71,6 +71,17 @@ environment:
     minioTimeout: 8
     mailResetPass: 0
     validUserMove: 0
+    codeTrxCloseCash: 9690
+    codeTrxOpenCash: 9691
+    routineBalance: 612
+    trxCloseCashier: 114
+    trxOpenCashier: 115
+    trxCodeMoveCashInventory: 9692
+    openDayCode: 9111
+    routineOfflineStatus: 616
+    routineDateHost: 618
+    trxEgressCode: 1
+    startDayTrxCode: 115
     isAlive:
       enable: false
       namespace: is-alive
@@ -261,7 +272,7 @@ services:
   registryIsAlive: 277232507401.dkr.ecr.us-west-2.amazonaws.com/is-alive/
   catalog:
     image: catalog-service-kube
-    tag: v7.6.f
+    tag: v7.6.g
     port: 2102
     memoryLimit: 750Mi
     replicas: 1
@@ -270,7 +281,7 @@ services:
       url: /actuator
   transactionCatalog:
     image: transaction-catalog-service-kube
-    tag: v7.6.q.l.a
+    tag: v7.6.q.n
     port: 2103
     typeService: C
     memoryLimit: 712Mi
@@ -278,7 +289,7 @@ services:
       url: /actuator
   transactionEngine:
     image: transaction-engine-service-kube
-    tag: v7.6.n.f.t.7
+    tag: v7.6.n.g.c
     port: 2107
     typeService: C
     memoryLimit: 700Mi
@@ -287,7 +298,7 @@ services:
       delay: 200
   management:
     image: operation-management-service-kube
-    tag: v7.6.g
+    tag: v7.6.i.c
     port: 2107
     typeService: C
     memoryLimit: 1400Mi
@@ -295,7 +306,7 @@ services:
       url: /v1/actuator
   specsView:
     image: jt-frontend-kube-dev
-    tag: dev.1.0.30.a
+    tag: dev.1.0.32
     typeService: C
     port: 8080
   operationView:
@@ -305,7 +316,7 @@ services:
     port: 8080
   security:
     image: security-service-kube
-    tag: v7.6.j.k
+    tag: v7.6.j.l.3
     port: 1119
     typeService: C
     memoryLimit: 712Mi
@@ -337,7 +348,7 @@ services:
       url: /actuator
   logdat:
     image: logdat-jteller-service-kube
-    tag: v7.6.e.c
+    tag: v7.6.e.e
     port: 8080
     typeService: C
     memoryLimit: 512Mi
@@ -365,7 +376,7 @@ services:
     hostname: false
   hermes:
     image: hermes-kube
-    tag: v7.6.c.d
+    tag: v7.6.c.d.1
     port: 1120
     typeService: C
     memoryLimit: 512Mi
@@ -373,7 +384,7 @@ services:
       url: /v1/actuator
   firmasView:
     image: firmas-front-kube
-    tag: dev.1.1.14
+    tag: dev.1.1.14.1
     port: 8080
     typeService: C
   firmas:
@@ -455,5 +466,10 @@ services:
   isAliveMonitor:
     image: is-alive-monitor-service
     tag: dev.0.0.5
+    port: 8080
+    typeService: C
+  transactionManager:
+    image: transaction-manager-kube
+    tag: dev.0.0.4.b
     port: 8080
     typeService: C

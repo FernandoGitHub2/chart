@@ -1,0 +1,19 @@
+{{- if eq (int .Values.executionMode) 2 }}
+apiVersion: v1
+data:
+  config.json: |
+    {
+     "config":{
+            "issuer":"{{ printf "%s/%s/%s" .Values.environment.keycloak.url "realms" .Values.environment.keycloak.realm }}",
+            "realmInHeader": "{{.Values.environment.keycloak.realmInHeader}}",
+            "clientId": "jt-frontend",
+            "idleTime": "15",
+            "language": "{{.Values.environment.backend.locale}}",
+            "hasGranularSecurity": true
+             }
+    }
+kind: ConfigMap
+metadata:
+  name: transaction-manager-configmap
+  namespace: {{.Values.namespace}}
+  {{- end }}
