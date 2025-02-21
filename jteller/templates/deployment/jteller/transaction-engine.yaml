@@ -222,7 +222,7 @@ spec:
             - name: config.trxEgresoCode
               value: "{{.Values.environment.backend.trxEgressCode}}"
             - name: config.startDayTrxCode
-              value: {{.Values.environment.backend.startDayTrxCode}}
+              value: "{{.Values.environment.backend.startDayTrxCode}}"
           image: {{ .Values.services.registry}}{{.Values.services.transactionEngine.image}}:{{.Values.services.transactionEngine.tag }}
           imagePullPolicy: IfNotPresent
           {{- if and (hasKey .Values.services.transactionEngine "actuator") (eq (int .Values.actuator) 1) }}
