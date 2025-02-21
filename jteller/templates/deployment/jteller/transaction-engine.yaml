@@ -202,25 +202,25 @@ spec:
             - name: app.actuator.write-query
               value: {{.Values.environment.backend.isAlive.write}}
             - name: config.routineBalance
-              value: {{.Values.environment.backend.routineBalance}}
+              value: "{{.Values.environment.backend.routineBalance}}"
             - name: config.trxClose
-              value: {{.Values.environment.backend.trxCloseCashier}}
+              value: "{{.Values.environment.backend.trxCloseCashier}}"
             - name: config.trxOpen
-              value: {{.Values.environment.backend.trxOpenCashier}}
+              value: "{{.Values.environment.backend.trxOpenCashier}}"
             - name: config.trxCodeMoveCashInventory
-              value: {{.Values.environment.backend.trxCodeMoveCashInventory}}
+              value: "{{.Values.environment.backend.trxCodeMoveCashInventory}}"
             - name: config.codeTrxCloseCash
-              value: {{.Values.environment.backend.codeTrxCloseCash}}
+              value: "{{.Values.environment.backend.codeTrxCloseCash}}"
             - name: config.codeTrxOpenCash
-              value: {{.Values.environment.backend.codeTrxOpenCash}}
+              value: "{{.Values.environment.backend.codeTrxOpenCash}}"
             - name: config.openDayCode
-              value: {{.Values.environment.backend.openDayCode}}
+              value: "{{.Values.environment.backend.openDayCode}}"
             - name: config.routineOfflineStatus
-              value: {{.Values.environment.backend.routineOfflineStatus}}
+              value: "{{.Values.environment.backend.routineOfflineStatus}}"
             - name: config.routineDateHost
-              value: {{.Values.environment.backend.routineDateHost}}
+              value: "{{.Values.environment.backend.routineDateHost}}"
             - name: config.trxEgresoCode
-              value: {{.Values.environment.backend.trxEgressCode}}
+              value: "{{.Values.environment.backend.trxEgressCode}}"
             - name: config.startDayTrxCode
               value: {{.Values.environment.backend.startDayTrxCode}}
           image: {{ .Values.services.registry}}{{.Values.services.transactionEngine.image}}:{{.Values.services.transactionEngine.tag }}
