@@ -306,7 +306,7 @@ services:
       url: /v1/actuator
   specsView:
     image: jt-frontend-kube-dev
-    tag: dev.1.0.32
+    tag: dev.1.0.33
     typeService: C
     port: 8080
   operationView:
@@ -397,7 +397,7 @@ services:
       url: /actuator
   distributorView:
     image: distributor-view-kube
-    tag: dev.1.1.25.f
+    tag: dev.1.1.27.a
     port: 8080
     typeService: C
   distributor:
