@@ -298,7 +298,7 @@ services:
       delay: 200
   management:
     image: operation-management-service-kube
-    tag: v7.6.i.c
+    tag: v7.6.i.d
     port: 2107
     typeService: C
     memoryLimit: 1400Mi
