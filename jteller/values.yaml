@@ -82,6 +82,7 @@ environment:
     routineDateHost: 618
     trxEgressCode: 1
     startDayTrxCode: 115
+    voucherServer: https://keycloak.bytesw.cloud:30010
     isAlive:
       enable: false
       namespace: is-alive
@@ -136,6 +137,12 @@ environment:
       entityStatusAccountId: 2
       entityStatusSignatureId: 5
       deleteUsedCard: 0
+    offline:
+      queryTrxStatus: 616
+      method: "1" #1 - Verificación por ping , 2 -Verificación por endpoint
+      routineCheckConnectionStatus: 615
+      timeout: 3000
+      enable: 0
   frontend:
     aceptedUrls:
       - http://172.16.10.101:30010

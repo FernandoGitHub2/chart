@@ -216,13 +216,21 @@ spec:
             - name: config.openDayCode
               value: "{{.Values.environment.backend.openDayCode}}"
             - name: config.routineOfflineStatus
-              value: "{{.Values.environment.backend.routineOfflineStatus}}"
+              value: "{{.Values.environment.backend.offline.queryTrxStatus}}"
             - name: config.routineDateHost
               value: "{{.Values.environment.backend.routineDateHost}}"
             - name: config.trxEgresoCode
               value: "{{.Values.environment.backend.trxEgressCode}}"
             - name: config.startDayTrxCode
               value: "{{.Values.environment.backend.startDayTrxCode}}"
+            - name: offline.method
+              value: "{{.Values.environment.backend.offline.method}}"
+            - name: offline.codeRoutine
+              value: "{{.Values.environment.backend.offline.routineCheckConnectionStatus}}"
+            - name: offline.timeout
+              value: "{{.Values.environment.backend.offline.timeout}}"
+            - name: offline.enable
+              value: "{{.Values.environment.backend.offline.enable}}"
           image: {{ .Values.services.registry}}{{.Values.services.transactionEngine.image}}:{{.Values.services.transactionEngine.tag }}
           imagePullPolicy: IfNotPresent
           {{- if and (hasKey .Values.services.transactionEngine "actuator") (eq (int .Values.actuator) 1) }}
