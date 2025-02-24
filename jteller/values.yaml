@@ -355,7 +355,7 @@ services:
       url: /actuator
   logdat:
     image: logdat-jteller-service-kube
-    tag: v7.6.e.f.c
+    tag: v7.6.e.f.d
     port: 8080
     typeService: C
     memoryLimit: 512Mi
