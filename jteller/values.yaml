@@ -391,12 +391,12 @@ services:
       url: /v1/actuator
   firmasView:
     image: firmas-front-kube
-    tag: dev.1.1.14.1
+    tag: dev.1.1.14.2
     port: 8080
     typeService: C
   firmas:
     image: firmas-service-kube
-    tag: v7.6.j.d
+    tag: v7.6.j.e
     port: 2114
     typeService: C
     memoryLimit: 1200Mi
