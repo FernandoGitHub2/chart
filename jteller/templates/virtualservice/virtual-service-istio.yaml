@@ -251,7 +251,7 @@ spec:
             port:
               number: 8080
       rewrite:
-        uri: /
+        uri: '/'
     - match:
         - uri:
             prefix: /api/operation-management-service
