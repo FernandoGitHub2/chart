@@ -377,7 +377,7 @@ spec:
             port:
               number: 8080
       rewrite:
-        uri: ' '
+        uri: '/'
     - match:
         - uri:
             prefix: /service/is-alive-service

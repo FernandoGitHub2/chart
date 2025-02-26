@@ -78,7 +78,6 @@ environment:
     trxOpenCashier: 115
     trxCodeMoveCashInventory: 9692
     openDayCode: 9111
-    routineOfflineStatus: 616
     routineDateHost: 618
     trxEgressCode: 1
     startDayTrxCode: 115
@@ -377,8 +376,7 @@ services:
     image: keycloak
     tag: 23.0.0
     port: 8080
-    typeService: N
-    nodePort: 30012
+    typeService: C
     proxy: edge
     hostname: false
   hermes:
