@@ -303,7 +303,17 @@ spec:
             port:
               number: 8080
       rewrite:
-        uri: ' '
+        uri: '/'
+    - match:
+        - uri:
+            prefix: /admin-view
+      route:
+        - destination:
+            host: admin-view
+            port:
+              number: 8080
+      rewrite:
+        uri: '/'
     - match:
         - uri:
             prefix: /service/integrator
