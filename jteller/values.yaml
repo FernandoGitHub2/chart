@@ -52,7 +52,7 @@ environment:
       secret: AHWdclMePbiqj2VNZOCcQb9zIJH6GOU1
     isAlive:
       resource: is-alive-backend
-      secret: l6z2UuOZkTwsBLXZeqkWVBRsOrVadhPd
+      secret: nTRlAtHrcE6jaFTTPt3ttOizObqNlWcB
     realmInHeader: jteller
     adminUser: YWRtaW4=
     adminPassword: YWRtaW4=
