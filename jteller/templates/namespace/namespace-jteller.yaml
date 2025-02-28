@@ -1,4 +1,4 @@
-{{- if and (eq (int .Values.executionMode) 0) (.Values.createNamespace) }}
+{{- if .Values.createNamespace | default false }}
 apiVersion: v1
 kind: Namespace
 metadata:

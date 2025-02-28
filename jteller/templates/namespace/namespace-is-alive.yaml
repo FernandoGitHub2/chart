@@ -1,4 +1,4 @@
-{{- if and (.Values.createNamespace) (.Values.environment.backend.isAlive.enable | default false) (eq (int .Values.executionMode) 2) }}
+{{- if and (.Values.createNamespace | default false) (.Values.environment.backend.isAlive.enable | default false) }}
 apiVersion: v1
 kind: Namespace
 metadata:
