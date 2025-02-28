@@ -153,6 +153,7 @@ environment:
     password: bWluaW8xMjM=
 replicas: 1
 namespace: jteller
+createNamespace: true
 executionMode: 2 # 0 - arquitectura, 1 - database, 2 - jteller
 verifyDevice: 0
 actuator: 1

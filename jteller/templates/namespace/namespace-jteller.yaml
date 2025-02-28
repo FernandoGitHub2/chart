@@ -1,14 +1,14 @@
-{{/*{{- if eq (int .Values.executionMode) 0 }}*/}}
-{{/*apiVersion: v1*/}}
-{{/*kind: Namespace*/}}
-{{/*metadata:*/}}
-{{/*  labels:*/}}
-{{/*    {{- if .Values.istio.enable | default false}}*/}}
-{{/*    istio-injection: enabled*/}}
-{{/*    {{- end }}*/}}
-{{/*    kubernetes.io/metadata.name: {{.Values.namespace}}*/}}
-{{/*  name: {{.Values.namespace}}*/}}
-{{/*spec:*/}}
-{{/*  finalizers:*/}}
-{{/*    - kubernetes*/}}
-{{/*  {{- end }}*/}}
+{{- if and (eq (int .Values.executionMode) 0) (.Values.createNamespace) }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    {{- if .Values.istio.enable | default false}}
+    istio-injection: enabled
+    {{- end }}
+    kubernetes.io/metadata.name: {{.Values.namespace}}
+  name: {{.Values.namespace}}
+spec:
+  finalizers:
+    - kubernetes
+  {{- end }}
