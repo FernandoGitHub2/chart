@@ -153,7 +153,7 @@ environment:
     password: bWluaW8xMjM=
 replicas: 1
 namespace: jteller
-createNamespace: true
+createNamespace: false
 executionMode: 2 # 0 - arquitectura, 1 - database, 2 - jteller
 verifyDevice: 0
 actuator: 1
@@ -296,7 +296,7 @@ services:
       url: /actuator
   transactionEngine:
     image: transaction-engine-service-kube
-    tag: v7.6.n.g.i
+    tag: v7.6.n.g.k
     port: 2107
     typeService: C
     memoryLimit: 700Mi
@@ -313,12 +313,12 @@ services:
       url: /v1/actuator
   specsView:
     image: jt-frontend-kube-dev
-    tag: dev.1.0.34.a
+    tag: dev.1.0.34.c
     typeService: C
     port: 8080
   operationView:
     image: jt-operation-view-kube-dev
-    tag: dev.1.0.84.184.4
+    tag: dev.1.0.84.184.5
     typeService: C
     port: 8080
   security:
@@ -390,7 +390,7 @@ services:
       url: /v1/actuator
   firmasView:
     image: firmas-front-kube
-    tag: dev.1.1.14.2
+    tag: dev.1.1.14.3
     port: 8080
     typeService: C
   firmas:
