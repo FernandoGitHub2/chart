@@ -279,10 +279,9 @@ services:
   registryIsAlive: 277232507401.dkr.ecr.us-west-2.amazonaws.com/is-alive/
   catalog:
     image: catalog-service-kube
-    tag: v7.6.h.a
+    tag: v7.6.h.b
     port: 2102
     memoryLimit: 750Mi
-    replicas: 1
     typeService: C
     actuator:
       url: /actuator
@@ -305,7 +304,7 @@ services:
       delay: 200
   management:
     image: operation-management-service-kube
-    tag: v7.6.i.e
+    tag: v7.6.i.f.2
     port: 2107
     typeService: C
     memoryLimit: 1400Mi
@@ -318,7 +317,7 @@ services:
     port: 8080
   operationView:
     image: jt-operation-view-kube-dev
-    tag: dev.1.0.84.184.5
+    tag: dev.1.0.84.184.6
     typeService: C
     port: 8080
   security:
@@ -390,12 +389,12 @@ services:
       url: /v1/actuator
   firmasView:
     image: firmas-front-kube
-    tag: dev.1.1.14.3
+    tag: dev.1.1.14.4
     port: 8080
     typeService: C
   firmas:
     image: firmas-service-kube
-    tag: v7.6.j.e
+    tag: v7.6.j.f.a
     port: 2114
     typeService: C
     memoryLimit: 1200Mi
@@ -476,6 +475,6 @@ services:
     typeService: C
   transactionManager:
     image: transaction-manager-kube
-    tag: dev.0.0.5
+    tag: dev.0.0.7
     port: 8080
     typeService: C
