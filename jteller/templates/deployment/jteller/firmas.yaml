@@ -21,6 +21,13 @@ spec:
       labels:
         app: {{ .Release.Name }}-firmas
     spec:
+{{/*      initContainers:*/}}
+{{/*        - name: liquibase-executor*/}}
+{{/*          image: vasquezfernando/liquibase:1.0.0*/}}
+{{/*          imagePullPolicy: IfNotPresent*/}}
+{{/*          env:*/}}
+{{/*            - name: liquibase.datasources.default.change-log*/}}
+{{/*              value: classpath:db/firmas/{{.Values.environment.database.type}}/db.changelog-master.xml*/}}
       containers:
           - env:
             - name: JAVA_OPTS

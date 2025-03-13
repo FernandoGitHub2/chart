@@ -75,14 +75,14 @@ data:
           password: ENC(dJKu9CFbtZHdPDDtEmuLLA==)
           clientSecret: ENC(NDHNygfjL5G/UENdwCp7hYf+iXS+t76eyQWG8f6cgjLNzN6Cv7cEHsTAtK0YnGA7)
       keycloak:
-        server-url: ${admin-keycloak-url:https://keycloak.bytesw.cloud:30000/}
-        admin-keycloak-realm: ${admin-keycloak-realm:JTeller}
-        admin-user: admin
-        admin-password: admin
+        server-url: {{.Values.environment.keycloak.url}}
+        admin-keycloak-realm: {{.Values.environment.keycloak.realm}}
+        admin-user: {{.Values.environment.keycloak.adminUser}}
+        admin-password: {{.Values.environment.keycloak.adminUser}}
         admin-client-id: admin-cli
         configuration: /keycloak/keycloak.json
-        username: avelasco
-        password: Avelasco
+        username: {{.Values.environment.keycloak.adminUser}}
+        password: {{.Values.environment.keycloak.adminPassword}}
       resource:
         config:
           enabled: true

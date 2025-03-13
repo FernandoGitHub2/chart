@@ -55,7 +55,7 @@ environment:
       secret: nTRlAtHrcE6jaFTTPt3ttOizObqNlWcB
     realmInHeader: jteller
     adminUser: YWRtaW4=
-    adminPassword: YWRtaW4=
+    adminPassword: QWRtaW4=
   backend:
     resolver: fixed
     timeZone: America/Guatemala
@@ -465,7 +465,7 @@ services:
     typeService: C
   isAliveBatch:
     image: is-alive-batch-monitor
-    tag: dev.0.0.29
+    tag: dev.0.0.29.a
     port: 8080
     typeService: C
   isAliveMonitor:
