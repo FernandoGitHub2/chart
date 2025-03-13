@@ -63,6 +63,8 @@ spec:
               value: {{.Values.environment.keycloak.isAlive.secret}}
             - name: JAVA_OPTS
               value: -Xms300m -Xmx800m
+            - name: logging.level.org.keycloak
+              value: TRACE
           image: {{.Values.services.registryIsAlive | default .Values.services.registry}}{{.Values.services.isAliveBatch.image}}:{{.Values.services.isAliveBatch.tag}}
           imagePullPolicy: IfNotPresent
           name: is-alive-batch-monitor
