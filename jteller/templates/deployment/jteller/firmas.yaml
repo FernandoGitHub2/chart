@@ -21,13 +21,32 @@ spec:
       labels:
         app: {{ .Release.Name }}-firmas
     spec:
-{{/*      initContainers:*/}}
-{{/*        - name: liquibase-executor*/}}
-{{/*          image: vasquezfernando/liquibase:1.0.0*/}}
-{{/*          imagePullPolicy: IfNotPresent*/}}
-{{/*          env:*/}}
-{{/*            - name: liquibase.datasources.default.change-log*/}}
-{{/*              value: classpath:db/firmas/{{.Values.environment.database.type}}/db.changelog-master.xml*/}}
+      initContainers:
+        - name: liquibase-executor
+          image: vasquezfernando/liquibase:1.0.0
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: liquibase.datasources.default.change-log
+              value: classpath:db/firmas/{{.Values.environment.database.type}}/db.changelog-master.xml
+            - name: spring.datasource.url
+              value: "{{ .Values.environment.database.url }}{{if eq .Values.environment.database.type "mysql"}}{{.Values.environment.database.signatureUsername | b64dec}}?useUnicode=true{{end}}"
+            - name: spring.liquibase.enable
+              value: "{{ .Values.liquibaseEnable }}"
+            {{- if eq .Values.environment.database.type "oracle" }}
+            - name: spring.datasource.driver-class-name
+              value: "oracle.jdbc.OracleDriver"
+            - name: spring.jpa.database-platform
+              value: "org.hibernate.dialect.Oracle12cDialect"
+            - name: spring.jpa.properties.hibernate.dialect
+              value: "org.hibernate.dialect.Oracle12cDialect"
+            {{- else if eq .Values.environment.database.type "mysql" }}
+            - name: spring.datasource.driver-class-name
+              value: "com.mysql.cj.jdbc.Driver"
+            - name: spring.jpa.database-platform
+              value: "org.hibernate.dialect.MySQL5InnoDBDialect"
+            - name: spring.jpa.properties.hibernate.dialect
+              value: "org.hibernate.dialect.MySQL5InnoDBDialect"
+            {{- end }}
       containers:
           - env:
             - name: JAVA_OPTS
