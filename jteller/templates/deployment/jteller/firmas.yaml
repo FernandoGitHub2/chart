@@ -32,6 +32,8 @@ spec:
               value: "{{ .Values.environment.database.url }}{{if eq .Values.environment.database.type "mysql"}}{{.Values.environment.database.signatureUsername | b64dec}}?useUnicode=true{{end}}"
             - name: liquibase.datasources.defaul.enabled
               value: "{{ .Values.liquibaseEnable }}"
+            - name: liquibase.datasources.defaul.contexts
+              value: "{{ .Values.liquibaseContext }}{{- if .Values.liquibaseInit }},init{{- end }}"
             - name: datasources.default.username
               valueFrom:
                 secretKeyRef:
