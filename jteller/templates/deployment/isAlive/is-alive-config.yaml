@@ -90,6 +90,13 @@ spec:
             - mountPath: /keycloak
               name: keycloak-config-volume
       dnsPolicy: ClusterFirst
+      {{- if .Values.istio.ssl.develop }}
+      hostAliases:
+        - ip: {{.Values.istio.ssl.ip}}
+          hostnames:
+            - {{.Values.istio.ssl.appHost}}
+            - {{.Values.istio.ssl.keycloakHost}}
+      {{- end }}
       imagePullSecrets:
         - name: {{.Values.services.secretRegistry}}
       restartPolicy: Always
