@@ -394,7 +394,7 @@ services:
     typeService: C
   firmas:
     image: firmas-service-kube
-    tag: v7.6.j.f.a
+    tag: v7.6.j.f.c
     port: 2114
     typeService: C
     memoryLimit: 1200Mi
