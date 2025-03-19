@@ -407,7 +407,7 @@ services:
     typeService: C
   distributor:
     image: distributor-service-kube
-    tag: v7.6.i.c
+    tag: v7.6.i.e
     port: 8080
     typeService: C
     memoryLimit: 512Mi
@@ -415,7 +415,7 @@ services:
       url: /distributor-service/actuator
   distributorClient:
     image: distributor-client-service-kube
-    tag: v7.6.0.a
+    tag: v7.6.f
     port: 8080
     typeService: C
     memoryLimit: 600Mi
