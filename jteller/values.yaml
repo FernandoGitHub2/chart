@@ -354,7 +354,7 @@ services:
       url: /actuator
   logdat:
     image: logdat-jteller-service-kube
-    tag: v7.6.e.f.e
+    tag: v7.6.e.h
     port: 8080
     typeService: C
     memoryLimit: 512Mi
@@ -394,7 +394,7 @@ services:
     typeService: C
   firmas:
     image: firmas-service-kube
-    tag: v7.6.j.f.c
+    tag: v7.6.j.f.e
     port: 2114
     typeService: C
     memoryLimit: 1200Mi
