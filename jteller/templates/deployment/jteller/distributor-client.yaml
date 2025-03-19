@@ -137,9 +137,9 @@ spec:
         - name: logging.level.org.hibernate.type.descriptor.sql.BasicBinder
           value: "{{ .Values.environment.database.sqlBasicBinder }}"
         - name: spring.liquibase.enable
-          value: "{{ .Values.liquibaseEnable }}"
+          value: "false"
         - name: migration.enabled
-          value: "{{ .Values.liquibaseEnable }}"
+          value: "false"
         - name: spring.liquibase.contexts
           value: "{{ .Values.liquibaseContext }}"
         - name: migration.context
