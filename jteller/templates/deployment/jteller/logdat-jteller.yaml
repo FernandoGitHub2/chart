@@ -28,7 +28,7 @@ spec:
             - name: liquibase.datasources.default.change-log
               value: classpath:db/logdat/{{.Values.environment.database.type}}/db.changelog-master.xml
             - name: datasources.default.url
-              value: "{{ .Values.environment.database.url }}{{if eq .Values.environment.database.type "mysql"}}{{.Values.environment.database.logdatUsername | b64dec}}?useUnicode=true&characterEncoding=UTF-8{{end}}"
+              value: "{{ .Values.environment.database.url }}{{if eq .Values.environment.database.type "mysql"}}{{.Values.environment.database.logdatUsername | b64dec}}?useUnicode=true{{end}}"
             - name: liquibase.datasources.defaul.enabled
               value: "{{ .Values.liquibaseEnable }}"
             - name: liquibase.datasources.defaul.contexts
