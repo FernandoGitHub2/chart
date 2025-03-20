@@ -28,7 +28,7 @@ spec:
     spec:
       initContainers:
         - name: liquibase-executor
-          image: vasquezfernando/liquibase:1.0.6.3
+          image: vasquezfernando/liquibase:1.0.6.4
           imagePullPolicy: IfNotPresent
           env:
             - name: liquibase.datasources.default.change-log
