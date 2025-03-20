@@ -338,7 +338,7 @@ services:
       url: /v1/actuator
   personData:
     image: person-data-service
-    tag: jtv7.6.b
+    tag: jtv7.6.c
     port: 8080
     typeService: C
     memoryLimit: 512Mi
@@ -346,7 +346,7 @@ services:
       url: /actuator
   personConf:
     image: person-conf-service
-    tag: jtv7.6.0.a
+    tag: jtv7.6.0.b
     port: 8080
     typeService: C
     memoryLimit: 350Mi
@@ -429,7 +429,7 @@ services:
     memoryLimit: 256Mi
   common:
     image: common-service-kube
-    tag: jtv7.6.c
+    tag: jtv7.6.d
     port: 8080
     typeService: C
     memoryLimit: 750Mi
