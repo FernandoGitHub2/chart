@@ -53,6 +53,9 @@ data:
         locale: es
         locale-resolver: fixed
     app:
+      actuator:
+        read-query: "select count(*) from IS_ALIVE_CONTROL"
+        write-query: "insert into IS_ALIVE_CONTROL(CONTROL_DATE) VALUES (SYSDATE)"
       commons:
         report:
           maxNumberItemsReport: 1000
@@ -68,6 +71,10 @@ data:
       contexts: ${migration.context:production}
       enabled: ${migration.enabled:false}
     management:
+      endpoints:
+        web:
+          exposure:
+            include: health,metrics,prometheus
       health:
         probes:
           enabled: true
@@ -1046,6 +1053,21 @@ data:
             enforcementMode: DISABLED
     config:
       distEnable: 0
+    ---
+
+    spring:
+      profiles: test
+    server:
+      port: 0
+
+    ---
+
+    spring:
+      profiles: docker
+    eureka:
+      instance:
+        hostname: ${byte.net.hostname:transaction-catalog-service}
+        ipAddress: ${byte.net.address}
 kind: ConfigMap
 metadata:
   name: keycloak-transaction-catalog
