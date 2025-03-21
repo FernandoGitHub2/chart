@@ -14,7 +14,7 @@ data:
         configPath: ${k8s.configPath:NOT-SET}
         token: ${k8s.token:NOT-SET}
       prometheus:
-        url: http://172.16.10.105:30400/api/v1/query
+        url: {{.Values.environment.backend.isAlive.prometheus}}
     server:
       port: 8080
     spring:

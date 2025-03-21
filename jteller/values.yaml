@@ -82,11 +82,13 @@ environment:
     trxEgressCode: 1
     startDayTrxCode: 115
     voucherServer: https://keycloak.bytesw.cloud:30010
+    closeCashierUrl: http://172.16.10.108:9091/payment/transactions
     isAlive:
       enable: true
       namespace: is-alive
       read: select count(*) from jtellerv7.IS_ALIVE_CONTROL
       write: insert into jtellerv7.IS_ALIVE_CONTROL(CONTROL_DATE) VALUES (now())
+      prometheus:
     mail:
       host: smtp.gmail.com
       port: 587
@@ -461,7 +463,7 @@ services:
   isAliveView:
     image: is-alive-frontend
     tag: dev.0.0.35
-    port: 80
+    port: 8080
     typeService: C
   isAliveBatch:
     image: is-alive-batch-monitor

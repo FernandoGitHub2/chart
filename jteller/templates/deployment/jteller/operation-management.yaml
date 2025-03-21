@@ -216,6 +216,8 @@ spec:
               value: "false"
             - name: ip_server
               value: "{{.Values.environment.backend.voucherServer}}"
+            - name: config.transactions-url
+              value: "{{.Values.environment.backend.closeCashierUrl}}"
           image: {{.Values.services.registry}}{{.Values.services.management.image}}:{{.Values.services.management.tag }}
           imagePullPolicy: IfNotPresent
           {{- if and (hasKey .Values.services.management "actuator") (eq (int .Values.actuator) 1) }}
