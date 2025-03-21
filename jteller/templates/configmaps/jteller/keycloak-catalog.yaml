@@ -22,7 +22,7 @@ data:
       application:
         name: catalog-service
       datasource:
-        url: ${db.local.host:jdbc:oracle:thin:@//172.16.21.10:1521:xe}
+        url: ${db.local.host:jdbc:oracle:thin:@//172.16.10.135:1521/orclpdb1}
         username: ${db.local.user:jtellerv7}
         password: ${db.local.password:jtellerv7}
         driver-class-name: oracle.jdbc.OracleDriver
@@ -44,7 +44,7 @@ data:
           org:
             hibernate:
               envers:
-                default_schema: jtellerv7
+                default_schema: logdat
                 do_not_audit_optimistic_locking_field: false
                 store_data_at_delete: true
       jackson:
@@ -54,7 +54,21 @@ data:
       mvc:
         locale-resolver: fixed
         locale: es
+    #security:
+    #  basic:
+    #    enabled: false
+    #  oauth2:
+    #    resource:
+    #      id: api
+    #      token-info-uri: ${auth-server.url}/oauth/check_token
+    #      jwt:
+    #        key-uri: ${auth-server.url}/oauth/token_key
+    #auth-server:
+    #  url: ${auth-server.service.url:http://172.16.10.105:30000/api/auth-server/auth-server}
     app:
+      actuator:
+        read-query: "select count(*) from IS_ALIVE_CONTROL"
+        write-query: "insert into IS_ALIVE_CONTROL(CONTROL_DATE) VALUES (NOW())"
       commons:
         report:
           maxNumberItemsReport: 1000
@@ -71,6 +85,10 @@ data:
       contexts: ${migration.context:production}
       enabled: ${migration.enabled:false}
     management:
+      endpoints:
+        web:
+          exposure:
+            include: health,metrics,prometheus
       health:
         probes:
           enabled: true
@@ -152,7 +170,7 @@ data:
       auth-server-url: ${keycloak.auth:https://keycloak.bytesw.cloud:30000}
       bearer-only: true
       credentials:
-        secret: ${keycloak.secret:smKzP5GNRS4XieHByrqzIsppscABge3L}
+        secret: ${keycloak.secret:Py1WDjKToqr0TUtHqTjJsL4En9uDW3V8}
       config:
         number: 1 # 1 -> resources/file.json , 2 -> conf in yaml
       securityConstraints:
@@ -1484,13 +1502,13 @@ data:
       mailResetPass: 1
       personConfService: http://person-conf-service:8080
       catalogService: http://catalog:2102
-      savePersonURL: http://172.16.21.10:30012/service/person-data/person/savePerson
-      updatePersonURL: http://172.16.21.10:30012/service/person-data/person/updatePerson
-      getPersonURL: http://172.16.21.10:30012/service/person-data/person/getPerson
+      savePersonURL: http://172.16.10.105:30012/service/person-data/person/savePerson
+      updatePersonURL: http://172.16.10.105:30012/service/person-data/person/updatePerson
+      getPersonURL: http://172.16.10.105:30012/service/person-data/person/getPerson
       distEnable: 0
       #Se agrega variable para controlar si es necesario que las jornadas se cierren para que un usuario cambie de jornada
-      # 0 - No se permite cambio de jornada si no se cierran las jornadas.
-      # 1 - Se permite cambio de jornada aunque no se cierren las jornadas.
+      # 0 - Se permite cambio de jornada aunque no se cierren las jornadas.
+      # 1 - No se permite cambio de jornada si no se cierran las jornadas.
       validUserMove: 1
       keycloak:
         username: admin
