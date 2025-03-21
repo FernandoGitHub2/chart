@@ -34,7 +34,7 @@ spec:
             - name: liquibase.datasources.defaul.enabled
               value: "{{ .Values.liquibaseEnable }}"
             - name: liquibase.datasources.defaul.contexts
-              value: "{{ .Values.liquibaseContext }}{{- if .Values.liquibaseInit }}"
+              value: "{{ .Values.liquibaseContext }}"
             - name: datasources.default.username
               valueFrom:
                 secretKeyRef:
