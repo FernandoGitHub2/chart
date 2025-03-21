@@ -6,17 +6,19 @@ metadata:
   namespace: {{ .Values.namespace }}
 data:
   person-data-application.yml: |
-    server:
-      port: ${server.port}
+    app:
+      actuator:
+        read-query: "select count(*) from JTELLERV7.IS_ALIVE_CONTROL"
+        write-query: "insert into JTELLERV7.IS_ALIVE_CONTROL(CONTROL_DATE) VALUES (SYSDATE)"
     spring:
       application:
         name: person-data-service
       datasource:
         database-type: oracle
-        url: ${db.local.host}
+        url: ${db.local.host:jdbc:oracle:thin:@//172.16.10.135:1521/orclpdb1}
         driverClassName: oracle.jdbc.OracleDriver
-        username: ${db.username}
-        password: ${db.password}
+        username: ${db.username:jsigperson_data}
+        password: ${db.password:jsigperson_data}
         minimum-idle: 1
         maximum-pool-size: 1
       jpa:
@@ -30,10 +32,22 @@ data:
                 store_data_at_delete: true
       liquibase:
         change-log: classpath:changelog/db.changelog-master.xml
-        contexts: prod, develop, oracle
-        enabled: {{.Values.liquibaseEnable}}
+        contexts: prod, oracle
+        enabled: true
     #  profiles:
     #    include: 'keycloak'
+    management:
+      endpoints:
+        web:
+          exposure:
+            include: health,info,metrics,prometheus
+          base-path: /service/person-data/actuator/
+      health:
+        probes:
+          enabled: true
+      endpoint:
+        health:
+          show-details: always
     hazelcast:
       network:
         join:
@@ -47,7 +61,9 @@ data:
       vistasService: http://vistas-service:8080
       host: person-conf-service
       port: 8080
-      customerEnable: ${customer.enable:0}
+      customerEnable: 1
+      isAlive:
+        enable: 0
     byte:
       conf:
         registryTypeId: 21
@@ -124,10 +140,10 @@ data:
                   patterns:
                     - /service/person-data/person-pep-info/*
       ssl-required: external
-      auth-server-url: ${keycloak.auth-server-url}
+      auth-server-url: https://keycloak.bytesw.cloud:30000
       bearer-only: true
       credentials:
-        secret: ${keycloak.credentials.secret}
+        secret: 3b329590-55a9-4580-9696-e2196fd7d325
       policy-enforcer-config:
         paths:
           -   methods:
@@ -376,6 +392,10 @@ data:
                     scopes:
                       - update
               path: /service/person-data/person-pep-info/*
-
-
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+            path: /service/person-data/actuator/**
+            enforcementMode: DISABLED
   {{- end }}
