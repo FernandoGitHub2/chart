@@ -281,7 +281,7 @@ services:
   registryIsAlive: 277232507401.dkr.ecr.us-west-2.amazonaws.com/is-alive/
   catalog:
     image: catalog-service-kube
-    tag: v7.6.h.b
+    tag: v7.6.h.c
     port: 2102
     memoryLimit: 750Mi
     typeService: C
