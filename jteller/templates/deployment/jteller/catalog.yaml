@@ -202,7 +202,7 @@ spec:
             initialDelaySeconds: {{ .Values.services.catalog.actuator.delay | default .Values.services.actuatorDelay}}
             periodSeconds: 5
             successThreshold: 1
-            timeoutSeconds: 1
+            timeoutSeconds: 2
           readinessProbe:
             failureThreshold: 3
             httpGet:
@@ -211,7 +211,7 @@ spec:
               scheme: HTTP
             periodSeconds: 10
             successThreshold: 3
-            timeoutSeconds: 1
+            timeoutSeconds: 2
           {{- end }}
           resources:
             limits:
