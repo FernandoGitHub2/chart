@@ -345,7 +345,7 @@ services:
     typeService: C
     memoryLimit: 512Mi
     actuator:
-      url: /actuator
+      url: /service/person-data
   personConf:
     image: person-conf-service
     tag: jtv7.6.0.b
