@@ -1,5 +1,6 @@
 {{- if eq (int .Values.executionMode) 2 }}
 {{- if ne (int .Values.signature) 0}}
+{{- $name := ternary "db.changelog-master-init.xml" "db.changelog-master.xml" .Values.liquibaseInit }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -23,11 +24,11 @@ spec:
     spec:
       initContainers:
         - name: liquibase-executor
-          image: vasquezfernando/liquibase:1.0.6.5
+          image: vasquezfernando/liquibase:1.0.6.6
           imagePullPolicy: IfNotPresent
           env:
             - name: liquibase.datasources.default.change-log
-              value: classpath:db/firmas/{{.Values.environment.database.type}}/db.changelog-master.xml
+              value: classpath:db/firmas/{{.Values.environment.database.type}}/{{$name}}
             - name: datasources.default.url
               value: "{{ .Values.environment.database.url }}{{if eq .Values.environment.database.type "mysql"}}{{.Values.environment.database.signatureUsername | b64dec}}?useUnicode=true{{end}}"
             - name: liquibase.datasources.defaul.enabled
