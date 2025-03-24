@@ -53,16 +53,6 @@ spec:
                 secretKeyRef:
                   key: isAlivePassword
                   name: general-secret
-            - name: keycloak-realm
-              value: {{.Values.environment.keycloak.realm}}
-            - name: keycloak-url
-              value: {{.Values.environment.keycloak.url}}
-            - name: admin-keycloak-url
-              value: {{.Values.environment.keycloak.url}}
-            - name: keycloak-secret
-              value: {{.Values.environment.keycloak.isAlive.secret}}
-            - name: JAVA_OPTS
-              value: -Xms300m -Xmx800m
             - name: byte.keycloak.admin-user
               valueFrom:
                 secretKeyRef:
@@ -83,26 +73,16 @@ spec:
                 secretKeyRef:
                   key: passcore
                   name: general-secret
-{{/*            - name: byte.keycloak.admin-user*/}}
-{{/*              valueFrom:*/}}
-{{/*                secretKeyRef:*/}}
-{{/*                  key: keycloakAdminUsername*/}}
-{{/*                  name: general-secret*/}}
-{{/*            - name: byte.keycloak.admin-password*/}}
-{{/*              valueFrom:*/}}
-{{/*                secretKeyRef:*/}}
-{{/*                  key: keycloakAdminPassword*/}}
-{{/*                  name: general-secret*/}}
-{{/*            - name: byte.keycloak.username*/}}
-{{/*              valueFrom:*/}}
-{{/*                secretKeyRef:*/}}
-{{/*                  key: usercore*/}}
-{{/*                  name: general-secret*/}}
-{{/*            - name: byte.keycloak.password*/}}
-{{/*              valueFrom:*/}}
-{{/*                secretKeyRef:*/}}
-{{/*                  key: passcore*/}}
-{{/*                  name: general-secret*/}}
+            - name: keycloak-realm
+              value: {{.Values.environment.keycloak.realm}}
+            - name: keycloak-url
+              value: {{.Values.environment.keycloak.url}}
+            - name: admin-keycloak-url
+              value: {{.Values.environment.keycloak.url}}
+            - name: keycloak-secret
+              value: {{.Values.environment.keycloak.isAlive.secret}}
+            - name: JAVA_OPTS
+              value: -Xms300m -Xmx800m
           image: {{.Values.services.registryIsAlive | default .Values.services.registry}}{{.Values.services.isAliveBatch.image}}:{{.Values.services.isAliveBatch.tag}}
           imagePullPolicy: IfNotPresent
           name: is-alive-batch-monitor
