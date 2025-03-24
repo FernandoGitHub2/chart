@@ -6,6 +6,9 @@ metadata:
   namespace: {{.Values.namespace}}
 spec:
   template:
+    metadata:
+      labels:
+        app: liquibase-executor
     spec:
       restartPolicy: Never
       containers:
