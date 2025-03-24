@@ -3,26 +3,25 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: liquibase-executor
-  namespace: {{.Values.namespace}}
+  namespace: {{ .Values.namespace }}
 spec:
   template:
     metadata:
       labels:
         app: liquibase-executor
     spec:
-{{/*      restartPolicy: Never*/}}
       containers:
         - name: liquibase-executor
           image: vasquezfernando/liquibase:1.0.6.6
           imagePullPolicy: IfNotPresent
           env:
             - name: liquibase.datasources.default.change-log
-              value: classpath:db/distributor/core/{{.Values.environment.database.type}}/{{$name}}
+              value: classpath:db/distributor/core/{{ .Values.environment.database.type }}/{{ $name }}
             - name: datasources.default.url
-              value: "{{ .Values.environment.database.url }}{{if eq .Values.environment.database.type "mysql"}}{{.Values.environment.database.distributorUsername | b64dec}}?useUnicode=true{{end}}"
-            - name: liquibase.datasources.defaul.enabled
+              value: "{{ .Values.environment.database.url }}{{ if eq .Values.environment.database.type "mysql" }}{{ .Values.environment.database.distributorUsername | b64dec }}?useUnicode=true{{ end }}"
+            - name: liquibase.datasources.default.enabled
               value: "{{ .Values.liquibaseEnable }}"
-            - name: liquibase.datasources.defaul.contexts
+            - name: liquibase.datasources.default.contexts
               value: "{{ .Values.liquibaseContext }}{{- if .Values.liquibaseInit }},init{{- end }}"
             - name: datasources.default.username
               valueFrom:
@@ -38,6 +37,7 @@ spec:
             - name: datasources.default.driver-class-name
               value: "oracle.jdbc.OracleDriver"
             - name: spring.jpa.database-platform
+              value: "org.hibernate.dialect.OracleDialect"
             {{- else if eq .Values.environment.database.type "mysql" }}
             - name: datasources.default.driver-class-name
               value: "com.mysql.cj.jdbc.Driver"
