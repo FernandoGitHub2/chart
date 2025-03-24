@@ -78,7 +78,7 @@ spec:
                 secretKeyRef:
                   key: usercore
                   name: general-secret
-            - name: byte.keycloak.admin-password
+            - name: byte.keycloak.password
               valueFrom:
                 secretKeyRef:
                   key: passcore
