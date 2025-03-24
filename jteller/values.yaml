@@ -328,7 +328,7 @@ services:
     port: 1119
     typeService: C
     memoryLimit: 712Mi
-    replicas: 3
+    replicas: 1
     actuator:
       url: /actuator
   resource:
