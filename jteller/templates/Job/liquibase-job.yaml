@@ -1,8 +1,8 @@
 {{- $name := ternary "db.changelog-master-init.xml" "db.changelog-master.xml" .Values.liquibaseInit }}
-apiVersion: batch/v1
-kind: Job
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: liquibase-job
+  name: liquibase-executor
   namespace: {{.Values.namespace}}
 spec:
   template:
