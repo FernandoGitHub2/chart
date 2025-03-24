@@ -88,7 +88,7 @@ environment:
       namespace: is-alive
       read: select count(*) from jtellerv7.IS_ALIVE_CONTROL
       write: insert into jtellerv7.IS_ALIVE_CONTROL(CONTROL_DATE) VALUES (now())
-      prometheus:
+      prometheus: http://172.16.10.108:9091/api/v1/query
     mail:
       host: smtp.gmail.com
       port: 587
