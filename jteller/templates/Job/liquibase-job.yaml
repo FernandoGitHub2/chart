@@ -5,6 +5,10 @@ metadata:
   name: liquibase-executor
   namespace: {{ .Values.namespace }}
 spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: liquibase-executor
   template:
     metadata:
       labels:
