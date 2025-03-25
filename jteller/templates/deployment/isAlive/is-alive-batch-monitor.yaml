@@ -53,16 +53,16 @@ spec:
                 secretKeyRef:
                   key: isAlivePassword
                   name: general-secret
-            - name: byte.keycloak.admin-user
-              valueFrom:
-                secretKeyRef:
-                  key: keycloakAdminUsername
-                  name: general-secret
-{{/*            - name: byte.keycloak.admin-password*/}}
+{{/*            - name: byte.keycloak.admin-user*/}}
 {{/*              valueFrom:*/}}
 {{/*                secretKeyRef:*/}}
-{{/*                  key: keycloakAdminPassword*/}}
+{{/*                  key: keycloakAdminUsername*/}}
 {{/*                  name: general-secret*/}}
+            - name: byte.keycloak.admin-password
+              valueFrom:
+                secretKeyRef:
+                  key: keycloakAdminPassword
+                  name: general-secret
 {{/*            - name: byte.keycloak.username*/}}
 {{/*              valueFrom:*/}}
 {{/*                secretKeyRef:*/}}
