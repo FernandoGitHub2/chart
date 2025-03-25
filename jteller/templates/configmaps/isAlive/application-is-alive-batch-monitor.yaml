@@ -77,12 +77,12 @@ data:
       keycloak:
         server-url: {{.Values.environment.keycloak.url}}
         admin-keycloak-realm: {{.Values.environment.keycloak.realm}}
-        admin-user: {{.Values.environment.keycloak.adminUser}}
-        admin-password: {{.Values.environment.keycloak.adminUser}}
+        admin-user: ${KEYCLOAK_ADMIN:admin}
+        admin-password: ${KEYCLOAK_PASSWORD:admin}
         admin-client-id: admin-cli
         configuration: /keycloak/keycloak.json
-        username: {{.Values.environment.keycloak.adminUser}}
-        password: {{.Values.environment.keycloak.adminPassword}}
+        username: ${USERNAME:admin}
+        password: ${PASSWORD:admin}
       resource:
         config:
           enabled: true
