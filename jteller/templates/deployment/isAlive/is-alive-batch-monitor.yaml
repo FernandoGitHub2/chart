@@ -48,11 +48,11 @@ spec:
                 secretKeyRef:
                   key: isAliveUsername
                   name: general-secret
-{{/*            - name: db.password*/}}
-{{/*              valueFrom:*/}}
-{{/*                secretKeyRef:*/}}
-{{/*                  key: isAlivePassword*/}}
-{{/*                  name: general-secret*/}}
+            - name: db.password
+              valueFrom:
+                secretKeyRef:
+                  key: isAlivePassword
+                  name: general-secret
 {{/*            - name: byte.keycloak.admin-user*/}}
 {{/*              valueFrom:*/}}
 {{/*                secretKeyRef:*/}}
