@@ -56,28 +56,23 @@ spec:
             - name: KEYCLOAK_ADMIN
               valueFrom:
                 secretKeyRef:
-                  name: general-secret
                   key: keycloakAdminUsername
-{{/*            - name: byte.keycloak.admin-user*/}}
-{{/*              valueFrom:*/}}
-{{/*                secretKeyRef:*/}}
-{{/*                  key: keycloakAdminUsername*/}}
-{{/*                  name: general-secret-alive*/}}
-{{/*            - name: byte.keycloak.admin-password*/}}
-{{/*              valueFrom:*/}}
-{{/*                secretKeyRef:*/}}
-{{/*                  key: keycloakAdminPassword*/}}
-{{/*                  name: general-secret-alive*/}}
-{{/*            - name: byte.keycloak.username*/}}
-{{/*              valueFrom:*/}}
-{{/*                secretKeyRef:*/}}
-{{/*                  key: usercore*/}}
-{{/*                  name: general-secret-alive*/}}
-{{/*            - name: byte.keycloak.password*/}}
-{{/*              valueFrom:*/}}
-{{/*                secretKeyRef:*/}}
-{{/*                  key: passcore*/}}
-{{/*                  name: general-secret-alive*/}}
+                  name: general-secret-alive
+            - name: KEYCLOAK_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: keycloakAdminPassword
+                  name: general-secret-alive
+            - name: USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: usercore
+                  name: general-secret-alive
+            - name: PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: passcore
+                  name: general-secret-alive
             - name: keycloak-realm
               value: {{.Values.environment.keycloak.realm}}
             - name: keycloak-url
