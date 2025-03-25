@@ -47,32 +47,32 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: isAliveUsername
-                  name: general-secret
+                  name: general-secret-alive
             - name: db.password
               valueFrom:
                 secretKeyRef:
                   key: isAlivePassword
-                  name: general-secret
+                  name: general-secret-alive
             - name: byte.keycloak.admin-user
               valueFrom:
                 secretKeyRef:
                   key: keycloakAdminUsername
-                  name: general-secret
+                  name: general-secret-alive
             - name: byte.keycloak.admin-password
               valueFrom:
                 secretKeyRef:
                   key: keycloakAdminPassword
-                  name: general-secret
+                  name: general-secret-alive
             - name: byte.keycloak.username
               valueFrom:
                 secretKeyRef:
                   key: usercore
-                  name: general-secret
+                  name: general-secret-alive
             - name: byte.keycloak.password
               valueFrom:
                 secretKeyRef:
                   key: passcore
-                  name: general-secret
+                  name: general-secret-alive
             - name: keycloak-realm
               value: {{.Values.environment.keycloak.realm}}
             - name: keycloak-url

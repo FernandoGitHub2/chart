@@ -45,12 +45,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: isAliveUsername
-                  name: general-secret
+                  name: general-secret-alive
             - name: db.password
               valueFrom:
                 secretKeyRef:
                   key: isAlivePassword
-                  name: general-secret
+                  name: general-secret-alive
             - name: keycloak-realm
               value: {{.Values.environment.keycloak.realm}}
             - name: keycloak-url
