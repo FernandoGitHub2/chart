@@ -53,7 +53,7 @@ spec:
                 secretKeyRef:
                   key: isAlivePassword
                   name: general-secret-alive
-            - name: KEYCLOAK_ADMIN
+            - name: byte.keycloak.admin-user
               valueFrom:
                 secretKeyRef:
                   name: general-secret
