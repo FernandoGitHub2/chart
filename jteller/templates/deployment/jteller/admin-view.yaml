@@ -5,7 +5,10 @@ metadata:
   name: {{.Release.Name}}-admin-view
   namespace: {{ .Values.namespace }}
   labels:
-    {{- include "common.labels" . | nindent 4 }}
+    app: {{ .Chart.Name }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
 spec:
   {{- if hasKey .Values.services.adminView "replicas" }}
   replicas:  {{ .Values.services.adminView.replicas }}
