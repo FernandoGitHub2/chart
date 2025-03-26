@@ -4,11 +4,6 @@ kind: Deployment
 metadata:
   name: {{.Release.Name}}-admin-view
   namespace: {{ .Values.namespace }}
-  labels:
-    app: {{ .Chart.Name }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
 spec:
   {{- if hasKey .Values.services.adminView "replicas" }}
   replicas:  {{ .Values.services.adminView.replicas }}
@@ -24,6 +19,9 @@ spec:
     metadata:
       labels:
         app: {{.Release.Name}}-admin-view
+        chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+        release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
     spec:
       containers:
       - image: {{.Values.services.registry}}{{.Values.services.adminView.image}}:{{.Values.services.adminView.tag}}
