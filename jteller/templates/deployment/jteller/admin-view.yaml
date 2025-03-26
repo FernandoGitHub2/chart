@@ -4,6 +4,8 @@ kind: Deployment
 metadata:
   name: {{.Release.Name}}-admin-view
   namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "common.labels" . | nindent 4 }}
 spec:
   {{- if hasKey .Values.services.adminView "replicas" }}
   replicas:  {{ .Values.services.adminView.replicas }}
