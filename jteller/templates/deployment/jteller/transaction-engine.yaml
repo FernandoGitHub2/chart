@@ -26,6 +26,9 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}-transaction-engine
+        chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+        release: {{ .Release.Name }}
+        created-at: "{{ now | date "2006-01-02_15-04-05" }}"
     spec:
       initContainers:
         - name: liquibase-executor

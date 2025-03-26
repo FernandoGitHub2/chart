@@ -21,7 +21,7 @@ spec:
         app: {{.Release.Name}}-admin-view
         chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
         release: {{ .Release.Name }}
-        heritage: {{ .Release.Service }}
+        created-at: "{{ now | date "2006-01-02_15-04-05" }}"
     spec:
       containers:
       - image: {{.Values.services.registry}}{{.Values.services.adminView.image}}:{{.Values.services.adminView.tag}}
