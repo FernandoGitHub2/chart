@@ -221,6 +221,16 @@ spec:
               value: "{{.Values.environment.backend.voucherServer}}"
             - name: config.transactions-url
               value: "{{.Values.environment.backend.closeCashierUrl}}"
+            - name: config.login.username
+              valueFrom:
+                secretKeyRef:
+                  key: usercore
+                  name: general-secret
+            - name: config.login.password
+              valueFrom:
+                secretKeyRef:
+                  key: passcore
+                  name: general-secret
           image: {{.Values.services.registry}}{{.Values.services.management.image}}:{{.Values.services.management.tag }}
           imagePullPolicy: IfNotPresent
           {{- if and (hasKey .Values.services.management "actuator") (eq (int .Values.actuator) 1) }}

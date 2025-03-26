@@ -24,37 +24,6 @@ spec:
         release: {{ .Release.Name }}
         created-at: "{{ now | date "2006-01-02_15-04-05" }}"
     spec:
-      initContainers:
-        - name: liquibase-executor
-          image: vasquezfernando/liquibase:1.0.6.6
-          imagePullPolicy: IfNotPresent
-          env:
-            - name: liquibase.datasources.default.change-log
-              value: classpath:db/person/common/{{.Values.environment.database.type}}/{{$name}}
-            - name: datasources.default.url
-              value: "{{ .Values.environment.database.url }}{{if eq .Values.environment.database.type "mysql"}}{{.Values.environment.database.commonUsername | b64dec}}?useUnicode=true{{end}}"
-            - name: liquibase.datasources.defaul.enabled
-              value: "{{ .Values.liquibaseEnable }}"
-            - name: liquibase.datasources.defaul.contexts
-              value: "{{ .Values.liquibaseContext }}{{- if .Values.liquibaseInit }},init{{- end }}"
-            - name: datasources.default.username
-              valueFrom:
-                secretKeyRef:
-                  name: general-secret
-                  key: commonUsername
-            - name: datasources.default.password
-              valueFrom:
-                secretKeyRef:
-                  name: general-secret
-                  key: commonPassword
-            {{- if eq .Values.environment.database.type "oracle" }}
-            - name: datasources.default.driver-class-name
-              value: "oracle.jdbc.OracleDriver"
-            - name: spring.jpa.database-platform
-            {{- else if eq .Values.environment.database.type "mysql" }}
-            - name: datasources.default.driver-class-name
-              value: "com.mysql.cj.jdbc.Driver"
-            {{- end }}
       containers:
       - env:
         - name: JAVA_OPTS

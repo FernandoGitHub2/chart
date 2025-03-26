@@ -14,9 +14,8 @@ spec:
       labels:
         app: liquibase-executor
     spec:
-{{/*      restartPolicy: Never*/}}
       containers:
-        - name: liquibase-executor
+        - name: distributor
           image: vasquezfernando/liquibase:1.0.7
           imagePullPolicy: IfNotPresent
           env:
