@@ -13,15 +13,15 @@ spec:
   selector:
     matchLabels:
       app: {{ .Release.Name }}-logdat-jteller
-      chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-      release: {{ .Release.Name }}
-      created-at: "{{ now | date "2006-01-02_15-04-05" }}"
   strategy:
     type: RollingUpdate
   template:
     metadata:
       labels:
         app: {{ .Release.Name }}-logdat-jteller
+        chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+        release: {{ .Release.Name }}
+        created-at: "{{ now | date "2006-01-02_15-04-05" }}"
     spec:
       initContainers:
         - name: liquibase-executor
