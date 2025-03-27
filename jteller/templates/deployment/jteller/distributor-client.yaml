@@ -18,7 +18,6 @@ spec:
         app: {{ .Release.Name }}-distributor-client
         chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
         release: {{ .Release.Name }}
-        created-at: "{{ now | date "2006-01-02_15-04-05" }}"
     spec:
       containers:
       - name: {{ .Release.Name }}-distributor-client

@@ -21,7 +21,6 @@ spec:
         app: {{.Release.Name}}-firmas-front
         chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
         release: {{ .Release.Name }}
-        created-at: "{{ now | date "2006-01-02_15-04-05" }}"
     spec:
       containers:
       - image: {{ .Values.services.registry}}{{.Values.services.firmasView.image}}:{{.Values.services.firmasView.tag }}
