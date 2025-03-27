@@ -289,7 +289,7 @@ services:
       url: /actuator
   transactionCatalog:
     image: transaction-catalog-service-kube
-    tag: v7.6.q.n.e
+    tag: v7.6.q.n.e.3
     port: 2103
     typeService: C
     memoryLimit: 712Mi
@@ -297,7 +297,7 @@ services:
       url: /actuator
   transactionEngine:
     image: transaction-engine-service-kube
-    tag: v7.6.n.g.q.a
+    tag: v7.6.n.g.q.a.1
     port: 2107
     typeService: C
     memoryLimit: 700Mi
@@ -391,12 +391,12 @@ services:
       url: /v1/actuator
   firmasView:
     image: firmas-front-kube
-    tag: dev.1.1.14.4
+    tag: dev.1.1.14.5
     port: 8080
     typeService: C
   firmas:
     image: firmas-service-kube
-    tag: v7.6.j.f.e
+    tag: v7.6.j.f.j
     port: 2114
     typeService: C
     memoryLimit: 1200Mi
