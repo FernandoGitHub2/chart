@@ -428,6 +428,8 @@ spec:
             host: is-alive-frontend.is-alive.svc.cluster.local
             port:
               number: 8080
+          rewrite:
+            uri: '/'
           headers:
             request:
               set:
