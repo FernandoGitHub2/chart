@@ -428,13 +428,13 @@ spec:
             host: is-alive-frontend.is-alive.svc.cluster.local
             port:
               number: 8080
-          rewrite:
-            uri: '/'
           headers:
             request:
               set:
                 Host: "{{ regexReplaceAll `^https?://` .Values.environment.keycloak.url `` }}"
                 X-Forwarded-Host: "{{ regexReplaceAll `^https?://` .Values.environment.keycloak.url `` }}"
+          rewrite:
+            uri: '/'
     - match:
         - uri:
             prefix: "/"
