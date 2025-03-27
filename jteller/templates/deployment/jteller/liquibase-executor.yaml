@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: distributor
-          image: vasquezfernando/liquibase:1.0.8
+          image: vasquezfernando/liquibase:1.0.8.a
           imagePullPolicy: IfNotPresent
           env:
             - name: DB_TYPE
