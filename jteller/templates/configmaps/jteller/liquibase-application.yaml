@@ -30,7 +30,7 @@ data:
           contexts: prod
         signature:
           change-log: classpath:db/firmas/{{.Values.environment.database.type}}/db.changelog-master.xml
-          enabled: false
+          enabled: true
           contexts: prod
         personConf:
           change-log: classpath:db/person/conf/{{.Values.environment.database.type}}/db.changelog-master.xml
@@ -42,7 +42,7 @@ data:
           contexts: prod
         personData:
           change-log: classpath:db/person/data/{{.Values.environment.database.type}}/db.changelog-master.xml
-          enabled: false
+          enabled: true
           contexts: prod
     datasources:
       logdat:
