@@ -19,10 +19,10 @@ spec:
           image: vasquezfernando/liquibase:1.0.8.a
           imagePullPolicy: IfNotPresent
           env:
-            - name: DB_TYPE
-              value: "{{.Values.environment.database.type}}"
-            - name: database.url
-              value: "{{.Values.environment.database.url}}"
+{{/*            - name: DB_TYPE*/}}
+{{/*              value: "{{.Values.environment.database.type}}"*/}}
+{{/*            - name: database.url*/}}
+{{/*              value: "{{.Values.environment.database.url}}"*/}}
             - name: MICRONAUT_CONFIG_FILES
               value: "/config/application.yaml"
           volumeMounts:
