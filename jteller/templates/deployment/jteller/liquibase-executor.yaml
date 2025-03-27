@@ -30,6 +30,6 @@ spec:
               mountPath: /config/application.yaml
               subPath: application.yaml
       volumes:
-        - name: config-volumne
+        - name: config-volume
           configMap:
             name: liquibase-application
