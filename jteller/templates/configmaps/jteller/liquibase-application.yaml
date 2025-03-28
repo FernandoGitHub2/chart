@@ -12,7 +12,7 @@ data:
         logdat:
           change-log:
             - classpath:db/logdat/{{.Values.environment.database.type}}/db.changelog-master.xml
-          enabled: true
+          enabled: {{ne (int .Values.executionMode) 0 }}
           contexts: prod
         security:
           change-log: classpath:db/security/{{.Values.environment.database.type}}/db.changelog-master.xml
