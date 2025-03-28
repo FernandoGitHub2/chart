@@ -29,8 +29,8 @@ data:
         jteller:
           change-log:
           - classpath:db/engine/{{.Values.environment.database.type}}/db.changelog-master.xml
-          {{- if eq (int .Values.executionMode) 8}}
-          - classpath:db/engine/{{.Values.environment.database.type}}/db.changelog-master.xml
+          {{- if eq (int .Values.executionMode) 2}}
+          - classpath:db/engine/{{.Values.environment.database.type}}/db.changelog-1.1.0-AML.xml
           {{- end }}
           enabled: {{ge (int .Values.executionMode) 0 }}
           contexts: prod
