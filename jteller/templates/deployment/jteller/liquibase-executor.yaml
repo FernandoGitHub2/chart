@@ -15,8 +15,8 @@ spec:
         app: liquibase-executor
     spec:
       containers:
-        - name: distributor
-          image: vasquezfernando/liquibase:1.0.8.a
+        - name: liquibase-executor
+          image: vasquezfernando/liquibase:1.0.9
           imagePullPolicy: IfNotPresent
           env:
 {{/*            - name: DB_TYPE*/}}
