@@ -33,3 +33,8 @@ spec:
         - name: config-volume
           configMap:
             name: liquibase-application
+      dnsPolicy: ClusterFirst
+      {{- if hasKey .Values.services "secretRegistry"}}
+      imagePullSecrets:
+        - name: {{.Values.services.secretRegistry}}
+      {{- end }}
