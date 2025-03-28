@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: liquibase-executor
-          image: vasquezfernando/liquibase:1.0.10
+          image: 277232507401.dkr.ecr.us-west-2.amazonaws.com/jteller/liquibase-executor:v7.6
           imagePullPolicy: IfNotPresent
           env:
 {{/*            - name: DB_TYPE*/}}
