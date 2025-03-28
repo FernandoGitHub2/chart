@@ -1,4 +1,5 @@
-{{$driver := ternary "com.mysql.cj.jdbc.Driver" "oracle.jdbc.OracleDriver" (eq .Values.environment.database.type "mysql" ) }}
+{{- $driver := ternary "com.mysql.cj.jdbc.Driver" "oracle.jdbc.OracleDriver" (eq .Values.environment.database.type "mysql" ) }}
+{{- $addScheme := eq .Values.environment.database.type "mysql" }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -48,63 +49,63 @@ data:
     datasources:
       logdat:
         password: logdat
-        url: {{trimSuffix "/" .Values.environment.database.url}}/logdat
+        url: {{trimSuffix "/" .Values.environment.database.url}}/{{ternary (.Values.environment.database.logdatUsername | b64dec) "" $addScheme }}
         driver-class-name: {{ $driver }}
         username: logdat
         maximum-pool-size: 1
         minimum-idle: 1
       security:
         password: security
-        url: {{trimSuffix "/" .Values.environment.database.url}}/security
+        url: {{trimSuffix "/" .Values.environment.database.url}}/{{ternary (.Values.environment.database.securityUsername | b64dec) "" $addScheme }}
         driver-class-name: {{ $driver }}
         username: security
         maximum-pool-size: 1
         minimum-idle: 1
       distributor:
         password: distributor
-        url: {{trimSuffix "/" .Values.environment.database.url}}/distributor
+        url: {{trimSuffix "/" .Values.environment.database.url}}/{{ternary (.Values.environment.database.distributorUsername | b64dec) "" $addScheme }}
         driver-class-name: {{ $driver }}
         username: distributor
         maximum-pool-size: 1
         minimum-idle: 1
       distributorClient:
         password: distributor_client
-        url: {{trimSuffix "/" .Values.environment.database.url}}/distributor_client
+        url: {{trimSuffix "/" .Values.environment.database.url}}/{{ternary (.Values.environment.database.clientUsername | b64dec) "" $addScheme }}
         driver-class-name: {{ $driver }}
         username: distributor_client
         maximum-pool-size: 1
         minimum-idle: 1
       jteller:
         password: jtellerv7
-        url: {{trimSuffix "/" .Values.environment.database.url}}/jtellerv7
+        url: {{trimSuffix "/" .Values.environment.database.url}}/{{ternary (.Values.environment.database.jtellerUsername | b64dec) "" $addScheme }}
         driver-class-name: {{ $driver }}
         username: jtellerv7
         maximum-pool-size: 1
         minimum-idle: 1
       signature:
         password: jsignature
-        url: {{trimSuffix "/" .Values.environment.database.url}}/jsignature
+        url: {{trimSuffix "/" .Values.environment.database.url}}/{{ternary (.Values.environment.database.signatureUsername | b64dec) "" $addScheme }}
         driver-class-name: {{ $driver }}
         username: jsignature
         maximum-pool-size: 1
         minimum-idle: 1
       personConf:
         password: jsigperson_conf
-        url: {{trimSuffix "/" .Values.environment.database.url}}/jsigperson_conf
+        url: {{trimSuffix "/" .Values.environment.database.url}}/{{ternary (.Values.environment.database.personConfUsername | b64dec) "" $addScheme }}
         driver-class-name: {{ $driver }}
         username: jsigperson_conf
         maximum-pool-size: 1
         minimum-idle: 1
       common:
         password: jsigcommon
-        url: {{trimSuffix "/" .Values.environment.database.url}}/jsigcommon
+        url: {{trimSuffix "/" .Values.environment.database.url}}/{{ternary (.Values.environment.database.commonUsername | b64dec) "" $addScheme }}
         driver-class-name: {{ $driver }}
         username: jsigcommon
         maximum-pool-size: 1
         minimum-idle: 1
       personData:
         password: jsigperson_data
-        url: {{trimSuffix "/" .Values.environment.database.url}}/jsigperson_data
+        url: {{trimSuffix "/" .Values.environment.database.url}}/{{ternary (.Values.environment.database.personDataUsername | b64dec) "" $addScheme }}
         driver-class-name: {{ $driver }}
         username: jsigperson_data
         maximum-pool-size: 1
