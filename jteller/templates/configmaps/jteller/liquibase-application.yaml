@@ -16,35 +16,39 @@ data:
           contexts: prod
         security:
           change-log: classpath:db/security/{{.Values.environment.database.type}}/db.changelog-master.xml
-          enabled: true
+          enabled: {{ne (int .Values.executionMode) 0 }}
           contexts: prod
         distributor:
           change-log: classpath:db/distributor/core/{{.Values.environment.database.type}}/db.changelog-master.xml
-          enabled: true
+          enabled: {{ne (int .Values.executionMode) 0 }}
           contexts: prod
         distributorClient:
           change-log: classpath:db/distributor/client/{{.Values.environment.database.type}}/db.changelog-master.xml
-          enabled: true
+          enabled: {{ne (int .Values.executionMode) 0 }}
           contexts: prod
         jteller:
-          change-log: classpath:db/engine/{{.Values.environment.database.type}}/db.changelog-master.xml
-          enabled: true
+          change-log:
+          - classpath:db/engine/{{.Values.environment.database.type}}/db.changelog-master.xml
+          {{- if eq (int .Values.executionMode) 2}}
+          - classpath:db/engine/{{.Values.environment.database.type}}/db.changelog-master.xml
+          {{- end }}
+          enabled: {{ge (int .Values.executionMode) 0 }}
           contexts: prod
         signature:
           change-log: classpath:db/firmas/{{.Values.environment.database.type}}/db.changelog-master.xml
-          enabled: true
+          enabled: {{ge (int .Values.executionMode) 0 }}
           contexts: prod
         personConf:
           change-log: classpath:db/person/conf/{{.Values.environment.database.type}}/db.changelog-master.xml
-          enabled: true
+          enabled: {{ne (int .Values.executionMode) 0 }}
           contexts: prod
         common:
           change-log: classpath:db/person/common/{{.Values.environment.database.type}}/db.changelog-master.xml
-          enabled: true
+          enabled: {{ne (int .Values.executionMode) 0 }}
           contexts: prod
         personData:
           change-log: classpath:db/person/data/{{.Values.environment.database.type}}/db.changelog-master.xml
-          enabled: true
+          enabled: {{ge (int .Values.executionMode) 0 }}
           contexts: prod
     datasources:
       logdat:
