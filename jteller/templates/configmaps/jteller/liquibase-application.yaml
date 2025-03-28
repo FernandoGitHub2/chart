@@ -1,3 +1,4 @@
+{{$driver := ternary "com.mysql.cj.jdbc.Driver" "oracle.jdbc.OracleDriver" (eq .Values.environment.database.type "mysql" ) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -48,63 +49,63 @@ data:
       logdat:
         password: logdat
         url: {{.Values.environment.database.url}}logdat
-        driver-class-name: com.mysql.cj.jdbc.Driver
+        driver-class-name: {{ $driver }}
         username: logdat
         maximum-pool-size: 1
         minimum-idle: 1
       security:
         password: security
         url: {{.Values.environment.database.url}}security
-        driver-class-name: com.mysql.cj.jdbc.Driver
+        driver-class-name: {{ $driver }}
         username: security
         maximum-pool-size: 1
         minimum-idle: 1
       distributor:
         password: distributor
         url: {{.Values.environment.database.url}}distributor
-        driver-class-name: com.mysql.cj.jdbc.Driver
+        driver-class-name: {{ $driver }}
         username: distributor
         maximum-pool-size: 1
         minimum-idle: 1
       distributorClient:
         password: distributor_client
         url: {{.Values.environment.database.url}}distributor_client
-        driver-class-name: com.mysql.cj.jdbc.Driver
+        driver-class-name: {{ $driver }}
         username: distributor_client
         maximum-pool-size: 1
         minimum-idle: 1
       jteller:
         password: jtellerv7
         url: {{.Values.environment.database.url}}jtellerv7
-        driver-class-name: com.mysql.cj.jdbc.Driver
+        driver-class-name: {{ $driver }}
         username: jtellerv7
         maximum-pool-size: 1
         minimum-idle: 1
       signature:
         password: jsignature
         url: {{.Values.environment.database.url}}jsignature
-        driver-class-name: com.mysql.cj.jdbc.Driver
+        driver-class-name: {{ $driver }}
         username: jsignature
         maximum-pool-size: 1
         minimum-idle: 1
       personConf:
         password: jsigperson_conf
         url: {{.Values.environment.database.url}}jsigperson_conf
-        driver-class-name: com.mysql.cj.jdbc.Driver
+        driver-class-name: {{ $driver }}
         username: jsigperson_conf
         maximum-pool-size: 1
         minimum-idle: 1
       common:
         password: jsigcommon
         url: {{.Values.environment.database.url}}jsigcommon
-        driver-class-name: com.mysql.cj.jdbc.Driver
+        driver-class-name: {{ $driver }}
         username: jsigcommon
         maximum-pool-size: 1
         minimum-idle: 1
       personData:
         password: jsigperson_data
         url: {{.Values.environment.database.url}}jsigperson_data
-        driver-class-name: com.mysql.cj.jdbc.Driver
+        driver-class-name: {{ $driver }}
         username: jsigperson_data
         maximum-pool-size: 1
         minimum-idle: 1
