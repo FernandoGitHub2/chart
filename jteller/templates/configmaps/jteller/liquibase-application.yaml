@@ -1,5 +1,6 @@
 {{- $driver := ternary "com.mysql.cj.jdbc.Driver" "oracle.jdbc.OracleDriver" (eq .Values.environment.database.type "mysql" ) }}
 {{- $addScheme := eq .Values.environment.database.type "mysql" }}
+{{- $name := ternary "db.changelog-master-init.xml" "db.changelog-master.xml" .Values.liquibaseInit }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -11,19 +12,19 @@ data:
       datasources:
         logdat:
           change-log:
-            - classpath:db/logdat/{{.Values.environment.database.type}}/db.changelog-master.xml
+            - classpath:db/logdat/{{.Values.environment.database.type}}/{{$name}}
           enabled: {{ne (int .Values.executionMode) 0 }}
           contexts: prod
         security:
-          change-log: classpath:db/security/{{.Values.environment.database.type}}/db.changelog-master.xml
+          change-log: classpath:db/security/{{.Values.environment.database.type}}/{{$name}}
           enabled: {{ne (int .Values.executionMode) 0 }}
           contexts: prod
         distributor:
-          change-log: classpath:db/distributor/core/{{.Values.environment.database.type}}/db.changelog-master.xml
+          change-log: classpath:db/distributor/core/{{.Values.environment.database.type}}/{{$name}}
           enabled: {{ne (int .Values.executionMode) 0 }}
           contexts: prod
         distributorClient:
-          change-log: classpath:db/distributor/client/{{.Values.environment.database.type}}/db.changelog-master.xml
+          change-log: classpath:db/distributor/client/{{.Values.environment.database.type}}/{{$name}}
           enabled: {{ne (int .Values.executionMode) 0 }}
           contexts: prod
         jteller:
@@ -31,24 +32,24 @@ data:
           {{-  if eq (int .Values.executionMode) 1}}
           - classpath:db/engine/{{.Values.environment.database.type}}/db.changelog-master-mode-one.xml
           {{- else if eq (int .Values.executionMode) 2}}
-          - classpath:db/engine/{{.Values.environment.database.type}}/db.changelog-master.xml
+          - classpath:db/engine/{{.Values.environment.database.type}}/{{$name}}
           {{- end }}
           enabled: {{ge (int .Values.executionMode) 0 }}
           contexts: prod
         signature:
-          change-log: classpath:db/firmas/{{.Values.environment.database.type}}/db.changelog-master.xml
+          change-log: classpath:db/firmas/{{.Values.environment.database.type}}/{{$name}}
           enabled: {{ge (int .Values.executionMode) 0 }}
           contexts: prod
         personConf:
-          change-log: classpath:db/person/conf/{{.Values.environment.database.type}}/db.changelog-master.xml
+          change-log: classpath:db/person/conf/{{.Values.environment.database.type}}/{{$name}}
           enabled: {{ne (int .Values.executionMode) 0 }}
           contexts: prod
         common:
-          change-log: classpath:db/person/common/{{.Values.environment.database.type}}/db.changelog-master.xml
+          change-log: classpath:db/person/common/{{.Values.environment.database.type}}/{{$name}}
           enabled: {{ne (int .Values.executionMode) 0 }}
           contexts: prod
         personData:
-          change-log: classpath:db/person/data/{{.Values.environment.database.type}}/db.changelog-master.xml
+          change-log: classpath:db/person/data/{{.Values.environment.database.type}}/{{$name}}
           enabled: {{ge (int .Values.executionMode) 0 }}
           contexts: prod
     datasources:
