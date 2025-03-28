@@ -7,9 +7,9 @@ metadata:
 data:
   common-application.yml: |
     app:
-    actuator:
-      read-query: "select count(*) from jtellerv7.IS_ALIVE_CONTROL"
-      write-query: "insert into jtellerv7.IS_ALIVE_CONTROL(CONTROL_DATE) VALUES (NOW())"
+      actuator:
+        read-query: "select count(*) from jtellerv7.IS_ALIVE_CONTROL"
+        write-query: "insert into jtellerv7.IS_ALIVE_CONTROL(CONTROL_DATE) VALUES (NOW())"
     spring:
       application:
         name: common
@@ -43,12 +43,13 @@ data:
     config:
       isAlive:
         enable: 0
-      vistasService: http://vistas-service:8080
+      vistasService : http://vistas-service:8080
     management:
       endpoints:
         web:
           exposure:
             include: health,info,metrics,prometheus
+          base-path: /service/common/actuator/
       health:
         probes:
           enabled: true
@@ -647,7 +648,7 @@ data:
                 - method: GET
                   scopes:
                     - view
-              path: /actuator/health/**
+              path: /service/common/actuator/**
               enforcementMode: DISABLED
             - methods:
                 - method: GET
@@ -677,6 +678,5 @@ data:
                   scopes:
                     - update
               path: /service/common/document-property-entity/*
-
 
     {{- end }}

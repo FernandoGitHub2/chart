@@ -6,13 +6,17 @@ metadata:
   namespace: {{ .Values.namespace }}
 data:
   person-conf-application.yml: |
+    app:
+      actuator:
+        read-query: "select count(*) from IS_ALIVE_CONTROL"
+        write-query: "insert into IS_ALIVE_CONTROL(CONTROL_DATE) VALUES (NOW())"
     spring:
       application:
         name: person-conf
       datasource:
         database-type: oracle
-        url: ${db.url:jdbc:oracle:thin:@//172.16.10.135:1521/orclpdb1}
-        driverClassName: oracle.jdbc.OracleDriver
+        url: ${db.local.host:jdbc:mysql://172.16.10.101:3306/jsigperson_conf?useUnicode=true}
+        driverClassName: com.mysql.cj.jdbc.Driver
         username: ${db.username:jsigperson_conf}
         password: ${db.password:jsigperson_conf}
         minimum-idle: 1
@@ -31,17 +35,18 @@ data:
       jackson:
         serialization:
           fail-on-empty-beans: ${jackson.serialization.fail-on-empty-beans:false}
-      liquibase:
-        change-log: classpath:changelog/db.changelog-master.xml
-        contexts: prod, develop, oracle
-        enabled: {{.Values.liquibaseEnable}}
+        #liquibase:
+        #change-log: classpath:changelog/db.changelog-master.xml
+        #contexts: prod,mysql
+        #enabled: true
     #  profiles:
     #    include: 'keycloak'
     management:
       endpoints:
         web:
           exposure:
-            include: health,info
+            include: health,info,metrics,prometheus
+          base-path: /service/person-conf/actuator/
       health:
         probes:
           enabled: true
@@ -55,53 +60,53 @@ data:
       realm: agentes
       resource: configuration-service
       securityConstraints:
-        - authRoles:
-            {{- range  $index, $role := .Values.environment.keycloak.roles}}
-            - {{$role}}
-            {{- end }}
-          securityCollections:
-            - name: civil-status-service
-              patterns:
-                - /service/person-conf/civil_status/*
-            - name: business-categories-service
-              patterns:
-                - /service/person-conf/business_categories/*
-            - name: documents-types-service
-              patterns:
-                - /service/person-conf/documents_types/*
-            - name: documents-types-validations-service
-              patterns:
-                - /service/person-conf/documents_types_validations/*
-            - name: addresses-types-service
-              patterns:
-                - /service/person-conf/address_type/*
-            - name: parties-service
-              patterns:
-                - /service/person-conf/party/*
-            - name: parties-identifications-documents-service
-              patterns:
-                - /service/person-conf/party_identification_document/*
-            - name: parties-relations-service
-              patterns:
-                - /service/person-conf/party_relation/*
-            - name: person-roles-documents-service
-              patterns:
-                - /service/person-conf/person_rol_document/*
-            - name: person-roles-types-service
-              patterns:
-                - /service/person-conf/person_role_type/*
-            - name: phones-types-service
-              patterns:
-                - /service/person-conf/phones_types/*
-            - name: registries-types-service
-              patterns:
-                - /service/person-conf/registry_type/*
-            - name: pep-type-service
-              patterns:
-                - /service/person-conf/pep-type/*
-            - name: profession-service
-              patterns:
-                - /service/person-conf/profession/*
+        -   authRoles:
+              {{- range  $index, $role := .Values.environment.keycloak.roles}}
+              - {{$role}}
+              {{- end }}
+            securityCollections:
+              -   name: civil-status-service
+                  patterns:
+                    - /service/person-conf/civil_status/*
+              -   name: business-categories-service
+                  patterns:
+                    - /service/person-conf/business_categories/*
+              -   name: documents-types-service
+                  patterns:
+                    - /service/person-conf/documents_types/*
+              -   name: documents-types-validations-service
+                  patterns:
+                    - /service/person-conf/documents_types_validations/*
+              -   name: addresses-types-service
+                  patterns:
+                    - /service/person-conf/address_type/*
+              -   name: parties-service
+                  patterns:
+                    - /service/person-conf/party/*
+              -   name: parties-identifications-documents-service
+                  patterns:
+                    - /service/person-conf/party_identification_document/*
+              -   name: parties-relations-service
+                  patterns:
+                    - /service/person-conf/party_relation/*
+              -   name: person-roles-documents-service
+                  patterns:
+                    - /service/person-conf/person_rol_document/*
+              -   name: person-roles-types-service
+                  patterns:
+                    - /service/person-conf/person_role_type/*
+              -   name: phones-types-service
+                  patterns:
+                    - /service/person-conf/phones_types/*
+              -   name: registries-types-service
+                  patterns:
+                    - /service/person-conf/registry_type/*
+              -   name: pep-type-service
+                  patterns:
+                    - /service/person-conf/pep-type/*
+              -   name: profession-service
+                  patterns:
+                    - /service/person-conf/profession/*
       ssl-required: external
       auth-server-url: http://172.16.10.120:30080/auth
       bearer-only: true
@@ -109,271 +114,271 @@ data:
         secret: c9444b08-1ccd-4453-bd4d-22627af100e6
       policy-enforcer-config:
         paths:
+          -   methods:
+                -   method: GET
+              path: /actuator/*
+              enforcementMode: DISABLED
+          -   methods:
+                -   method: POST
+                    scopes:
+                      - view
+              path: /service/person-conf/civil_status/page
+          -   methods:
+                -   method: GET
+                    scopes:
+                      - view
+                -   method: DELETE
+                    scopes:
+                      - delete
+                -   method: POST
+                    scopes:
+                      - create
+                -   method: PUT
+                    scopes:
+                      - update
+              path: /service/person-conf/civil_status/*
+          -   methods:
+                -   method: POST
+                    scopes:
+                      - view
+              path: /service/person-conf/business_categories/page
+          -   methods:
+                -   method: GET
+                    scopes:
+                      - view
+                -   method: DELETE
+                    scopes:
+                      - delete
+                -   method: POST
+                    scopes:
+                      - create
+                -   method: PUT
+                    scopes:
+                      - update
+              path: /service/person-conf/business_categories/*
+          -   methods:
+                -   method: POST
+                    scopes:
+                      - view
+              path: /service/person-conf/documents_types/page
+          -   methods:
+                -   method: GET
+                    scopes:
+                      - view
+                -   method: DELETE
+                    scopes:
+                      - delete
+                -   method: POST
+                    scopes:
+                      - create
+                -   method: PUT
+                    scopes:
+                      - update
+              path: /service/person-conf/documents_types/*
+          -   methods:
+                -   method: POST
+                    scopes:
+                      - view
+              path: /service/person-conf/documents_types_validations/page
+          -   methods:
+                -   method: GET
+                    scopes:
+                      - view
+                -   method: DELETE
+                    scopes:
+                      - delete
+                -   method: POST
+                    scopes:
+                      - create
+                -   method: PUT
+                    scopes:
+                      - update
+              path: /service/person-conf/documents_types_validations/*
+          -   methods:
+                -   method: POST
+                    scopes:
+                      - view
+              path: /service/person-conf/address_type/page
+          -   methods:
+                -   method: GET
+                    scopes:
+                      - view
+                -   method: DELETE
+                    scopes:
+                      - delete
+                -   method: POST
+                    scopes:
+                      - create
+                -   method: PUT
+                    scopes:
+                      - update
+              path: /service/person-conf/address_type/*
+          -   methods:
+                -   method: POST
+                    scopes:
+                      - view
+              path: /service/person-conf/party/page
+          -   methods:
+                -   method: GET
+                    scopes:
+                      - view
+                -   method: DELETE
+                    scopes:
+                      - delete
+                -   method: POST
+                    scopes:
+                      - create
+                -   method: PUT
+                    scopes:
+                      - update
+              path: /service/person-conf/party/*
+          -   methods:
+                -   method: POST
+                    scopes:
+                      - view
+              path: /service/person-conf/party_identification_document/page
+          -   methods:
+                -   method: GET
+                    scopes:
+                      - view
+                -   method: DELETE
+                    scopes:
+                      - delete
+                -   method: POST
+                    scopes:
+                      - create
+                -   method: PUT
+                    scopes:
+                      - update
+              path: /service/person-conf/party_identification_document/*
+          -   methods:
+                -   method: POST
+                    scopes:
+                      - view
+              path: /service/person-conf/party_relation/page
+          -   methods:
+                -   method: GET
+                    scopes:
+                      - view
+                -   method: DELETE
+                    scopes:
+                      - delete
+                -   method: POST
+                    scopes:
+                      - create
+                -   method: PUT
+                    scopes:
+                      - update
+              path: /service/person-conf/party_relation/*
+          -   methods:
+                -   method: POST
+                    scopes:
+                      - view
+              path: /service/person-conf/person_rol_document/page
+          -   methods:
+                -   method: GET
+                    scopes:
+                      - view
+                -   method: DELETE
+                    scopes:
+                      - delete
+                -   method: POST
+                    scopes:
+                      - create
+                -   method: PUT
+                    scopes:
+                      - update
+              path: /service/person-conf/person_rol_document/*
+          -   methods:
+                -   method: POST
+                    scopes:
+                      - view
+              path: /service/person-conf/person_role_type/page
+          -   methods:
+                -   method: GET
+                    scopes:
+                      - view
+                -   method: DELETE
+                    scopes:
+                      - delete
+                -   method: POST
+                    scopes:
+                      - create
+                -   method: PUT
+                    scopes:
+                      - update
+              path: /service/person-conf/person_role_type/*
+          -   methods:
+                -   method: POST
+                    scopes:
+                      - view
+              path: /service/person-conf/phones_types/page
+          -   methods:
+                -   method: GET
+                    scopes:
+                      - view
+                -   method: DELETE
+                    scopes:
+                      - delete
+                -   method: POST
+                    scopes:
+                      - create
+                -   method: PUT
+                    scopes:
+                      - update
+              path: /service/person-conf/phones_types/*
+          -   methods:
+                -   method: POST
+                    scopes:
+                      - view
+              path: /service/person-conf/registry_type/page
+          -   methods:
+                -   method: GET
+                    scopes:
+                      - view
+                -   method: DELETE
+                    scopes:
+                      - delete
+                -   method: POST
+                    scopes:
+                      - create
+                -   method: PUT
+                    scopes:
+                      - update
+              path: /service/person-conf/registry_type/*
+          -   methods:
+                -   method: GET
+                    scopes:
+                      - view
+                -   method: DELETE
+                    scopes:
+                      - delete
+                -   method: POST
+                    scopes:
+                      - create
+                -   method: PUT
+                    scopes:
+                      - update
+              path: /service/person-conf/pep-type/*
+          -   methods:
+                -   method: GET
+                    scopes:
+                      - view
+                -   method: DELETE
+                    scopes:
+                      - delete
+                -   method: POST
+                    scopes:
+                      - create
+                -   method: PUT
+                    scopes:
+                      - update
+              path: /service/person-conf/profession/*
           - methods:
               - method: GET
-            path: /actuator/*
-            enforcementMode: DISABLED
-          - methods:
-              - method: POST
                 scopes:
                   - view
-            path: /service/person-conf/civil_status/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/person-conf/civil_status/*
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/person-conf/business_categories/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/person-conf/business_categories/*
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/person-conf/documents_types/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/person-conf/documents_types/*
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/person-conf/documents_types_validations/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/person-conf/documents_types_validations/*
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/person-conf/address_type/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/person-conf/address_type/*
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/person-conf/party/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/person-conf/party/*
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/person-conf/party_identification_document/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/person-conf/party_identification_document/*
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/person-conf/party_relation/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/person-conf/party_relation/*
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/person-conf/person_rol_document/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/person-conf/person_rol_document/*
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/person-conf/person_role_type/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/person-conf/person_role_type/*
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/person-conf/phones_types/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/person-conf/phones_types/*
-          - methods:
-              - method: POST
-                scopes:
-                  - view
-            path: /service/person-conf/registry_type/page
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/person-conf/registry_type/*
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/person-conf/pep-type/*
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-              - method: DELETE
-                scopes:
-                  - delete
-              - method: POST
-                scopes:
-                  - create
-              - method: PUT
-                scopes:
-                  - update
-            path: /service/person-conf/profession/*
-          - methods:
-              - method: GET
-                scopes:
-                  - view
-            path: /actuator/health/**
+            path: /service/person-conf/actuator/**
             enforcementMode: DISABLED
       enabled: true
 

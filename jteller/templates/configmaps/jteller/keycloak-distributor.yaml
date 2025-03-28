@@ -30,7 +30,7 @@ data:
       datasource:
         database-type: oracle
         url: ${db.local.host:jdbc:oracle:thin:@//172.16.10.135:1521/orclpdb1}
-        driverClassName: oracle.jdbc.driver.OracleDriver
+        driverClassName: oracle.jdbc.OracleDriver
         username: ${db.local.user:distributor}
         password: ${db.local.password:distributor}
         minimum-idle: ${db.minimum-idle:1}
@@ -38,7 +38,7 @@ data:
       jpa:
         show-sql: true
         properties:
-    #      hibernate.dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+          #      hibernate.dialect: org.hibernate.dialect.MySQL5InnoDBDialect
           org.hibernate.envers.do_not_audit_optimistic_locking_field: false
           org.hibernate.envers.store_data_at_delete: true
           org.hibernate.envers.default_schema: logdat
@@ -51,10 +51,10 @@ data:
         locale: es
         locale-resolver: fixed
       liquibase:
-        enabled: {{.Values.liquibaseEnable}}
+        enabled: false
         change-log: changelog/db.changelog-master.xml
-        contexts: ${migration.context:mysql,develop}
-    #    liquibase-schema: DISTRIBUTOR
+        contexts: ${migration.context:oracle,develop}
+      #    liquibase-schema: DISTRIBUTOR
       mail:
         template: template.ftl
         subject: Notificación de cambio de paso
@@ -79,6 +79,7 @@ data:
       catalogService: https://keycloak.bytesw.cloud:30010/api/catalog-service
       realm: jteller
       maxAttemp: 20
+      isAlive: 0
       credentials:
         user: avelasco
         password: Avelasco$2021

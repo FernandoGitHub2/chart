@@ -76,7 +76,7 @@ data:
         entityStatusCode: CR
         channelId: 1
       fe:
-        realm: jteller
+        realm: bantrab
         username: agentebancario
         password: Convenios$21
         organizationTreeUrl: /api/catalog-service/v1/organizationTree
@@ -92,7 +92,7 @@ data:
     logging.level.com.bytesw.acm.person.web.client.FeClient: DEBUG
     keycloak:
       enabled: true
-      realm: jteller
+      realm: JTeller
       resource: configuration-service
       securityConstraints:
           - authRoles:

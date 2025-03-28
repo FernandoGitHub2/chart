@@ -68,7 +68,7 @@ data:
     app:
       actuator:
         read-query: "select count(*) from IS_ALIVE_CONTROL"
-        write-query: "insert into IS_ALIVE_CONTROL(CONTROL_DATE) VALUES (NOW())"
+        write-query: "insert into IS_ALIVE_CONTROL(CONTROL_DATE) VALUES (SYSDATE)"
       commons:
         report:
           maxNumberItemsReport: 1000
@@ -167,7 +167,7 @@ data:
       realm: ${keycloak.realmName:JTeller}
       resource: ${keycloak.client:specs-configuration}
       ssl-required: external
-      auth-server-url: ${keycloak.auth:https://keycloak.bytesw.cloud:30000}
+      auth-server-url: ${keycloak.auth:https://keycloak.bytesw.cloud:30010}
       bearer-only: true
       credentials:
         secret: ${keycloak.secret:Py1WDjKToqr0TUtHqTjJsL4En9uDW3V8}
@@ -1528,6 +1528,7 @@ data:
       instance:
         hostname: ${byte.net.hostname:catalog-service}
         ipAddress: ${byte.net.address}
+
 kind: ConfigMap
 metadata:
   name: keycloak-catalog

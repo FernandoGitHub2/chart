@@ -36,10 +36,10 @@ data:
           org.hibernate.envers.default_schema: logdat
       main:
         allow-bean-definition-overriding: true
-      liquibase:
-        enabled: {{.Values.liquibaseEnable}}
-        change-log: changelog/db.changelog-master.xml
-        contexts: mysql, prod
+      #  liquibase:
+      #    enabled: false
+      #    change-log: changelog/db.changelog-master.xml
+      #    contexts: mysql, prod
       mvc:
         locale: es
         locale-resolver: fixed
@@ -49,6 +49,11 @@ data:
         org.keycloak: INFO
         org.hibernate: INFO
     management:
+      endpoints:
+        web:
+          exposure:
+            include: health,metrics,prometheus
+          base-path: /firmas-service/actuator/
       health:
         probes:
           enabled: true
@@ -68,6 +73,8 @@ data:
       timeout: 10
     distEnvironment: 0
     config:
+      isAlive:
+        enable: 0
       signatureCore: http://provide-signature:8080/provide-signature-service/provideAccountData/
       commonService: http://common-service:8080
       coreBankClient: http://corebank-jsing:8080/coreBankResponse/getBycodigoCliente
@@ -83,7 +90,7 @@ data:
       realm: ${keycloak.realmName:JTeller}
       resource: ${keycloak.client:firmas-be}
       ssl-required: external
-      auth-server-url: ${keycloak.auth:https://keycloak.bytesw.cloud:30000}
+      auth-server-url: ${keycloak.auth:https://keycloak.bytesw.cloud:30010}
       bearer-only: true
       credentials:
         secret: ${keycloak.secret:6adcea23-c214-4ad7-86f9-9a5f3cbfc198}
@@ -335,88 +342,88 @@ data:
                   - delete
             path: /firmas-service/signatureClass/*
           - methods:
-            - method: GET
-              scopes:
-                - view
-            - method: POST
-              scopes:
-                - create
-            - method: PUT
-              scopes:
-                - update
-            - method: DELETE
-              scopes:
-                - delete
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
             path: /firmas-service/cardScan/*
           - methods:
-            - method: GET
-              scopes:
-                - view
-            - method: POST
-              scopes:
-                - create
-            - method: PUT
-              scopes:
-                - update
-            - method: DELETE
-              scopes:
-                - delete
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
             path: /firmas-service/cardScanDetail/*
           - methods:
-            - method: GET
-              scopes:
-                - view
-            - method: POST
-              scopes:
-                - create
-            - method: PUT
-              scopes:
-                - update
-            - method: DELETE
-              scopes:
-                - delete
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
             path: /firmas-service/scanner/*
           - methods:
-            - method: GET
-              scopes:
-                - view
-            - method: POST
-              scopes:
-                - create
-            - method: PUT
-              scopes:
-                - update
-            - method: DELETE
-              scopes:
-                - delete
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
             path: /firmas-service/deviceScanner/*
           - methods:
-            - method: GET
-              scopes:
-                - view
-            - method: POST
-              scopes:
-                - create
-            - method: PUT
-              scopes:
-                - update
-            - method: DELETE
-              scopes:
-                - delete
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
             path: /firmas-service/rangeProfile/*
           - methods:
-            - method: GET
-              scopes:
-                - view
-            - method: POST
-              scopes:
-                - create
-            - method: PUT
-              scopes:
-                - update
-            - method: DELETE
-              scopes:
-                - delete
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
             path: /firmas-service/ocrEquivalence/*
           - methods:
               - method: POST
@@ -424,46 +431,46 @@ data:
                   - create
             path: /firmas-service/cardSave/*
           - methods:
-            - method: GET
-              scopes:
-                - view
-            - method: POST
-              scopes:
-                - create
-            - method: PUT
-              scopes:
-                - update
-            - method: DELETE
-              scopes:
-                - delete
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
             path: /firmas-service/account/*
           - methods:
-            - method: GET
-              scopes:
-                - view
-            - method: POST
-              scopes:
-                - create
-            - method: PUT
-              scopes:
-                - update
-            - method: DELETE
-              scopes:
-                - delete
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
             path: /firmas-service/customer/*
           - methods:
-            - method: GET
-              scopes:
-                - view
-            - method: POST
-              scopes:
-                - create
-            - method: PUT
-              scopes:
-                - update
-            - method: DELETE
-              scopes:
-                - delete
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
             path: /firmas-service/customerComment/*
           - methods:
               - method: POST
@@ -471,46 +478,46 @@ data:
                   - view
             path: /firmas-service/signature/getSingsToActivate/page
           - methods:
-            - method: GET
-              scopes:
-                - view
-            - method: POST
-              scopes:
-                - create
-            - method: PUT
-              scopes:
-                - update
-            - method: DELETE
-              scopes:
-                - delete
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
             path: /firmas-service/signature/*
           - methods:
-            - method: GET
-              scopes:
-                - view
-            - method: POST
-              scopes:
-                - create
-            - method: PUT
-              scopes:
-                - update
-            - method: DELETE
-              scopes:
-                - delete
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
             path: /firmas-service/groupAccount/*
           - methods:
-            - method: GET
-              scopes:
-                - view
-            - method: POST
-              scopes:
-                - create
-            - method: PUT
-              scopes:
-                - update
-            - method: DELETE
-              scopes:
-                - delete
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PUT
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
             path: /firmas-service/rangeAccount/*
           - methods:
               - method: GET
@@ -708,7 +715,7 @@ data:
               - method: GET
                 scopes:
                   - view
-            path: /actuator/**
+            path: /firmas-service/actuator/**
             enforcementMode: DISABLED
   {{- end }}
   {{- end }}
