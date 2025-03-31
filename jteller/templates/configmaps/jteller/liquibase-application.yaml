@@ -24,7 +24,7 @@ data:
           enabled: {{ ne (int .Values.executionMode) 0 }}
           contexts: {{ .Values.liquibaseContext | default "prod" }}
         distributorClient:
-          change-log: classpath:db/distributor/client/{{ .Values.environment.database.type }}/{{ $name }}
+          change-log: classpath:db/distributor/client/{{ .Values.environment.database.type }}/db.changelog-master.xml
           enabled: {{ ne (int .Values.executionMode) 0 }}
           contexts: {{ .Values.liquibaseContext | default "prod" }}
         jteller:
