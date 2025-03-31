@@ -40,7 +40,7 @@ data:
           {{- end }}
           enabled: {{ ge (int .Values.executionMode) 1 }}
           contexts: {{ .Values.liquibaseContext | default "prod" }}
-        {{if ge (int .Values.signature) 2}}
+        {{if or (eq (int .Values.signature) 1) (eq (int .Values.signature) 2) }}
         signature:
           change-log: classpath:db/firmas/{{ .Values.environment.database.type }}/{{ $name }}
           enabled: {{ ge (int .Values.executionMode) 1 }}
@@ -103,7 +103,7 @@ data:
         username: jtellerv7
         maximum-pool-size: 1
         minimum-idle: 1
-      {{if ne (int .Values.signature) 0}}
+      {{if or (eq (int .Values.signature) 1) (eq (int .Values.signature) 2) }}
       signature:
         password: jsignature
         {{- $signatureSuffix := ternary (printf "/%s" (.Values.environment.database.signatureUsername | b64dec)) "" $addScheme }}
