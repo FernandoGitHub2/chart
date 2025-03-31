@@ -31,7 +31,7 @@ environment:
   keycloak:
     securityOpt: 2
     url: https://keycloak.bytesw.cloud:32008
-    realm: jteller2
+    realm: jteller
     roles:
       - user
       - admin
