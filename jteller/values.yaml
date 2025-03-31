@@ -164,7 +164,7 @@ liquibaseEnable: true
 liquibaseContext: mysql,prod
 liquibaseInit: true
 enableSura: 0
-distributor: 1 # 0 - desabilitado, 1 - core , 2 - cliente , 3 - ambos
+distributor: 2 # 0 - desabilitado, 1 - core , 2 - cliente , 3 - ambos
 signature: 1 # 0 - desabilitado, 1 - centralizado , 2 - distribuidos
 istio:
   enable: true

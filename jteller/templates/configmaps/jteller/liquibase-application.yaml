@@ -19,17 +19,17 @@ data:
           change-log: classpath:db/security/{{ .Values.environment.database.type }}/db.changelog-master.xml
           enabled: {{ ne (int .Values.executionMode) 0 }}
           contexts: {{ .Values.liquibaseContext | default "prod" }}
-        {{- if ne (int .Values.distributor) 0}}
+        {{- if or (eq (int .Values.distributor) 1) (eq (int .Values.distributor) 3)}}
         distributor:
           change-log: classpath:db/distributor/core/{{ .Values.environment.database.type }}/{{ $name }}
           enabled: {{ ne (int .Values.executionMode) 0 }}
           contexts: {{ .Values.liquibaseContext | default "prod" }}
+        {{- end }}
         {{- if ge (int .Values.distributor) 2 }}
         distributorClient:
           change-log: classpath:db/distributor/client/{{ .Values.environment.database.type }}/db.changelog-master.xml
           enabled: {{ ne (int .Values.executionMode) 0 }}
           contexts: {{ .Values.liquibaseContext | default "prod" }}
-        {{- end }}
         {{- end }}
         jteller:
           change-log:
@@ -75,7 +75,7 @@ data:
         username: security
         maximum-pool-size: 1
         minimum-idle: 1
-      {{- if ne (int .Values.distributor) 0}}
+      {{- if or (eq (int .Values.distributor) 1) (eq (int .Values.distributor) 3)}}
       distributor:
         password: distributor
         {{- $distributorSuffix := ternary (printf "/%s" (.Values.environment.database.distributorUsername | b64dec)) "" $addScheme }}
@@ -84,6 +84,7 @@ data:
         username: distributor
         maximum-pool-size: 1
         minimum-idle: 1
+      {{- end }}
       {{- if ge (int .Values.distributor) 2 }}
       distributorClient:
         password: distributor_client
@@ -93,7 +94,6 @@ data:
         username: distributor_client
         maximum-pool-size: 1
         minimum-idle: 1
-      {{- end }}
       {{- end }}
       jteller:
         password: jtellerv7
