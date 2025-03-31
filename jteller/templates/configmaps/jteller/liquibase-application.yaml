@@ -24,7 +24,7 @@ data:
           change-log: classpath:db/distributor/core/{{ .Values.environment.database.type }}/{{ $name }}
           enabled: {{ ne (int .Values.executionMode) 0 }}
           contexts: {{ .Values.liquibaseContext | default "prod" }}
-        {{- if eq (int .Values.distributor) 2 }}
+        {{- if ge (int .Values.distributor) 2 }}
         distributorClient:
           change-log: classpath:db/distributor/client/{{ .Values.environment.database.type }}/db.changelog-master.xml
           enabled: {{ ne (int .Values.executionMode) 0 }}
