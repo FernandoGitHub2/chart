@@ -49,7 +49,7 @@ data:
           enabled: {{ ne (int .Values.executionMode) 0 }}
           contexts: {{ .Values.liquibaseContext | default "prod" }}
         personData:
-          change-log: classpath:db/person/data/{{ .Values.environment.database.type }}/{{ $name }}
+          change-log: classpath:db/person/data/{{ .Values.environment.database.type }}/db.changelog-master.xml
           enabled: {{ ge (int .Values.executionMode) 0 }}
           contexts: {{ .Values.liquibaseContext | default "prod" }}
     datasources:
