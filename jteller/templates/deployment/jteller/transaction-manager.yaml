@@ -23,6 +23,7 @@ spec:
         app: {{.Release.Name}}-transaction-manager
         chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
         release: {{ .Release.Name }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmaps/jteller/transaction-manager.yaml") . | sha256sum | trunc 63 }}
     spec:
       containers:
         - image: {{.Values.services.registry}}{{.Values.services.transactionManager.image}}:{{.Values.services.transactionManager.tag }}

@@ -21,6 +21,8 @@ spec:
         app: {{.Release.Name}}-operation-view
         chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
         release: {{ .Release.Name }}
+        checksum/ngnix: {{ include (print $.Template.BasePath "/configmaps/jteller/nginx-conf.yaml") . | sha256sum | trunc 63 }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmaps/jteller/operation-view-configmap.yml") . | sha256sum | trunc 63 }}
     spec:
       containers:
       - image: {{.Values.services.registry }}{{.Values.services.operationView.image}}:{{.Values.services.operationView.tag }}

@@ -22,6 +22,7 @@ spec:
         app: {{ .Release.Name }}-distributor-view
         chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
         release: {{ .Release.Name }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmaps/jteller/distributor-fe-configmap.yaml") . | sha256sum | trunc 63 }}
     spec:
       containers:
       - image: {{.Values.services.registry}}{{.Values.services.distributorView.image}}:{{.Values.services.distributorView.tag }}

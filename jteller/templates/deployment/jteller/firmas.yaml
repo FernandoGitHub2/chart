@@ -23,6 +23,7 @@ spec:
         app: {{ .Release.Name }}-firmas
         chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
         release: {{ .Release.Name }}
+        checksum/application: {{ include (print $.Template.BasePath "/configmaps/jteller/keycloak-firmas.yaml") . | sha256sum | trunc 63 }}
     spec:
       containers:
           - env:

@@ -22,6 +22,7 @@ spec:
         app: {{.Release.Name}}-common-service
         chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
         release: {{ .Release.Name }}
+        checksum/application: {{ include (print $.Template.BasePath "/configmaps/jteller/keycloak-common.yaml") . | sha256sum | trunc 63 }}
     spec:
       containers:
       - env:

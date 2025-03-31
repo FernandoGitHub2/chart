@@ -21,6 +21,8 @@ spec:
         app: {{.Release.Name}}-transaction-catalog
         chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
         release: {{ .Release.Name }}
+        checksum/application: {{ include (print $.Template.BasePath "/configmaps/jteller/keycloak-transaction-catalog.yaml") . | sha256sum | trunc 63 }}
+        checksum/keycloak: {{ include (print $.Template.BasePath "/configmaps/jteller/backend-configmap.yml") . | sha256sum | trunc 63 }}
     spec:
       containers:
         - env:
