@@ -353,7 +353,7 @@ services:
     typeService: C
     memoryLimit: 350Mi
     actuator:
-      url: /actuator
+      url: /service/person-conf/actuator
   logdat:
     image: logdat-jteller-service-kube
     tag: v7.6.e.h
