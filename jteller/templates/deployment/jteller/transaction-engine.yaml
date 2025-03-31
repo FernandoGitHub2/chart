@@ -29,7 +29,7 @@ spec:
         chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
         release: {{ .Release.Name }}
         {{- if hasKey .Values "camposTabla"}}
-        checksum/tables: {{ .Values.camposTabla | sha256sum | trunc 63 }}
+        checksum/tables: {{ .Values.camposTabla | toYaml | sha256sum | trunc 63 }}
         {{- end }}
         checksum/keycloak: {{ include (print $.Template.BasePath "/configmaps/jteller/backend-configmap.yml") . | sha256sum | trunc 63 }}
     spec:
