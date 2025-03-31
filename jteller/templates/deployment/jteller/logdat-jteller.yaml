@@ -21,6 +21,7 @@ spec:
         app: {{ .Release.Name }}-logdat-jteller
         chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
         release: {{ .Release.Name }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret/jteller/secret.yml") . | sha256sum | trunc 63 }}
     spec:
       containers:
       - env:

@@ -22,6 +22,7 @@ spec:
         chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
         release: {{ .Release.Name }}
         checksum/keycloak: {{ include (print $.Template.BasePath "/configmaps/jteller/backend-configmap.yml") . | sha256sum | trunc 63 }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret/jteller/secret.yml") . | sha256sum | trunc 63 }}
     spec:
       containers:
         - env:

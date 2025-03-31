@@ -19,6 +19,7 @@ spec:
         chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
         release: {{ .Release.Name }}
         checksum/kubeconf: {{ include (print $.Template.BasePath "/configmaps/jteller/kubeconf-configmap.yaml") . | sha256sum | trunc 63 }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret/jteller/secret.yml") . | sha256sum | trunc 63 }}
     spec:
       containers:
       - name: {{ .Release.Name }}-distributor-client
