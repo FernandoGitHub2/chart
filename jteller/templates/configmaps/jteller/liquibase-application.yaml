@@ -38,12 +38,12 @@ data:
           {{- else if eq (int .Values.executionMode) 2 }}
             - classpath:db/engine/{{ .Values.environment.database.type }}/{{ $name }}
           {{- end }}
-          enabled: {{ ge (int .Values.executionMode) 0 }}
+          enabled: {{ ge (int .Values.executionMode) 1 }}
           contexts: {{ .Values.liquibaseContext | default "prod" }}
-        {{if ne (int .Values.signature) 0}}
+        {{if ge (int .Values.signature) 2}}
         signature:
           change-log: classpath:db/firmas/{{ .Values.environment.database.type }}/{{ $name }}
-          enabled: {{ ge (int .Values.executionMode) 0 }}
+          enabled: {{ ge (int .Values.executionMode) 1 }}
           contexts: {{ .Values.liquibaseContext | default "prod" }}
         {{- end }}
         personConf:
@@ -56,7 +56,7 @@ data:
           contexts: {{ .Values.liquibaseContext | default "prod" }}
         personData:
           change-log: classpath:db/person/data/{{ .Values.environment.database.type }}/db.changelog-master.xml
-          enabled: {{ ge (int .Values.executionMode) 0 }}
+          enabled: {{ ge (int .Values.executionMode) 1 }}
           contexts: {{ .Values.liquibaseContext | default "prod" }}
     datasources:
       logdat:
@@ -84,7 +84,7 @@ data:
         username: distributor
         maximum-pool-size: 1
         minimum-idle: 1
-      {{- if eq (int .Values.distributor) 2 }}
+      {{- if ge (int .Values.distributor) 2 }}
       distributorClient:
         password: distributor_client
         {{- $clientSuffix := ternary (printf "/%s" (.Values.environment.database.clientUsername | b64dec)) "" $addScheme }}
