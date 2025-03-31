@@ -19,14 +19,18 @@ data:
           change-log: classpath:db/security/{{ .Values.environment.database.type }}/db.changelog-master.xml
           enabled: {{ ne (int .Values.executionMode) 0 }}
           contexts: {{ .Values.liquibaseContext | default "prod" }}
+        {{- if ne (int .Values.distributor) 0}}
         distributor:
           change-log: classpath:db/distributor/core/{{ .Values.environment.database.type }}/{{ $name }}
           enabled: {{ ne (int .Values.executionMode) 0 }}
           contexts: {{ .Values.liquibaseContext | default "prod" }}
+        {{- if eq (int .Values.distributor) 2 }}
         distributorClient:
           change-log: classpath:db/distributor/client/{{ .Values.environment.database.type }}/db.changelog-master.xml
           enabled: {{ ne (int .Values.executionMode) 0 }}
           contexts: {{ .Values.liquibaseContext | default "prod" }}
+        {{- end }}
+        {{- end }}
         jteller:
           change-log:
           {{- if eq (int .Values.executionMode) 1 }}
@@ -36,10 +40,12 @@ data:
           {{- end }}
           enabled: {{ ge (int .Values.executionMode) 0 }}
           contexts: {{ .Values.liquibaseContext | default "prod" }}
+        {{if ne (int .Values.signature) 0}}
         signature:
           change-log: classpath:db/firmas/{{ .Values.environment.database.type }}/{{ $name }}
           enabled: {{ ge (int .Values.executionMode) 0 }}
           contexts: {{ .Values.liquibaseContext | default "prod" }}
+        {{- end }}
         personConf:
           change-log: classpath:db/person/conf/{{ .Values.environment.database.type }}/{{ $name }}
           enabled: {{ ne (int .Values.executionMode) 0 }}
@@ -69,6 +75,7 @@ data:
         username: security
         maximum-pool-size: 1
         minimum-idle: 1
+      {{- if ne (int .Values.distributor) 0}}
       distributor:
         password: distributor
         {{- $distributorSuffix := ternary (printf "/%s" (.Values.environment.database.distributorUsername | b64dec)) "" $addScheme }}
@@ -77,6 +84,7 @@ data:
         username: distributor
         maximum-pool-size: 1
         minimum-idle: 1
+      {{- if eq (int .Values.distributor) 2 }}
       distributorClient:
         password: distributor_client
         {{- $clientSuffix := ternary (printf "/%s" (.Values.environment.database.clientUsername | b64dec)) "" $addScheme }}
@@ -85,6 +93,8 @@ data:
         username: distributor_client
         maximum-pool-size: 1
         minimum-idle: 1
+      {{- end }}
+      {{- end }}
       jteller:
         password: jtellerv7
         {{- $jtellerSuffix := ternary (printf "/%s" (.Values.environment.database.jtellerUsername | b64dec)) "" $addScheme }}
@@ -93,6 +103,7 @@ data:
         username: jtellerv7
         maximum-pool-size: 1
         minimum-idle: 1
+      {{if ne (int .Values.signature) 0}}
       signature:
         password: jsignature
         {{- $signatureSuffix := ternary (printf "/%s" (.Values.environment.database.signatureUsername | b64dec)) "" $addScheme }}
@@ -101,6 +112,7 @@ data:
         username: jsignature
         maximum-pool-size: 1
         minimum-idle: 1
+      {{- end }}
       personConf:
         password: jsigperson_conf
         {{- $personConfSuffix := ternary (printf "/%s" (.Values.environment.database.personConfUsername | b64dec)) "" $addScheme }}
