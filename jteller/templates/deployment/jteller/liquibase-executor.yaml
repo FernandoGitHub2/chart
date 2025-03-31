@@ -13,7 +13,7 @@ spec:
     metadata:
       labels:
         app: liquibase-executor
-        checksum/config: {{ include (print $.Template.BasePath "/configmaps/jteller/liquibase-application.yml") . | sha256sum | trunc 63 }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmaps/jteller/liquibase-application.yaml") . | sha256sum | trunc 63 }}
     spec:
       containers:
         - name: liquibase-executor
