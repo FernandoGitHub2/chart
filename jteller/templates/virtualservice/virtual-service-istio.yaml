@@ -448,5 +448,13 @@ spec:
               set:
                 Host: "{{ regexReplaceAll `^https?://` .Values.environment.keycloak.url `` }}"
                 X-Forwarded-Host: "{{ regexReplaceAll `^https?://` .Values.environment.keycloak.url `` }}"
+    - match:
+        - uri:
+            prefix: /service/security
+      route:
+        - destination:
+            host: security
+            port:
+              number: 1119
 
   {{- end }}
