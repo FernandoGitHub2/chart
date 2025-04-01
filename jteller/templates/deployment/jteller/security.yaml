@@ -148,6 +148,12 @@ spec:
             {{- if .Values.environment.backend.isAlive.enable}}
             - name: config.isAlive.enable
               value: "1"
+            - name: config.isAlive.realm
+              value: {{.Values.environment.keycloak.realm}}
+            - name: config.isAlive.resource
+              value: {{.Values.environment.keycloak.isAlive.resource}}
+            - name: config.isAlive.secret
+              value: {{.Values.environment.keycloak.isAlive.secret}}
             {{- end }}
           image: {{.Values.services.registry}}{{.Values.services.security.image}}:{{.Values.services.security.tag }}
           imagePullPolicy: IfNotPresent
