@@ -33,7 +33,7 @@ data:
         {{- end }}
         jteller:
           change-log:
-          {{- if eq (int .Values.executionMode) 1 }}
+          {{- if or (eq (int .Values.executionMode) 1) (eq (int .Values.executionMode) 0) }}
             - classpath:db/engine/{{ .Values.environment.database.type }}/db.changelog-master-mode-one.xml
           {{- else if eq (int .Values.executionMode) 2 }}
             - classpath:db/engine/{{ .Values.environment.database.type }}/{{ $name }}
