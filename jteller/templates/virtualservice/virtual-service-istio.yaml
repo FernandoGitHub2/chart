@@ -433,8 +433,8 @@ spec:
               set:
                 Host: "{{ regexReplaceAll `^https?://` .Values.environment.keycloak.url `` }}"
                 X-Forwarded-Host: "{{ regexReplaceAll `^https?://` .Values.environment.keycloak.url `` }}"
-      rewrite:
-        uri: /
+{{/*      rewrite:*/}}
+{{/*        uri: /*/}}
     - match:
         - uri:
             prefix: "/"
