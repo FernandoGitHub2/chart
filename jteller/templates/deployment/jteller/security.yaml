@@ -145,7 +145,10 @@ spec:
               value: {{.Values.environment.backend.isAlive.write}}
             - name: spring.security.oauth2.resourceserver.jwt.issuer-uri
               value: {{.Values.environment.keycloak.url}}/realms/{{.Values.environment.keycloak.realm}}
-
+            {{- if .Values.environment.backend.isAlive.enable}}
+            - name: config.isAlive.enable
+              value: "1"
+            {{- end }}
           image: {{.Values.services.registry}}{{.Values.services.security.image}}:{{.Values.services.security.tag }}
           imagePullPolicy: IfNotPresent
           {{- if and (hasKey .Values.services.security "actuator") (eq (int .Values.actuator) 1) }}
