@@ -340,7 +340,7 @@ services:
       url: /v1/actuator
   personData:
     image: person-data-service
-    tag: jtv7.6.c
+    tag: jtv7.6.c.1
     port: 8080
     typeService: C
     memoryLimit: 512Mi
@@ -396,7 +396,7 @@ services:
     typeService: C
   firmas:
     image: firmas-service-kube
-    tag: v7.6.j.f.j
+    tag: v7.6.j.f.j.3
     port: 2114
     typeService: C
     memoryLimit: 1200Mi
@@ -477,6 +477,6 @@ services:
     typeService: C
   transactionManager:
     image: transaction-manager-kube
-    tag: dev.0.0.12
+    tag: dev.0.0.12.a
     port: 8080
     typeService: C
