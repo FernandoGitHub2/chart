@@ -15,7 +15,7 @@ spec:
       {{- end }}
       port: {{.Values.services.isAliveView.port}}
       protocol: TCP
-      targetPort: {{.Values.services.isAliveView.port}}
+      targetPort: 80
   selector:
     app: is-alive-frontend
   sessionAffinity: None
