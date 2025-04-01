@@ -13,7 +13,7 @@ data:
         logdat:
           change-log:
             - classpath:db/logdat/{{ .Values.environment.database.type }}/db.changelog-master.xml
-          enabled: {{ .Values.liquibaseEnable }}
+          enabled: {{ and (ge (int .Values.executionMode) 1) .Values.liquibaseEnable }}
           contexts: {{ .Values.liquibaseContext | default "prod" }}
         security:
           change-log: classpath:db/security/{{ .Values.environment.database.type }}/db.changelog-master.xml
@@ -43,12 +43,12 @@ data:
         {{- if or (eq (int .Values.signature) 1) (eq (int .Values.signature) 2) }}
         signature:
           change-log: classpath:db/firmas/{{ .Values.environment.database.type }}/{{ $name }}
-          enabled: {{ .Values.liquibaseEnable }}
+          enabled: {{ and (ge (int .Values.executionMode) 1) .Values.liquibaseEnable }}
           contexts: {{ .Values.liquibaseContext | default "prod" }}
         {{- end }}
         personConf:
           change-log: classpath:db/person/conf/{{ .Values.environment.database.type }}/{{ $name }}
-          enabled: {{ and (ne (int .Values.executionMode) 0) .Values.liquibaseEnable }}
+          enabled: {{ .Values.liquibaseEnable }}
           contexts: {{ .Values.liquibaseContext | default "prod" }}
         common:
           change-log: classpath:db/person/common/{{ .Values.environment.database.type }}/{{ $name }}
