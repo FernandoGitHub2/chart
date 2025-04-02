@@ -62,14 +62,14 @@ data:
       logdat:
         password: ${LOGDAT_USERNAME:logdat}
         {{- $logdatSuffix := ternary (printf "/%s" (.Values.environment.database.logdatUsername | b64dec)) "" $addScheme }}
-        url: ${LOGDAT_URL:jdbc:mysql://172.16.10.101:3306/logdat}
+        url: ${LOGDAT_URL:`jdbc:mysql://172.16.10.101:3306/logdat`}
         driver-class-name: {{ $driver }}
         username: ${LOGDAT_PASSWORD:logdat}
         maximum-pool-size: 1
         minimum-idle: 1
       security:
         password: ${SECURITY_USERNAME:security}
-        url: ${SECURITY_URL:jdbc:mysql://172.16.10.101:3306/security}
+        url: ${SECURITY_URL:`jdbc:mysql://172.16.10.101:3306/security`}
         driver-class-name: {{ $driver }}
         username: ${SECURITY_PASSWORD:security}
         maximum-pool-size: 1
@@ -77,7 +77,7 @@ data:
       {{- if or (eq (int .Values.distributor) 1) (eq (int .Values.distributor) 3)}}
       distributor:
         password: ${DIST_USERNAME:distributor}
-        url: ${DIST_URL:jdbc:mysql://172.16.10.101:3306/distributor}
+        url: ${DIST_URL:`jdbc:mysql://172.16.10.101:3306/distributor`}
         driver-class-name: {{ $driver }}
         username: ${DIST_PASSWORD:distributor}
         maximum-pool-size: 1
@@ -86,7 +86,7 @@ data:
       {{- if ge (int .Values.distributor) 2 }}
       distributorClient:
         password: ${CLIENT_USERNAME:distributor_client}
-        url: ${CLIENT_URL:jdbc:mysql://172.16.10.101:3306/distributor_client}
+        url: ${CLIENT_URL:`jdbc:mysql://172.16.10.101:3306/distributor_client`}
         driver-class-name: {{ $driver }}
         username: ${CLIENT_PASSWORD:distributor_client}
         maximum-pool-size: 1
@@ -94,7 +94,7 @@ data:
       {{- end }}
       jteller:
         password: ${JTELLER_USERNAME:jtellerv7}
-        url: ${JTELLER_URL:jdbc:mysql://172.16.10.101:3306/jtellerv7}
+        url: ${JTELLER_URL:`jdbc:mysql://172.16.10.101:3306/jtellerv7`}
         driver-class-name: {{ $driver }}
         username: ${JTELLER_PASSWORD:jtellerv7}
         maximum-pool-size: 1
@@ -102,7 +102,7 @@ data:
       {{- if or (eq (int .Values.signature) 1) (eq (int .Values.signature) 2) }}
       signature:
         password: ${SIGNATURE_USERNAME:jsignature}
-        url: ${SIGNATURE_URL:jdbc:mysql://172.16.10.101:3306/jsignature}
+        url: ${SIGNATURE_URL:`jdbc:mysql://172.16.10.101:3306/jsignature`}
         driver-class-name: {{ $driver }}
         username: ${SIGNATURE_PASSWORD:jsignature}
         maximum-pool-size: 1
@@ -110,21 +110,21 @@ data:
       {{- end }}
       personConf:
         password: ${PERCONF_USERNAME:jsigperson_conf}
-        url: ${PERCONF_URL:jdbc:mysql://172.16.10.101:3306/jsigperson_conf}
+        url: ${PERCONF_URL:`jdbc:mysql://172.16.10.101:3306/jsigperson_conf`}
         driver-class-name: {{ $driver }}
         username: ${PERCONF_PASSWORD:jsigperson_conf}
         maximum-pool-size: 1
         minimum-idle: 1
       common:
         password: ${COMMON_USERNAME:jsigcommon}
-        url: ${COMMON_URL:jdbc:mysql://172.16.10.101:3306/jsigcommon}
+        url: ${COMMON_URL:`jdbc:mysql://172.16.10.101:3306/jsigcommon`}
         driver-class-name: {{ $driver }}
         username: ${COMMON_PASSWORD:jsigcommon}
         maximum-pool-size: 1
         minimum-idle: 1
       personData:
         password: ${PERDATA_USERNAME:jsigperson_data}
-        url: ${PERDATA_URL:jdbc:mysql://172.16.10.101:3306/jsigcommon}
+        url: ${PERDATA_URL:`jdbc:mysql://172.16.10.101:3306/jsigperson_data`}
         driver-class-name: {{ $driver }}
         username: ${PERDATA_PASSWORD:jsigperson_data}
         maximum-pool-size: 1
