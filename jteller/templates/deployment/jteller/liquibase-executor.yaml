@@ -21,6 +21,8 @@ spec:
           image: 277232507401.dkr.ecr.us-west-2.amazonaws.com/jteller/liquibase-executor:v7.6.b
           imagePullPolicy: IfNotPresent
           env:
+            - name: MICRONAUT_CONFIG_FILES
+              value: "/config/application.yaml"
             - name: LOGDAT_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -33,8 +35,102 @@ spec:
                   name: general-secret
             - name: LOGDAT_URL
               value: {{trimSuffix "/" .Values.environment.database.url }}{{ternary (printf "/%s" (.Values.environment.database.logdatUsername | b64dec)) "" $addScheme }}
-            - name: MICRONAUT_CONFIG_FILES
-              value: "/config/application.yaml"
+            - name: SECURITY_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: securityUsername
+                  name: general-secret
+            - name: SECURITY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: securityPassword
+                  name: general-secret
+            - name: SECURITY_URL
+              value: {{trimSuffix "/" .Values.environment.database.url }}{{ternary (printf "/%s" (.Values.environment.database.securityUsername | b64dec)) "" $addScheme }}
+            - name: DIST_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: distributorUsername
+                  name: general-secret
+            - name: DIST_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: distributorPassword
+                  name: general-secret
+            - name: DIST_URL
+              value: {{trimSuffix "/" .Values.environment.database.url }}{{ternary (printf "/%s" (.Values.environment.database.distributorUsername | b64dec)) "" $addScheme }}
+            - name: CLIENT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: clientUsername
+                  name: general-secret
+            - name: CLIENT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: clientPassword
+                  name: general-secret
+            - name: CLIENT_URL
+              value: {{trimSuffix "/" .Values.environment.database.url }}{{ternary (printf "/%s" (.Values.environment.database.clientUsername | b64dec)) "" $addScheme }}
+            - name: JTELLER_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: jtellerUsername
+                  name: general-secret
+            - name: JTELLER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: jtellerPassword
+                  name: general-secret
+            - name: JTELLER_URL
+              value: {{trimSuffix "/" .Values.environment.database.url }}{{ternary (printf "/%s" (.Values.environment.database.jtellerUsername | b64dec)) "" $addScheme }}
+            - name: SIGNATURE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: signatureUsername
+                  name: general-secret
+            - name: SIGNATURE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: signaturePassword
+                  name: general-secret
+            - name: SIGNATURE_URL
+              value: {{trimSuffix "/" .Values.environment.database.url }}{{ternary (printf "/%s" (.Values.environment.database.signatureUsername | b64dec)) "" $addScheme }}
+            - name: PERCONF_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: personConfUsername
+                  name: general-secret
+            - name: PERCONF_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: personConfPassword
+                  name: general-secret
+            - name: PERCONF_URL
+              value: {{trimSuffix "/" .Values.environment.database.url }}{{ternary (printf "/%s" (.Values.environment.database.personConfUsername | b64dec)) "" $addScheme }}
+            - name: COMMON_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: commonUsername
+                  name: general-secret
+            - name: COMMON_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: commonPassword
+                  name: general-secret
+            - name: COMMON_URL
+              value: {{trimSuffix "/" .Values.environment.database.url }}{{ternary (printf "/%s" (.Values.environment.database.commonUsername | b64dec)) "" $addScheme }}
+            - name: PERDATA_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: personDataUsername
+                  name: general-secret
+            - name: PERDATA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: personDataPassword
+                  name: general-secret
+            - name: PERDATA_URL
+              value: {{trimSuffix "/" .Values.environment.database.url }}{{ternary (printf "/%s" (.Values.environment.database.personDataUsername | b64dec)) "" $addScheme }}
           volumeMounts:
             - name: config-volume
               mountPath: /config/application.yaml
