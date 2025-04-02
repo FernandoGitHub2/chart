@@ -1,0 +1,48 @@
+environment:
+  mongo:
+    username: bW9uZ29hZG1pbg==
+    password: c2VjcmV0
+  minio:
+    username: bWluaW8=
+    password: bWluaW8xMjM=
+  database:
+    jtellerUsername: anRlbGxlcnY3
+    jtellerPassword: anRlbGxlcnY3
+    distributorUsername: ZGlzdHJpYnV0b3I=
+    distributorPassword: ZGlzdHJpYnV0b3I=
+    clientUsername: ZGlzdHJpYnV0b3JfY2xpZW50
+    clientPassword: ZGlzdHJpYnV0b3JfY2xpZW50
+    signatureUsername: anNpZ25hdHVyZQ==
+    signaturePassword: anNpZ25hdHVyZQ==
+    personDataUsername: anNpZ3BlcnNvbl9kYXRh
+    personDataPassword: anNpZ3BlcnNvbl9kYXRh
+    personConfUsername: anNpZ3BlcnNvbl9jb25m
+    personConfPassword: anNpZ3BlcnNvbl9jb25m
+    commonUsername: anNpZ2NvbW1vbg==
+    commonPassword: anNpZ2NvbW1vbg==
+    logdatUsername: bG9nZGF0
+    logdatPassword: bG9nZGF0
+    keycloakUsername: a2V5Y2xvYWs=
+    keycloakPassword: a2V5Y2xvYWs=
+    securityUsername: c2VjdXJpdHk=
+    securityPassword: c2VjdXJpdHk=
+    isAliveUsername: aXNfYWxpdmU=
+    isAlivePassword: aXNfYWxpdmU=
+  keycloak:
+    adminUser: YWRtaW4=
+    adminPassword: YWRtaW4=
+  backend:
+    mail:
+      username: YWRtaW5AYnl0ZXN3LmNvbQ==
+      password: b2dscmZlaXdvdW9pZGlqZA==
+    rabbitmq:
+      password: Qnl0ZTIwMjQ=
+      username: YWRtaW4=
+    credentials:
+      usercore: YWRtaW4=
+      passcore: QWRtaW4yMDI1
+      userClient: YWRtaW4=
+      passClient: QWRtaW4yMDI1
+    opensearch:
+      username: YWRtaW4=
+      password: YWRtaW4=

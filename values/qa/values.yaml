@@ -1,0 +1,236 @@
+environment:
+  database:
+    url: jdbc:oracle:thin:@172.16.10.108:51521:xe
+    type: oracle
+    audScheme: logdat
+    showSql: true
+    sqlBasicBinder: TRACE
+    formatSql: true
+  keycloak:
+    securityOpt: 2
+    url: https://keycloak.bytesw.cloud:32008
+    realm: jteller
+    roles:
+      - user
+      - admin
+    jtellerSpec:
+      resource: specs-configuration
+      secret: bOhIy87MhasjRhdBOod4kn755mfLGklD
+    jtellerOv: 
+      resource: jt-backend
+      secret: cqMdr1NC4xKrn1gJCFJfBTD9BVk3xjPL
+    distributor:
+      resource: distributor
+      secret: 1uExYQfdd1zk97i6hrZnDrpSk9HyoMnz
+    signature:
+      resource: firmas-be
+      secret: fEiyxcKePNWLoY7HCWUxW8ke0fV6XR5C
+    configuration:
+      resource: configuration-service
+      secret: YITNtt5okPhsJjMkX55kc9qU6N7D6ye7
+    isAlive:
+      resource: is-alive-backend
+      secret: ySLYETxxymNFBvhhuMMv0hiCzy9AJu41
+    realmInHeader: jteller
+  backend:
+    resolver: fixed
+    timeZone: America/Guatemala
+    locale: es
+    personInterface: 1
+    personUrl: http://person-data-service:8080
+    commonUrl: http://common-service:8080
+    catalogUrl: http://catalog:2102
+    minioUrl: http://minio:9000
+    securityCore: http://security:1119
+    securityClient: http://security:1119
+    distributorUrl: http://distributor:8080
+    minioTimeout: 8
+    mailResetPass: 0
+    validUserMove: 0
+    codeTrxCloseCash: 9690
+    codeTrxOpenCash: 9691
+    routineBalance: 5
+    trxCloseCashier: 114
+    trxOpenCashier: 115
+    trxCodeMoveCashInventory: 9692
+    openDayCode: 9111
+    routineDateHost: 618
+    trxEgressCode: 1
+    startDayTrxCode: 9675
+    voucherServer: https://keycloak.bytesw.cloud:32008
+    closeCashierUrl: http://172.16.10.108:9091/payment/transactions
+    isAlive:
+      enable: true
+      namespace: is-alive
+      read: select count(*) from jtellerv7.IS_ALIVE_CONTROL
+      write: insert into jtellerv7.IS_ALIVE_CONTROL(CONTROL_DATE) VALUES (sysdate)
+      prometheus: http://172.16.10.108:30024/api/v1/query
+    mail:
+      host: 172.16.20.209
+      port: 25
+      auth: false
+      connectiontimeout: 5000
+      timeout: 5000
+      writetimeout: 5000
+      starttls: false
+    numberFormat:
+      includeThousandsSeparator: 1
+      allowDecimal: 1
+      decimalSymbol: "."
+      thousandsSeparatorSymbol: ","
+      decimalLimit: 2
+      decimalLimitOnRate: 4
+    whatsapp:
+      token: EAAK02w5gL8IBO2rvWaofISogbiV7L5dLasCs1hLB4uGHvjQBcfYTbRlrBcK4Lp5ipcMD5e1MEoeDlXZCW0j3e7q73vgivL5qbNX7AxZBHUpZBXgbEkt0s7JvRztAu5LpZA99tI8PKNJfZBZB4zIPkfhPmlNrJnlec9iAyRfbYmMT6cBI8veEm01ksfDugFCdG8ZApfXq72976m5syKTlFD5maH5tFIZD
+      id: "225010557368287"
+      version: v18.0
+      templateName: comprobante
+      templateLanguage: es
+    rabbitmq:
+      port: 5672
+      host: rabbitmq
+      queue: journal-process-queue
+    opensearch:
+      enable: 1
+      host: 172.16.10.108
+      protocol: https
+      port: 30044
+      resendOpensearch: 21600000
+    signature:
+      corebankClient: http://corebank-jsing:8080/coreBankResponse/getBycodigoCliente
+      corebankSignatures: http://corebank-jsing:8080/coreBankResponse/getCoreBankResponse
+      signatureCore: http://provide-signature:8080/provide-signature-service/provideAccountData/
+      entityStatusAccountId: 2
+      entityStatusSignatureId: 5
+      deleteUsedCard: 0
+    offline:
+      queryTrxStatus: 616
+      method: "1" #1 - Verificación por ping , 2 -Verificación por endpoint
+      routineCheckConnectionStatus: 615
+      timeout: 3000
+      enable: 0
+  frontend:
+    aceptedUrls:
+     - https://keycloak.bytesw.cloud:32008
+replicas: 1
+namespace: jteller
+createNamespace: false
+executionMode: 2 # 0 - arquitectura, 1 - database, 2 - jteller
+verifyDevice: 0
+actuator: 1
+notRequireverify: 2
+liquibaseEnable: true
+liquibaseContext: oracle,prod
+liquibaseInit: false
+enableSura: 0
+distributor: 1 # 0 - desabilitado, 1 - core , 2 - cliente , 3 - ambos
+signature: 1 # 0 - desabilitado, 1 - centralizado , 2 - distribuidos
+istio:
+  enable: true
+  ssl:
+    enable: true
+    secretName: my-tls-secret
+    appHost: jtellerqa-108.bytesw.cloud
+    keycloakHost: keycloakqa-108.bytesw.cloud
+    develop: true
+    ip: 172.16.10.108
+camposTabla:
+  tabla-101: |
+    nameTable: tabla-101
+    columns:
+      -
+       name: columna a 
+       number: 0
+       label: Core
+       nameObject: CORE
+       dataType: A
+       length: 10
+       editionCode: null
+       resource: RECLAMOS,L,0|RECLAMO,O|CORE,O
+      -
+       name: columna b
+       number: 1
+       label: No Poliza
+       nameObject: NUMERO_DE_POLIZA
+       dataType: A
+       length: 20
+       editionCode: null
+       resource: RECLAMOS,L,0|RECLAMO,O|NUMERO_DE_POLIZA,O
+      -
+       name: columna c
+       number: 2
+       label: No Reclamo
+       nameObject: NO_RECLAMO
+       dataType: A
+       length: 12
+       editionCode: null
+       resource: RECLAMOS,L,0|RECLAMO,O|NO_RECLAMO,O
+      -
+       name: columna d
+       number: 3
+       label: No Cobertura
+       nameObject: NO_COBERTURA
+       dataType: A
+       length: 10
+       editionCode: null
+       resource: RECLAMOS,L,0|RECLAMO,O|COBERTURA,O|NO_COBERTURA,O
+      -
+       name: columna e
+       number: 4
+       label: F Reclamo
+       nameObject: FECHA_REGISTRO
+       dataType: A
+       length: 10
+       editionCode: null
+       resource: RECLAMOS,L,0|RECLAMO,O|FECHA_REGITRO,O
+      -
+       name: columna f
+       number: 5
+       label: Saldo
+       nameObject: MONTO_DEDUCIBLE
+       dataType: V
+       length: 12
+       editionCode: null
+       resource: RECLAMOS,L,0|RECLAMOS,O|COBERTURAS,O|MONTO_DEDUCIBLE,O
+      -
+       name: columna g
+       number: 6
+       label: Valor a Pagar
+       nameObject: cashToPay
+       dataType: V
+       length: 12
+       editionCode: null
+       resource: 0
+     isTotalize: 1
+     columnsToTotalize:
+      -
+       columnToTotalizeNumber: 5
+       correlativeField: 60
+      modifiable:
+       isModifiable: 1
+       isTotalize: 1
+       columnToTotalizeNumber: 6
+       correlativeField: 61
+  appPayments: |
+    typeFile: "JSON"
+    moreMessages: false
+    fieldNameData: null
+    fieldDataArray: false
+    finalObject: null
+    objectOfLst:
+      fields:
+        -
+          name: "reqAuthorization"
+          type: 'C'
+          start: null
+          end: null
+          length: 1
+          defectVal: false
+    acceptedWhen:
+      field: "errorCode"
+      value: 0000
+    reqAuthorizationWhen:
+      field: "reqAuthorization"
+      value: true
+    rejectedWhen: null
+    
