@@ -21,7 +21,7 @@ environment:
     commonUsername: anNpZ2NvbW1vbg==
     commonPassword: anNpZ2NvbW1vbg==
     logdatUsername: bG9nZGF0
-    logdatPassword: bG9nZGF0MQ==
+    logdatPassword: bG9nZGF0
     keycloakUsername: a2V5Y2xvYWs=
     keycloakPassword: a2V5Y2xvYWs=
     securityUsername: c2VjdXJpdHk=
