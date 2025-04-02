@@ -1,7 +1,7 @@
 environment:
   database:
-    url: jdbc:mysql://172.16.10.101:3306/
-    type: mysql
+    url: jdbc:oracle:thin:@//172.16.10.101:1521/xe
+    type: oracle
     audScheme: logdat
     showSql: true
     sqlBasicBinder: TRACE
@@ -37,25 +37,25 @@ environment:
       - admin
     jtellerSpec:
       resource: specs-configuration
-      secret: 9W8PcEf7uhvCkmvuexjCLgND4EToXzKC
+      secret: 6wzDzuqL8ghSCExqHskt1sK5ES390VkB
     jtellerOv:
       resource: jt-backend
-      secret: 4Cu0UyWMkUk2Qop26dgVpT23fvG7cZT4
+      secret: PIzu4H42gUjM6oxm3bi4Hm9Uzuxyo9tZ
     distributor:
       resource: distributor
-      secret: AxatoMMyMvSpX6voSdmARN4Gql0FYp5o
+      secret: Z1oahUWIZ8OqESfwtwO6sIrsaqA7uM4q
     signature:
       resource: firmas-be
-      secret: m0Hd3XtKVpHxRcLOGHVgC51OH7VFhmQ2
+      secret: PlZkBvOi6jE29Uy7A2J5G1K43iHRP8Ud
     configuration:
       resource: configuration-service
-      secret: AHWdclMePbiqj2VNZOCcQb9zIJH6GOU1
+      secret: Q3oUuOhUUKvcTNJxhZvIULrXjdZgJzFH
     isAlive:
       resource: is-alive-backend
-      secret: nTRlAtHrcE6jaFTTPt3ttOizObqNlWcB
+      secret: l6z2UuOZkTwsBLXZeqkWVBRsOrVadhPd
     realmInHeader: jteller
     adminUser: YWRtaW4=
-    adminPassword: QWRtaW4=
+    adminPassword: YWRtaW4=
   backend:
     resolver: fixed
     timeZone: America/Guatemala
