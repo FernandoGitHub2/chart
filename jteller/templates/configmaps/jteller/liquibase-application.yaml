@@ -60,81 +60,73 @@ data:
           contexts: {{ .Values.liquibaseContext | default "prod" }}
     datasources:
       logdat:
-        password: logdat
+        password: ${LOGDAT_USERNAME:logdat}
         {{- $logdatSuffix := ternary (printf "/%s" (.Values.environment.database.logdatUsername | b64dec)) "" $addScheme }}
-        url: {{ trimSuffix "/" .Values.environment.database.url }}{{ $logdatSuffix }}
+        url: ${LOGDAT_URL:jdbc:mysql://172.16.10.101:3306/logdat}
         driver-class-name: {{ $driver }}
-        username: logdat
+        username: ${LOGDAT_PASSWORD:logdat}
         maximum-pool-size: 1
         minimum-idle: 1
       security:
-        password: security
-        {{- $securitySuffix := ternary (printf "/%s" (.Values.environment.database.securityUsername | b64dec)) "" $addScheme }}
-        url: {{ trimSuffix "/" .Values.environment.database.url }}{{ $securitySuffix }}
+        password: ${SECURITY_USERNAME:security}
+        url: ${SECURITY_URL:jdbc:mysql://172.16.10.101:3306/security}
         driver-class-name: {{ $driver }}
-        username: security
+        username: ${SECURITY_PASSWORD:security}
         maximum-pool-size: 1
         minimum-idle: 1
       {{- if or (eq (int .Values.distributor) 1) (eq (int .Values.distributor) 3)}}
       distributor:
-        password: distributor
-        {{- $distributorSuffix := ternary (printf "/%s" (.Values.environment.database.distributorUsername | b64dec)) "" $addScheme }}
-        url: {{ trimSuffix "/" .Values.environment.database.url }}{{ $distributorSuffix }}
+        password: ${DIST_USERNAME:distributor}
+        url: ${DIST_URL:jdbc:mysql://172.16.10.101:3306/distributor}
         driver-class-name: {{ $driver }}
-        username: distributor
+        username: ${DIST_PASSWORD:distributor}
         maximum-pool-size: 1
         minimum-idle: 1
       {{- end }}
       {{- if ge (int .Values.distributor) 2 }}
       distributorClient:
-        password: distributor_client
-        {{- $clientSuffix := ternary (printf "/%s" (.Values.environment.database.clientUsername | b64dec)) "" $addScheme }}
-        url: {{ trimSuffix "/" .Values.environment.database.url }}{{ $clientSuffix }}
+        password: ${CLIENT_USERNAME:distributor_client}
+        url: ${CLIENT_URL:jdbc:mysql://172.16.10.101:3306/distributor_client}
         driver-class-name: {{ $driver }}
-        username: distributor_client
+        username: ${CLIENT_PASSWORD:distributor_client}
         maximum-pool-size: 1
         minimum-idle: 1
       {{- end }}
       jteller:
-        password: jtellerv7
-        {{- $jtellerSuffix := ternary (printf "/%s" (.Values.environment.database.jtellerUsername | b64dec)) "" $addScheme }}
-        url: {{ trimSuffix "/" .Values.environment.database.url }}{{ $jtellerSuffix }}
+        password: ${JTELLER_USERNAME:jtellerv7}
+        url: ${JTELLER_URL:jdbc:mysql://172.16.10.101:3306/jtellerv7}
         driver-class-name: {{ $driver }}
-        username: jtellerv7
+        username: ${JTELLER_PASSWORD:jtellerv7}
         maximum-pool-size: 1
         minimum-idle: 1
       {{- if or (eq (int .Values.signature) 1) (eq (int .Values.signature) 2) }}
       signature:
-        password: jsignature
-        {{- $signatureSuffix := ternary (printf "/%s" (.Values.environment.database.signatureUsername | b64dec)) "" $addScheme }}
-        url: {{ trimSuffix "/" .Values.environment.database.url }}{{ $signatureSuffix }}
+        password: ${SIGNATURE_USERNAME:jsignature}
+        url: ${SIGNATURE_URL:jdbc:mysql://172.16.10.101:3306/jsignature}
         driver-class-name: {{ $driver }}
-        username: jsignature
+        username: ${SIGNATURE_PASSWORD:jsignature}
         maximum-pool-size: 1
         minimum-idle: 1
       {{- end }}
       personConf:
-        password: jsigperson_conf
-        {{- $personConfSuffix := ternary (printf "/%s" (.Values.environment.database.personConfUsername | b64dec)) "" $addScheme }}
-        url: {{ trimSuffix "/" .Values.environment.database.url }}{{ $personConfSuffix }}
+        password: ${PERCONF_USERNAME:jsigperson_conf}
+        url: ${PERCONF_URL:jdbc:mysql://172.16.10.101:3306/jsigperson_conf}
         driver-class-name: {{ $driver }}
-        username: jsigperson_conf
+        username: ${PERCONF_PASSWORD:jsigperson_conf}
         maximum-pool-size: 1
         minimum-idle: 1
       common:
-        password: jsigcommon
-        {{- $commonSuffix := ternary (printf "/%s" (.Values.environment.database.commonUsername | b64dec)) "" $addScheme }}
-        url: {{ trimSuffix "/" .Values.environment.database.url }}{{ $commonSuffix }}
+        password: ${COMMON_USERNAME:jsigcommon}
+        url: ${COMMON_URL:jdbc:mysql://172.16.10.101:3306/jsigcommon}
         driver-class-name: {{ $driver }}
-        username: jsigcommon
+        username: ${COMMON_PASSWORD:jsigcommon}
         maximum-pool-size: 1
         minimum-idle: 1
       personData:
-        password: jsigperson_data
-        {{- $personDataSuffix := ternary (printf "/%s" (.Values.environment.database.personDataUsername | b64dec)) "" $addScheme }}
-        url: {{ trimSuffix "/" .Values.environment.database.url }}{{ $personDataSuffix }}
+        password: ${PERDATA_USERNAME:jsigperson_data}
+        url: ${PERDATA_URL:jdbc:mysql://172.16.10.101:3306/jsigcommon}
         driver-class-name: {{ $driver }}
-        username: jsigperson_data
+        username: ${PERDATA_PASSWORD:jsigperson_data}
         maximum-pool-size: 1
         minimum-idle: 1
     micronaut:
