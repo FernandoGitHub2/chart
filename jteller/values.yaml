@@ -1,6 +1,6 @@
 environment:
   database:
-    url: jdbc:oracle:thin:@172.16.10.108:51521:xe
+    url: jdbc:oracle:thin:@//172.16.10.101:1521/xe
     type: oracle
     audScheme: logdat
     showSql: true
@@ -37,22 +37,22 @@ environment:
       - admin
     jtellerSpec:
       resource: specs-configuration
-      secret: bOhIy87MhasjRhdBOod4kn755mfLGklD
+      secret: 6wzDzuqL8ghSCExqHskt1sK5ES390VkB
     jtellerOv:
       resource: jt-backend
-      secret: cqMdr1NC4xKrn1gJCFJfBTD9BVk3xjPL
+      secret: PIzu4H42gUjM6oxm3bi4Hm9Uzuxyo9tZ
     distributor:
       resource: distributor
-      secret: 1uExYQfdd1zk97i6hrZnDrpSk9HyoMnz
+      secret: Z1oahUWIZ8OqESfwtwO6sIrsaqA7uM4q
     signature:
       resource: firmas-be
-      secret: fEiyxcKePNWLoY7HCWUxW8ke0fV6XR5C
+      secret: PlZkBvOi6jE29Uy7A2J5G1K43iHRP8Ud
     configuration:
       resource: configuration-service
-      secret: YITNtt5okPhsJjMkX55kc9qU6N7D6ye7
+      secret: Q3oUuOhUUKvcTNJxhZvIULrXjdZgJzFH
     isAlive:
       resource: is-alive-backend
-      secret: ySLYETxxymNFBvhhuMMv0hiCzy9AJu41
+      secret: l6z2UuOZkTwsBLXZeqkWVBRsOrVadhPd
     realmInHeader: jteller
     adminUser: YWRtaW4=
     adminPassword: YWRtaW4=
@@ -60,7 +60,7 @@ environment:
     resolver: fixed
     timeZone: America/Guatemala
     locale: es
-    personInterface: 1
+    personInterface: false
     personUrl: http://person-data-service:8080
     commonUrl: http://common-service:8080
     catalogUrl: http://catalog:2102
@@ -73,22 +73,22 @@ environment:
     validUserMove: 0
     codeTrxCloseCash: 9690
     codeTrxOpenCash: 9691
-    routineBalance: 5
+    routineBalance: 612
     trxCloseCashier: 114
     trxOpenCashier: 115
     trxCodeMoveCashInventory: 9692
     openDayCode: 9111
     routineDateHost: 618
     trxEgressCode: 1
-    startDayTrxCode: 9675
-    voucherServer: https://keycloak.bytesw.cloud:32008
+    startDayTrxCode: 115
+    voucherServer: https://keycloak.bytesw.cloud:30010
     closeCashierUrl: http://172.16.10.108:9091/payment/transactions
     isAlive:
       enable: true
       namespace: is-alive
       read: select count(*) from jtellerv7.IS_ALIVE_CONTROL
-      write: insert into jtellerv7.IS_ALIVE_CONTROL(CONTROL_DATE) VALUES (sysdate)
-      prometheus: http://172.16.10.108:30024/api/v1/query
+      write: insert into jtellerv7.IS_ALIVE_CONTROL(CONTROL_DATE) VALUES (SYSDATE)
+      prometheus: http://172.16.10.108:9091/api/v1/query
     mail:
       host: smtp.gmail.com
       port: 587
@@ -119,9 +119,9 @@ environment:
       password: Qnl0ZTIwMjQ=
       username: YWRtaW4=
     opensearch:
-      enable: 1
-      host: 172.16.10.108
-      protocol: https
+      enable: 0
+      host: 172.16.10.105
+      protocol: http
       port: 30044
       resendOpensearch: 21600000
       username: YWRtaW4=
@@ -146,7 +146,7 @@ environment:
       enable: 0
   frontend:
     aceptedUrls:
-      - https://keycloak.bytesw.cloud:32008
+      - http://172.16.10.101:30010
   mongo:
     username: bW9uZ28=
     password: bW9uZ28xMjM=
