@@ -1,4 +1,5 @@
 {{- $name := ternary "db.changelog-master-init.xml" "db.changelog-master.xml" .Values.liquibaseInit }}
+{{- $addScheme := eq .Values.environment.database.type "mysql" }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -20,10 +21,18 @@ spec:
           image: 277232507401.dkr.ecr.us-west-2.amazonaws.com/jteller/liquibase-executor:v7.6.b
           imagePullPolicy: IfNotPresent
           env:
-{{/*            - name: DB_TYPE*/}}
-{{/*              value: "{{.Values.environment.database.type}}"*/}}
-{{/*            - name: database.url*/}}
-{{/*              value: "{{.Values.environment.database.url}}"*/}}
+            - name: LOGDAT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: logdatUsername
+                  name: general-secret
+            - name: LOGDAT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: logdatPassword
+                  name: general-secret
+            - name: LOGDAT_URL
+              value: {{trimSuffix "/" .Values.environment.database.url }}{{ternary (printf "/%s" (.Values.environment.database.logdatUsername | b64dec)) "" $addScheme }}
             - name: MICRONAUT_CONFIG_FILES
               value: "/config/application.yaml"
           volumeMounts:
