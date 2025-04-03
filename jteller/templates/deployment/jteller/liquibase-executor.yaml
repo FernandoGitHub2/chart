@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: liquibase-executor
-          image: 277232507401.dkr.ecr.us-west-2.amazonaws.com/jteller/liquibase-executor:v7.6.b
+          image: 277232507401.dkr.ecr.us-west-2.amazonaws.com/jteller/liquibase-executor:v7.6.c
           imagePullPolicy: IfNotPresent
           env:
             - name: MICRONAUT_CONFIG_FILES
