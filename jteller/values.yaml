@@ -480,3 +480,6 @@ services:
     tag: dev.0.0.12.a
     port: 8080
     typeService: C
+  liquibaseExecutor:
+    image: liquibase-executor
+    tag: v7.6.d
