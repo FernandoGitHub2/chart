@@ -156,7 +156,7 @@ environment:
 replicas: 1
 namespace: jteller
 createNamespace: true
-executionMode: 2 # 0 - arquitectura, 1 - database, 2 - jteller
+executionMode: 0 # 0 - arquitectura, 1 - database, 2 - jteller
 verifyDevice: 0
 actuator: 1
 notRequireverify: 2
@@ -164,7 +164,7 @@ liquibaseEnable: true
 liquibaseContext: mysql,prod
 liquibaseInit: false
 enableSura: 0
-distributor: 3 # 0 - desabilitado, 1 - core , 2 - cliente , 3 - ambos
+distributor: 2 # 0 - desabilitado, 1 - core , 2 - cliente , 3 - ambos
 signature: 1 # 0 - desabilitado, 1 - centralizado , 2 - distribuidos
 istio:
   enable: true
