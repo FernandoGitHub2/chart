@@ -117,6 +117,8 @@ spec:
               value: "{{ .Values.environment.database.showSql }}"
             - name: config.ambiente
               value: {{ .Values.environment.keycloak.realm }}
+            - name: config.realm
+              value: {{ .Values.environment.keycloak.realmInHeader }}
             - name: mail.host
               value: {{ .Values.environment.backend.mail.host }}
             - name: mail.port
