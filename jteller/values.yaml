@@ -84,7 +84,7 @@ environment:
     voucherServer: https://keycloak.bytesw.cloud:30010
     closeCashierUrl: http://172.16.10.108:9091/payment/transactions
     isAlive:
-      enable: true
+      enable: false
       namespace: is-alive
       read: select count(*) from jtellerv7.IS_ALIVE_CONTROL
       write: insert into jtellerv7.IS_ALIVE_CONTROL(CONTROL_DATE) VALUES (SYSDATE)
