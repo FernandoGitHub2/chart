@@ -161,7 +161,7 @@ verifyDevice: 0
 actuator: 1
 notRequireverify: 2
 liquibaseEnable: true
-liquibaseContext: mysql,prod
+liquibaseContext: oracle,prod
 liquibaseInit: false
 enableSura: 0
 distributor: 3 # 0 - desabilitado, 1 - core , 2 - cliente , 3 - ambos
