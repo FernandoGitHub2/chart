@@ -319,7 +319,7 @@ services:
     port: 8080
   operationView:
     image: jt-operation-view-kube-dev
-    tag: dev.1.0.84.184.10
+    tag: dev.1.0.84.184.12
     typeService: C
     port: 8080
   security:
@@ -391,12 +391,12 @@ services:
       url: /v1/actuator
   firmasView:
     image: firmas-front-kube
-    tag: dev.1.1.14.6
+    tag: dev.1.1.14.7
     port: 8080
     typeService: C
   firmas:
     image: firmas-service-kube
-    tag: v7.6.j.f.j.3
+    tag: v7.6.j.f.j.12
     port: 2114
     typeService: C
     memoryLimit: 1200Mi
