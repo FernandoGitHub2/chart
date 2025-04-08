@@ -37,19 +37,19 @@ environment:
       - admin
     jtellerSpec:
       resource: specs-configuration
-      secret: 6wzDzuqL8ghSCExqHskt1sK5ES390VkB
+      secret: seNyvFjDJpinykmNILIsNLc1Pu4d3Rs0
     jtellerOv:
       resource: jt-backend
-      secret: PIzu4H42gUjM6oxm3bi4Hm9Uzuxyo9tZ
+      secret: FbGT4n0dlW44t4cuRkf0B35MbjgZ7Hlp
     distributor:
       resource: distributor
-      secret: Z1oahUWIZ8OqESfwtwO6sIrsaqA7uM4q
+      secret: Ow2b8BNqfrzIqqeLONTKcbzJq7eQUXEh
     signature:
       resource: firmas-be
-      secret: PlZkBvOi6jE29Uy7A2J5G1K43iHRP8Ud
+      secret: TMgw6kvGalfYVIsHBWyZJQsEpTJr3yLV
     configuration:
       resource: configuration-service
-      secret: Q3oUuOhUUKvcTNJxhZvIULrXjdZgJzFH
+      secret: Bb7RneDwcGnJGUsnGs33cW1ZL3yo1fTW
     isAlive:
       resource: is-alive-backend
       secret: l6z2UuOZkTwsBLXZeqkWVBRsOrVadhPd

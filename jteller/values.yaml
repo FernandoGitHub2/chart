@@ -1,7 +1,7 @@
 environment:
   database:
-    url: jdbc:oracle:thin:@//172.16.10.101:1521/xe
-    type: oracle
+    url: jdbc:mysql://172.16.10.101:3306/
+    type: mysql
     audScheme: logdat
     showSql: true
     sqlBasicBinder: TRACE
@@ -37,19 +37,19 @@ environment:
       - admin
     jtellerSpec:
       resource: specs-configuration
-      secret: seNyvFjDJpinykmNILIsNLc1Pu4d3Rs0
+      secret: 9W8PcEf7uhvCkmvuexjCLgND4EToXzKC
     jtellerOv:
       resource: jt-backend
-      secret: FbGT4n0dlW44t4cuRkf0B35MbjgZ7Hlp
+      secret: 4Cu0UyWMkUk2Qop26dgVpT23fvG7cZT4
     distributor:
       resource: distributor
-      secret: Ow2b8BNqfrzIqqeLONTKcbzJq7eQUXEh
+      secret: AxatoMMyMvSpX6voSdmARN4Gql0FYp5o
     signature:
       resource: firmas-be
-      secret: TMgw6kvGalfYVIsHBWyZJQsEpTJr3yLV
+      secret: m0Hd3XtKVpHxRcLOGHVgC51OH7VFhmQ2
     configuration:
       resource: configuration-service
-      secret: Bb7RneDwcGnJGUsnGs33cW1ZL3yo1fTW
+      secret: AHWdclMePbiqj2VNZOCcQb9zIJH6GOU1
     isAlive:
       resource: is-alive-backend
       secret: l6z2UuOZkTwsBLXZeqkWVBRsOrVadhPd
@@ -161,7 +161,7 @@ verifyDevice: 0
 actuator: 1
 notRequireverify: 2
 liquibaseEnable: true
-liquibaseContext: oracle,prod
+liquibaseContext: mysql,prod
 liquibaseInit: false
 enableSura: 0
 distributor: 3 # 0 - desabilitado, 1 - core , 2 - cliente , 3 - ambos
