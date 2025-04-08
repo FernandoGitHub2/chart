@@ -234,6 +234,8 @@ spec:
                 secretKeyRef:
                   key: passcore
                   name: general-secret
+            - name: config.isAlive.enable
+              value: {{ ternary "1" "0" .Values.environment.backend.isAlive.enable }}
           image: {{.Values.services.registry}}{{.Values.services.management.image}}:{{.Values.services.management.tag }}
           imagePullPolicy: IfNotPresent
           {{- if and (hasKey .Values.services.management "actuator") (eq (int .Values.actuator) 1) }}

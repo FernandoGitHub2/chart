@@ -145,9 +145,9 @@ spec:
               value: {{.Values.environment.backend.isAlive.write}}
             - name: spring.security.oauth2.resourceserver.jwt.issuer-uri
               value: {{.Values.environment.keycloak.url}}/realms/{{.Values.environment.keycloak.realm}}
-            {{- if .Values.environment.backend.isAlive.enable}}
             - name: config.isAlive.enable
-              value: "1"
+              value: {{ ternary "1" "0" .Values.environment.backend.isAlive.enable }}
+            {{- if .Values.environment.backend.isAlive.enable}}
             - name: config.isAlive.realm
               value: {{.Values.environment.keycloak.realm}}
             - name: config.isAlive.resource
