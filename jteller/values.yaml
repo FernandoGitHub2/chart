@@ -482,4 +482,4 @@ services:
     typeService: C
   liquibaseExecutor:
     image: liquibase-executor
-    tag: v7.6.d
+    tag: v7.6.e.e
