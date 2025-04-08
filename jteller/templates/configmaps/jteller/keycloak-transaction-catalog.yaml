@@ -296,6 +296,9 @@ data:
             - name: changes-attributes-by-condition-resource
               patterns:
                 - /v1/changeAttributesByCondition/*
+            - name: result-fields-resource
+              patterns:
+                - /v1/resultFields/*
       policy-enforcer-config:
         paths:
           - methods:
@@ -1051,6 +1054,20 @@ data:
                   - view
             path: /actuator/**
             enforcementMode: DISABLED
+          - methods:
+              - method: GET
+                scopes:
+                  - view
+              - method: POST
+                scopes:
+                  - create
+              - method: PATCH
+                scopes:
+                  - update
+              - method: DELETE
+                scopes:
+                  - delete
+            path: /v1/resultFields/*
     config:
       distEnable: 0
     ---
