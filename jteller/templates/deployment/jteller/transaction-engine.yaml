@@ -237,7 +237,7 @@ spec:
               value: "{{.Values.environment.backend.offline.timeout}}"
             - name: offline.enable
               value: "{{.Values.environment.backend.offline.enable}}"
-            - name: config.isAlive.enable
+            - name: config.isAlive
               value: "{{ ternary "1" "0" .Values.environment.backend.isAlive.enable }}"
           image: {{ .Values.services.registry}}{{.Values.services.transactionEngine.image}}:{{.Values.services.transactionEngine.tag }}
           imagePullPolicy: IfNotPresent
