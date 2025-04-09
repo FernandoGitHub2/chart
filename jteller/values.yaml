@@ -462,12 +462,12 @@ services:
     typeService: C
   isAliveView:
     image: is-alive-frontend
-    tag: dev.0.0.35
+    tag: dev.0.0.38
     port: 8080
     typeService: C
   isAliveBatch:
     image: is-alive-batch-monitor
-    tag: dev.0.0.29.a
+    tag: dev.0.0.30
     port: 8080
     typeService: C
   isAliveMonitor:
