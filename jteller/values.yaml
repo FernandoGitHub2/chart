@@ -381,7 +381,7 @@ services:
     typeService: C
     proxy: edge
     hostname: false
-    registry: quay.io/keycloak/keycloak
+    registry: quay.io/keycloak
   hermes:
     image: hermes-kube
     tag: v7.6.c.d.1
