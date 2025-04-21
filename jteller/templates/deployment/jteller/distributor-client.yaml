@@ -60,9 +60,9 @@ spec:
         - name: config.distCore
           value: "{{ .Values.environment.backend.distributorUrl }}"
         - name: spring.jpa.properties.org.hibernate.envers.default_schema
-          value: {{ .Values.environment.database.audScheme }}
+          value: {{.Values.environment.database.clientUsername | b64dec}}
         - name: spring.jpa.properties.org.hibernate.envers.default_catalog
-          value: {{ .Values.environment.database.audScheme }}
+          value: {{.Values.environment.database.clientUsername | b64dec}}
         - name: config.credentials.securityClient
           value: "{{ .Values.environment.backend.securityClient }}"
         - name: config.credentials.securityCore
