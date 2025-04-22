@@ -314,7 +314,7 @@ services:
       url: /v1/actuator
   specsView:
     image: jt-frontend-kube-dev
-    tag: dev.1.0.38
+    tag: dev.1.0.40
     typeService: C
     port: 8080
   operationView:
