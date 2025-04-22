@@ -391,7 +391,7 @@ services:
       url: /v1/actuator
   firmasView:
     image: firmas-front-kube
-    tag: dev.1.1.14.8
+    tag: dev.1.1.14.9
     port: 8080
     typeService: C
   firmas:
