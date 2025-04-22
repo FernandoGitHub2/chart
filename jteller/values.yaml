@@ -376,12 +376,11 @@ services:
     pvcName: pvc-minio
   keycloak:
     image: keycloak
-    tag: 22.0.0
+    tag: 23.0.0
     port: 8080
     typeService: C
     proxy: edge
     hostname: false
-    registry: quay.io/keycloak/
   hermes:
     image: hermes-kube
     tag: v7.6.c.d.1
