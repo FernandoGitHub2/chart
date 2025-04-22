@@ -477,7 +477,7 @@ services:
     typeService: C
   transactionManager:
     image: transaction-manager-kube
-    tag: dev.0.0.12.a
+    tag: dev.0.0.12.b
     port: 8080
     typeService: C
   liquibaseExecutor:
